@@ -1,1 +1,1 @@
-# enriched_ebook-reader
+# smart_ebook-reader
