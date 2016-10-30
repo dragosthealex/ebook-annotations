@@ -55,7 +55,7 @@ class UrlSearcher2:
   def search_for(self, query):
     self.search_query = query
     self.get_book_id()
-    return self.get_html_book_url()
+    return str(self.get_html_book_url())
 
 class UrlSearcher:
 

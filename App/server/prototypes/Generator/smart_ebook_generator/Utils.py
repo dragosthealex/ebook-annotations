@@ -53,10 +53,9 @@ def update_index_file(url = None):
   conn, c = connect_database()
   # Number of files to go through
   no_files = len(os.listdir(RDF_CATALOG_PATH))
-  f = open('tmp.txt', 'w')
   # Go through all rdf files
-  for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))[:100]):
-    rdf_file_name = RDF_CATALOG_PATH + directory + '/pg' + directory + \
+  for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))[:1000]):
+    rdf_file_name = RDF_CATALOG_PATH + '/' + directory + '/pg' + directory + \
                     '.rdf'
     g = rdflib.Graph()
     g.load(rdf_file_name)
@@ -65,14 +64,11 @@ def update_index_file(url = None):
       continue
     title = g.objects(None, dcterms.title).next()
     the_id = directory
-    f.write(title.encode('utf-8') + '\n')
     # Put title and id in db
     c.execute('''INSERT INTO books (title, id)
                  VALUES (?, ?)''', (title.lower(), the_id))
   # Commit the query
   conn.commit()
-  f.close()
 
 if __name__ == '__main__':
-  print "shit"
   update_index_file()
