@@ -1,3 +1,4 @@
 Misc/
 App/server/prototypes/Generator/smart_ebook_generator/rdf-files/
 App/server/Generator/smart_ebook_generator/rdf-files
+*.pyc
