@@ -7,7 +7,9 @@ __all__ = ['Book']
 # The parsed book
 class Book:
 
-  parser = None;
+  parser = None
+  annotations = None
+
   title = None
   author = None
   chapter_titles = None
