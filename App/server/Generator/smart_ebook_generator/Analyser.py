@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import nltk
 import re
 from nltk import word_tokenize

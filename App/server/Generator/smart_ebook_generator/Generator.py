@@ -1,6 +1,6 @@
 import os
-from html_book_parser import *
-from url_searcher import *
+from Book import Book
+from UrlSearcher import UrlSearcher2
 
 if __name__ == '__main__':
 

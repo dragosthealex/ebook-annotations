@@ -2,7 +2,7 @@ import requests
 import re
 from urllib import quote
 from bs4 import BeautifulSoup
-from Utils import *
+from utils import *
 
 # TODO : make a cache
 # TODO : make cronjob for updating index file
