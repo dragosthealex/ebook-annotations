@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from Parser import Parser
+from Analyser import Analyser
 
 __all__ = ['Book']
 
@@ -8,13 +9,12 @@ __all__ = ['Book']
 class Book:
 
   parser = None
-  annotations = None
 
   title = None
   author = None
   chapter_titles = None
   chapters = None
-  output_txt_file_name = None
+  annotations = None
 
   def __init__(self, url):
 
@@ -25,31 +25,15 @@ class Book:
     self.chapter_titles = self.parser.get_chapter_titles()
     self.chapters = self.parser.get_chapters()
 
-  def set_output_txt(self, file_name):
-    self.output_txt_file_name = file_name
+    self.get_annotations()
 
-  def print_txt(self, file_name = None):
-    if file_name is not None:
-      fn = file_name
-    else:
-      fn = self.output_txt_file_name
-
-    f = open(fn, 'w+')
-    f.write(self.title + '\n')
-    f.write(self.author + '\n\n')
-    f.write('Contents' + '\n')
-    for chapter_title in self.chapter_titles:
-      f.write(chapter_title + '\n')
-    f.write('\n\n\n')
-
-    index = 0
+  # Get the annotations from the chapters
+  def get_annotations(self):
+    text = ''
     for chapter in self.chapters:
-      f.write(self.chapter_titles[index] + '\n\n')
-      f.write(chapter + '\n\n\n')
-      index = index + 1
-
-    f.close()
-
+      text += str(chapter)
+    analyser = Analyser(text)
+    self.annotations = analyser.generate_annotations()
 
 if __name__ == '__main__':
   pass

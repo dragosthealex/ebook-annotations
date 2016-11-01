@@ -41,7 +41,7 @@ def reset_database():
   conn, c = connect_database()
   # Create the books table
   c.execute('''CREATE TABLE books
-              (title text, id text)''')
+              (id text, title text, html_file_name text, pdf_file_name, url text)''')
   conn.commit()
   conn.close()
 # Update the book index file
@@ -54,7 +54,7 @@ def update_index_file(url = None):
   # Number of files to go through
   no_files = len(os.listdir(RDF_CATALOG_PATH))
   # Go through all rdf files
-  for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))[:1000]):
+  for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))):
     rdf_file_name = RDF_CATALOG_PATH + '/' + directory + '/pg' + directory + \
                     '.rdf'
     g = rdflib.Graph()
@@ -65,8 +65,8 @@ def update_index_file(url = None):
     title = g.objects(None, dcterms.title).next()
     the_id = directory
     # Put title and id in db
-    c.execute('''INSERT INTO books (title, id)
-                 VALUES (?, ?)''', (title.lower(), the_id))
+    c.execute('''INSERT INTO books (id, title, html_file_name, pdf_file_name, url)
+                 VALUES (?, ?, ?, ?, ?)''', (the_id, title.lower(), '', '', ''))
   # Commit the query
   conn.commit()
 
