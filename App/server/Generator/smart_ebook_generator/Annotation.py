@@ -2,8 +2,8 @@
 __all__ = ['TextAnnotation', 'AnnotationType']
 
 class AnnotationType:
-  def UNCOMMON_WORD = 0
-  def EXTRA = 1
+  UNCOMMON_WORD = 0
+  EXTRA = 1
 
 class TextAnnotation:
 

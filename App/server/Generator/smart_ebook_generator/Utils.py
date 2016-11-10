@@ -58,7 +58,11 @@ def update_index_file(url = None):
     rdf_file_name = RDF_CATALOG_PATH + '/' + directory + '/pg' + directory + \
                     '.rdf'
     g = rdflib.Graph()
-    g.load(rdf_file_name)
+    try:
+      g.load(rdf_file_name)
+    except Exception:
+      continue
+    
     # Get the title from rdf file
     if (None, dcterms.title, None) not in g:
       continue
