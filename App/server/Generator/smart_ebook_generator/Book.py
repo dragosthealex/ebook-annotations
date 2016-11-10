@@ -21,6 +21,7 @@ class Book:
     self.parser = Parser(url)
 
     self.title = self.parser.get_title()
+    self.id = self.parser.get_id()
     self.author = self.parser.get_author()
     self.chapter_titles = self.parser.get_chapter_titles()
     self.chapters = self.parser.get_chapters()

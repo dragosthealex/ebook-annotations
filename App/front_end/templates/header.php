@@ -29,9 +29,10 @@ include_once 'default.php';
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li>
             </ul>
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-left" method="post" action="<?=$env['API_ROOT']?>/search">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input name="source" type="hidden" value="web">
+                <input name="query" type="text" class="form-control" placeholder="Search">
                 <div class="input-group-btn">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -40,3 +41,4 @@ include_once 'default.php';
           </ul>
         </div>
     </header>
+    <div class="container main-content">

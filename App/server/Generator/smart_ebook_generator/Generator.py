@@ -20,12 +20,13 @@ class Generator:
   def generate_html_book(self, query):
     # Get the url from the query
     url = url_searcher.search_for(query)
-    # Checked if cached
-    if self.get_cached_html_book(url):
-      return self.html_book_file_name
-    # If not, create a new book from url
+    # Create the book from url
     book = Book(url)
     self.book = book
+    # If book cached, return the file
+    if(book.is_cached_html()):
+      return book.get_html_file_name()
+
     # Put stuff in tags
     title = self.enclose_in_tag('h1', book.title, {'class': 'title'})
     author = self.enclose_in_tag('h2', book.author, {'class': 'author'})
@@ -34,7 +35,7 @@ class Generator:
       chapter_tag = self.enclose_in_tag('a', chapter_title, {'href': '#ch-' + index})
       ch_titles += self.enclose_in_tag('li', chapter_tag)
     table_of_contents = self.enclose_in_tag('ul', table_of_contents, {'class', 'chapter_title'})
-      
+
   # Enclose some data in a given tag
   def enclose_in_tag(self, tag, data, attributes = {}):
     text = '<' + str(tag) + ' ' + \
