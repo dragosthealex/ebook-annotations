@@ -3,11 +3,32 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-__all__ = ['Parser']
+__all__ = ['GutenbergParser']
 
-# Parse the html ebook
-class Parser:
+# Parser class
+class Parser():
+  # Make unicode-converted strings back into utf8, and replace <br> with spaces
+  def stringy(self, string):
+    def replace_br(string):
+      return re.sub('(<br>)|(<br\/>)',' ',string)
+    return replace_br(str(string.encode('utf-8').strip()))
 
+  def get_title(self):
+    pass
+
+  def get_author(self):
+    pass
+
+  def get_chapter_titles(self):
+    pass
+
+  def get_chapters(self):
+    pass
+
+# Parse the html ebook from gutenberg
+class GutenbergParser(Parser):
+
+  # The root element
   root = None
   # The chapter title can be h2/h3
   chapter_title_tag = None
@@ -16,12 +37,6 @@ class Parser:
     r = requests.get(url)
     self.root = BeautifulSoup(r.content, "html.parser")
     self.find_chapter_title_tag()
-
-  # Make unicode-converted strings back into utf8, and replace <br> with spaces
-  def stringy(self, string):
-    def replace_br(string):
-      return re.sub('(<br>)|(<br\/>)',' ',string)
-    return replace_br(str(string.encode('utf-8').strip()))
 
   # Get the title of the book
   def get_title(self):

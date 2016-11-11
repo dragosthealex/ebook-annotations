@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Parser import Parser
+from Parser import GutenbergParser
 from Analyser import Analyser
 
 __all__ = ['Book']
@@ -18,7 +18,7 @@ class Book:
 
   def __init__(self, url):
 
-    self.parser = Parser(url)
+    self.parser = GutenbergParser(url)
 
     self.title = self.parser.get_title()
     self.id = self.parser.get_id()
