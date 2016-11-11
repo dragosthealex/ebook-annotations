@@ -16,7 +16,7 @@ class TextAnnotation:
     self.the_type = the_type
 
     if the_type == AnnotationType.UNCOMMON_WORD:
-      self.set_meaning()
+      self.get_meaning()
     elif the_type == AnnotationType.EXTRA:
       self.get_info()
 

@@ -31,7 +31,10 @@ class BookSearcher:
     conn, c = connect_database()
     c.execute('''SELECT id FROM books
                  WHERE title LIKE ?''', ('%'+query.lower()+'%',))
-    book_id = c.fetchone()[0]
+    book_id = c.fetchone()
+    if book_id is None:
+      raise BookNotFoundException()
+    book_id = book_id[0]
     self.book_id = book_id
     return book_id
 

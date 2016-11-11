@@ -1,6 +1,8 @@
 import os
+import re
 from Book import *
 from BookSearcher import BookSearcher
+from Utils import *
 
 __all__ = ['Generator']
 
@@ -19,7 +21,7 @@ class Generator:
   # Returns the absolute path to the file
   def generate_html_book(self, query):
     # Get the url and the source from the query
-    url, the_id, source = searcher.search_for(query)
+    url, the_id, source = self.searcher.search_for(query)
     # Create the book from url and source
     book = Book(url, the_id, source)
     # If book cached, return the file
@@ -34,14 +36,30 @@ class Generator:
     author = self.enclose_in_tag('h2', book.author, {'class': 'author'})
     table_of_contents = ''
     for index, chapter_title in enumerate(book.chapter_titles):
-      chapter_tag = self.enclose_in_tag('a', chapter_title, {'href': '#ch-' + index})
-      ch_titles += self.enclose_in_tag('li', chapter_tag)
-    table_of_contents = self.enclose_in_tag('ul', table_of_contents, {'class', 'chapter_title'})
+      chapter_tag = self.enclose_in_tag('a', chapter_title, {'href': '#ch-' + str(index)})
+      table_of_contents += self.enclose_in_tag('li', chapter_tag)
+    table_of_contents = self.enclose_in_tag('ul', table_of_contents, {'class': 'chapter_title'})
+    chapters = ''
+    for index, chapter in enumerate(book.chapters):
+      ch_title = self.enclose_in_tag('a', book.chapter_titles[index], {'name': 'ch-' + str(index)})
+      ch_title = self.enclose_in_tag('h3', ch_title, {'class': 'chapter-title'})
+      # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)
+      chapter = self.enclose_in_tag('p', chapter, {'class': 'chapter-body'})
+      tag = self.enclose_in_tag('div', ch_title + chapter, {'class': 'chapter'})
+      chapters += tag
+    # Enclose everything in a div tag with class book
+    html = self.enclose_in_tag('div', title + author + table_of_contents + chapters, {'class': 'book'})
+    file_name = HTML_BOOKS_FOLDER + '/' + str(the_id) + '.html'
+    # Create the html file
+    with open(file_name, 'w') as f:
+      f.write(html)
+    # Return its name
+    return file_name
 
   # Enclose some data in a given tag
   def enclose_in_tag(self, tag, data, attributes = {}):
     text = '<' + str(tag) + ' ' + \
-      ' '.join(str(key)+"='"+str(value)+"'" for key,value in attributes.iteritems()) + \
+      ' '.join(str(key)+'="'+str(value)+'"' for key,value in attributes.iteritems()) + \
       '>'
     text += str(data)
     text += '</' + tag + '>'

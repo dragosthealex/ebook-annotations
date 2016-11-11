@@ -8,7 +8,7 @@ import rdflib
 import sqlite3
 from tqdm import tqdm
 
-__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'COMMON_WORDS_FILE_NAME']
+__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'COMMON_WORDS_FILE_NAME', 'HTML_BOOKS_FOLDER', 'BookNotFoundException']
 
 URLS = {
   'GUTENBERG_SEARCH' : 'http://www.gutenberg.org/ebooks/search/?query=',
@@ -19,6 +19,7 @@ URLS = {
 COMMON_WORDS_FILE_NAME = os.path.join(os.path.dirname(__file__), './common_words')
 RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__), './rdf-files/cache/epub')
 DB_FILE_NAME = os.path.join(os.path.dirname(__file__), './database.db')
+HTML_BOOKS_FOLDER = os.path.join(os.path.dirname(__file__), '../../html_books')
 
 # Check if string s represents an int
 def represents_int(s):
@@ -77,3 +78,7 @@ def update_index_file(url = None):
 
 if __name__ == '__main__':
   update_index_file()
+
+# Exceptions
+class BookNotFoundException(Exception):
+  pass

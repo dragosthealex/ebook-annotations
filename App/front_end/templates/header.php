@@ -29,7 +29,7 @@ include_once 'default.php';
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li>
             </ul>
-            <form class="navbar-form navbar-left" method="post" action="<?=$env['API_ROOT']?>/search">
+            <form id="nav-search" class="navbar-form navbar-left" method="post" action="<?=$env['API_ROOT']?>/search">
               <div class="input-group">
                 <input name="source" type="hidden" value="web">
                 <input name="query" type="text" class="form-control" placeholder="Search">
@@ -41,4 +41,4 @@ include_once 'default.php';
           </ul>
         </div>
     </header>
-    <div class="container main-content">
+    <div id="main-content" class="container main-content">

@@ -11,10 +11,21 @@ include_once 'default.php';
   crossorigin="anonymous"></script>
   <script>
   $(document).ready(function() {
-    $("#nav-search").submit(function() {
-      $.post("<?=$env['API_ROOT']?>/search", $(this).serialize(), function(data) {
-        $("#main-content").html(data);
-      });
+    $("#nav-search").submit(function(e) {
+      e.preventDefault();
+      $.ajax({url: "<?=$env['API_ROOT']?>/search",
+              type: "POST",
+              data: $(this).serialize(),
+              beforeSend: function(xhr) {
+                $("#main-content").html("<span class='loading'>Loading...</span>");
+              },
+              success: function(data, status, xhr) {
+                        $("#main-content").html(data);
+                      },
+              error: function(xhr, status, error) {
+                $("#main-content").html("<span class='error'>An error occurred: " + error + "</span>");
+              }
+              });
     });
   });
   </script>
