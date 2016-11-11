@@ -8,4 +8,4 @@ from Parser import Parser
 from Analyser import Analyser
 from BookSearcher import BookSearcher
 from Generator import Generator
-from utils import *
+from Utils import *
