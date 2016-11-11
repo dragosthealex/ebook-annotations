@@ -42,7 +42,6 @@ class Book:
     self.author = self.parser.get_author()
     self.chapter_titles = self.parser.get_chapter_titles()
     self.chapters = self.parser.get_chapters()
-    self.get_annotations()
   # Get the annotations from the chapters
   def get_annotations(self):
     text = ''

@@ -8,7 +8,7 @@ import rdflib
 import sqlite3
 from tqdm import tqdm
 
-__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database']
+__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'COMMON_WORDS_FILE_NAME']
 
 URLS = {
   'GUTENBERG_SEARCH' : 'http://www.gutenberg.org/ebooks/search/?query=',
@@ -16,7 +16,7 @@ URLS = {
   'BOOK_INDEX' : 'http://eremita.di.uminho.pt/gutenberg/GUTINDEX.ALL',
   'GUTENBERG_RDF_CATALOG': 'https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.zip'
 }
-
+COMMON_WORDS_FILE_NAME = os.path.join(os.path.dirname(__file__), './common_words')
 RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__), './rdf-files/cache/epub')
 DB_FILE_NAME = os.path.join(os.path.dirname(__file__), './database.db')
 # Check if string s represents an int
@@ -62,7 +62,7 @@ def update_index_file(url = None):
       g.load(rdf_file_name)
     except Exception:
       continue
-    
+
     # Get the title from rdf file
     if (None, dcterms.title, None) not in g:
       continue
