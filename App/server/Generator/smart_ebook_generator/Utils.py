@@ -8,7 +8,7 @@ import rdflib
 import sqlite3
 from tqdm import tqdm
 
-__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'COMMON_WORDS_FILE_NAME', 'HTML_BOOKS_FOLDER', 'BookNotFoundException']
+__all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'enclose_in_html_tag', 'COMMON_WORDS_FILE_NAME', 'HTML_BOOKS_FOLDER', 'BookNotFoundException']
 
 URLS = {
   'GUTENBERG_SEARCH' : 'http://www.gutenberg.org/ebooks/search/?query=',
@@ -75,6 +75,15 @@ def update_index_file(url = None):
                  VALUES (?, ?, ?, ?, ?)''', (the_id, title.lower(), '', '', ''))
   # Commit the query
   conn.commit()
+
+# Enclose some data in a given tag
+def enclose_in_html_tag(tag, data, attributes = {}):
+  text = '<' + str(tag) + ' ' + \
+    ' '.join(str(key)+'="'+str(value)+'"' for key,value in attributes.iteritems()) + \
+    '>'
+  text += str(data)
+  text += '</' + tag + '>'
+  return text
 
 if __name__ == '__main__':
   update_index_file()

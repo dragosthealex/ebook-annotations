@@ -14,7 +14,8 @@ class TextAnnotation:
 
   def __init__(self, word, the_type):
     self.the_type = the_type
-
+    self.word = word
+    
     if the_type == AnnotationType.UNCOMMON_WORD:
       self.get_meaning()
     elif the_type == AnnotationType.EXTRA:
