@@ -7,9 +7,9 @@ from utils import *
 # TODO : make a cache
 # TODO : make cronjob for updating index file
 
-__all__ = ['UrlSearcher']
+__all__ = ['BookSearcher']
 
-class UrlSearcher:
+class BookSearcher:
 
   # The query that we are searching for
   search_query = None

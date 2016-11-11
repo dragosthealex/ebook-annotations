@@ -1,6 +1,6 @@
 import os
 from Book import Book
-from UrlSearcher import UrlSearcher
+from BookSearcher import BookSearcher
 
 __all__ = ['Generator']
 
@@ -9,17 +9,17 @@ class Generator:
   book = None
   html_book_file_name = None
   pdf_book_file_name = None
-  url_searcher = None
+  searcher = None
 
   def __init__(self):
-    url_searcher = UrlSearcher()
+    self.searcher = BookSearcher()
     pass
 
   # Generate the html book given a title.
   # Returns the absolute path to the file
   def generate_html_book(self, query):
     # Get the url from the query
-    url = url_searcher.search_for(query)
+    url = searcher.search_for(query)
     # Create the book from url
     book = Book(url)
     self.book = book
