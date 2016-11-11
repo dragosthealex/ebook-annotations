@@ -3,6 +3,7 @@ import re
 from urllib import quote
 from bs4 import BeautifulSoup
 from utils import *
+from Book import BookSource
 
 # TODO : make a cache
 # TODO : make cronjob for updating index file
@@ -53,8 +54,9 @@ class BookSearcher:
   # Do a search from a query
   def search_for(self, query):
     self.search_query = query
-    self.get_book_id()
-    return str(self.get_html_book_url())
+    the_id = self.get_book_id()
+    the_url = str(self.get_html_book_url())
+    return (the_url, the_id, BookSource.GUTENBERG)
 
 if __name__ == '__main__':
   pass

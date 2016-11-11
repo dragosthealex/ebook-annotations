@@ -1,5 +1,6 @@
 import unittest
 from context import BookSearcher
+from context import BookSource
 
 class TestBookSearcher(unittest.TestCase):
 
@@ -18,12 +19,14 @@ class TestBookSearcher(unittest.TestCase):
 
   def test_search_for(self):
     searcher = BookSearcher()
-    searcher.search_for('moorish literature')
-    self.assertIsNot(searcher.book_id, None)
-    self.assertIsNot(searcher.result_url, None)
-    self.assertEqual(str(searcher.book_id), '10085')
-    self.assertEqual(str(searcher.result_url), \
+    url, the_id, source = searcher.search_for('moorish literature')
+    self.assertIsNot(the_id, None)
+    self.assertIsNot(url, None)
+    self.assertIsNot(source, None)
+    self.assertEqual(str(the_id), '10085')
+    self.assertEqual(str(url), \
       'http://eremita.di.uminho.pt/gutenberg/1/0/0/8/10085/10085-h/10085-h.htm')
+    self.assertEqual(source, BookSource.GUTENBERG)
 
 if __name__ == '__main__':
     unittest.main()

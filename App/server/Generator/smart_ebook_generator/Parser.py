@@ -13,6 +13,9 @@ class Parser():
       return re.sub('(<br>)|(<br\/>)',' ',string)
     return replace_br(str(string.encode('utf-8').strip()))
 
+  def get_id(self):
+    pass
+
   def get_title(self):
     pass
 
@@ -28,6 +31,8 @@ class Parser():
 # Parse the html ebook from gutenberg
 class GutenbergParser(Parser):
 
+  # The url of the html book
+  url = None
   # The root element
   root = None
   # The chapter title can be h2/h3
@@ -37,6 +42,7 @@ class GutenbergParser(Parser):
     r = requests.get(url)
     self.root = BeautifulSoup(r.content, "html.parser")
     self.find_chapter_title_tag()
+    self.url = url
 
   # Get the title of the book
   def get_title(self):

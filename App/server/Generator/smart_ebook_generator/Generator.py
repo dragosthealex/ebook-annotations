@@ -1,5 +1,5 @@
 import os
-from Book import Book
+from Book import *
 from BookSearcher import BookSearcher
 
 __all__ = ['Generator']
@@ -18,14 +18,16 @@ class Generator:
   # Generate the html book given a title.
   # Returns the absolute path to the file
   def generate_html_book(self, query):
-    # Get the url from the query
-    url = searcher.search_for(query)
-    # Create the book from url
-    book = Book(url)
-    self.book = book
+    # Get the url and the source from the query
+    url, the_id, source = searcher.search_for(query)
+    # Create the book from url and source
+    book = Book(url, the_id, source)
     # If book cached, return the file
     if(book.is_cached_html()):
       return book.get_html_file_name()
+    # Else, parse the book into the object
+    book.populate_content()
+    self.book = book
 
     # Put stuff in tags
     title = self.enclose_in_tag('h1', book.title, {'class': 'title'})
