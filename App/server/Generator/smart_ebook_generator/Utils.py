@@ -19,6 +19,7 @@ URLS = {
 COMMON_WORDS_FILE_NAME = os.path.join(os.path.dirname(__file__), './common_words')
 RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__), './rdf-files/cache/epub')
 DB_FILE_NAME = os.path.join(os.path.dirname(__file__), './database.db')
+
 # Check if string s represents an int
 def represents_int(s):
   try:

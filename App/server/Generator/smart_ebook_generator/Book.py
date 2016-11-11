@@ -2,7 +2,7 @@
 
 from Parser import GutenbergParser
 from Analyser import Analyser
-from utils import *
+from Utils import *
 
 __all__ = ['Book', 'BookSource']
 

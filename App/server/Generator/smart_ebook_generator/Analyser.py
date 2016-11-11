@@ -6,7 +6,7 @@ from nltk import word_tokenize
 from nltk import FreqDist
 from nltk.corpus import gutenberg
 from nltk.corpus import stopwords
-from utils import *
+from Utils import *
 from Annotation import TextAnnotation
 from Annotation import AnnotationType
 

@@ -2,7 +2,7 @@ import requests
 import re
 from urllib import quote
 from bs4 import BeautifulSoup
-from utils import *
+from Utils import *
 from Book import BookSource
 
 # TODO : make a cache
