@@ -23,9 +23,6 @@ class Book:
   chapters = None
   annotations = None
 
-  # The raw text, including all chapters
-  raw_text = None
-
   def __init__(self, url, the_id, source = BookSource.GUTENBERG):
     if source == BookSource.GUTENBERG:
       self.parser = GutenbergParser(url)
@@ -53,21 +50,33 @@ class Book:
     text = ''
     for chapter in self.chapters:
       text += str(chapter)
-    self.raw_text = text
     analyser = Analyser(text)
     self.annotations = analyser.generate_annotations()
 
-  # Apply the annotations on the words
-  def apply_annotations(self, text = None):
-    if text is None:
-      text = self.raw_text
+  def annotate(self):
+    for chapter in self.chapters:
+      self.apply_annotations(chapter)
 
-    for index, ann in enumerate(self.annotations):
-      tag = enclose_in_html_tag('a', str(ann.word), {'class': 'annotation',\
-                                                'def': str(ann.data),\
-                                                'url': str(ann.url)})
-      print tag
-      text = re.sub(str(ann.word), tag, text)
+  # Apply the annotations on the words
+  def apply_annotations(self, text):
+    # split text into individual words
+    words = text.split(' ')
+    # Get just the annotation words
+    words_to_annotate = [ann.word for ann in self.annotations]
+    analyser = Analyser()
+    for index, current_word in enumerate(words):
+      # We need to remove extra stuff, like when looked for annotations
+      processed_word = sorted(analyser.preprocess_input(current_word).split())[-1]
+      if processed_word in words_to_annotate:
+        # Get the annotation tag
+        ann = self.annotations[words_to_annotate.index(processed_word)]
+        tag = enclose_in_html_tag('a', str(processed_word), {'class': 'annotation',\
+                                                  'def': str(ann.data),\
+                                                  'url': str(ann.url)})
+        # Replace the processed word found with a tag with the annotation
+        words[index] = re.sub(processed_word, tag, current_word)
+    # Rebuild the original text
+    text = ' '.join(words)
     return text
 
 if __name__ == '__main__':

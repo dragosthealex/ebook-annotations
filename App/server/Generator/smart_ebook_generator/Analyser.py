@@ -72,7 +72,7 @@ class Analyser:
   # Load the common words list
   def load_common_words(self):
     with open(COMMON_WORDS_FILE_NAME, 'r') as f:
-      self.common_words = self.nltk_text(f.read())
+      self.common_words = self.nltk_text(f.read().decode('utf-8'))
 
 if __name__ == '__main__':
   pass
