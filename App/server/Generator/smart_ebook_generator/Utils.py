@@ -85,9 +85,9 @@ def enclose_in_html_tag(tag, data, attributes = {}):
   text += '</' + tag + '>'
   return text
 
-if __name__ == '__main__':
-  update_index_file()
-
 # Exceptions
 class BookNotFoundException(Exception):
   pass
+
+if __name__ == '__main__':
+  update_index_file()

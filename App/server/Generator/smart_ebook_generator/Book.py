@@ -54,8 +54,8 @@ class Book:
     self.annotations = analyser.generate_annotations()
 
   def annotate(self):
-    for chapter in self.chapters:
-      self.apply_annotations(chapter)
+    for index, chapter in enumerate(self.chapters):
+      self.chapters[index] = self.apply_annotations(chapter)
 
   # Apply the annotations on the words
   def apply_annotations(self, text):

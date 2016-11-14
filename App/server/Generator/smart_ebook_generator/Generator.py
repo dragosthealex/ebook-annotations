@@ -34,14 +34,20 @@ class Generator:
     book.populate_content()
     self.book = book
 
-    # Put stuff in tags
+    # Put title in tags
     title = enclose_in_html_tag('h1', book.title, {'class': 'title'})
+    # Put author in tags
     author = enclose_in_html_tag('h2', book.author, {'class': 'author'})
+    # Put the table of contents in tags
     table_of_contents = ''
     for index, chapter_title in enumerate(book.chapter_titles):
       chapter_tag = enclose_in_html_tag('a', chapter_title, {'href': '#ch-' + str(index)})
       table_of_contents += enclose_in_html_tag('li', chapter_tag)
     table_of_contents = enclose_in_html_tag('ul', table_of_contents, {'class': 'chapter_title'})
+    # Annotate the text (in chapters)
+    book.get_annotations()
+    book.annotate()
+    # Put the chapters in tags
     chapters = ''
     for index, chapter in enumerate(book.chapters):
       ch_title = enclose_in_html_tag('a', book.chapter_titles[index], {'name': 'ch-' + str(index)})
@@ -50,10 +56,6 @@ class Generator:
       chapter = enclose_in_html_tag('p', chapter, {'class': 'chapter-body'})
       tag = enclose_in_html_tag('div', ch_title + chapter, {'class': 'chapter'})
       chapters += tag
-    # Annotate
-    book.get_annotations()
-    book.apply_annotations(chapters)
-
     # Enclose everything in a div tag with class book
     html = enclose_in_html_tag('div', title + author + table_of_contents + chapters, {'class': 'book'})
     file_name = HTML_BOOKS_FOLDER + '/' + str(the_id) + '.html'
