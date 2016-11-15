@@ -25,7 +25,7 @@ class TestBook(unittest.TestCase):
     book = Book('http://eremita.di.uminho.pt/gutenberg/1/11/11-h/11-h.htm', '11')
     book.populate_content()
     book.get_annotations()
-    book.apply_annotations()
+    book.annotate()
 
 if __name__ == '__main__':
   unittest.main()

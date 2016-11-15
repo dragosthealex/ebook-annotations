@@ -9,7 +9,7 @@ class TestAnalyser(unittest.TestCase):
     analyser = Analyser()
     test = analyser.preprocess_input('lol. max/keksasdasd>?<".<WOW><12')
     self.assertIsNot(None, test)
-    self.assertEqual(test, 'lol  max keksasdasd " WOW 12')
+    self.assertEqual(test, 'lol  max keksasdasd WOW ')
 
   def test_eliminate_common(self):
     analyser = Analyser("I am very excitability")

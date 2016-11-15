@@ -1,0 +1,63 @@
+-> intro
+- lots of places to find books online, such as gutenberg
+- those books can contain lesser known words or phrases, how can users find out more about them?
+- one-click ebook !
+
+-> first, a web version
+- search for a book
+- check if cached. if not, generate annotations, cache, and display to user
+
+-> then, a pdf version
+- hard to do proper pdf styling in python, so use latex
+- create latex source file from the parsed book in python, then use pdflatex to generate pdf
+- again, use caching
+
+-> what is the pipeline?
+- have a large file with ~50k most used English words
+- check each word in text, if not there, it is uncommon => get meaning
+- not really efficient, lots of common words are not there
+- need to manually check every word, not too "smart"
+- currently ignores the part of speech, so words that can be both verbs and nouns
+may be defined wrong.
+
+-> how to improve this? 
+(just for the web version)
+- every word would have a "annotation likelihood"
+- the initial likelihood would be set depending whether said word is in the common words list
+- then, every time a user clicks it in any book, they have the option to increase or decrease the likelihood.
+- if user thinks words is too common, they can decrease. if they think the definition helped them, they can increase.
+- also, users can click on any word and increase the likelihood.
+- if a lot of users marked a word as "uncommon" (it means there are a lot of people not knowing the definition for it),
+  it will have a bigger and bigger likelihood
+- we have a threshold after which any word displays an annotation
+
+-> Problems ? a lot !
+- no api for searching the book
+   > Can't automate a search on gutenberg website
+   > solved by using an rdf catalog, storing all the urls and titles in local DB
+- no scalable way of doing fuzzy search (~50k volumes)
+   > now it takes only first result. later will display more and let users choose
+
+-> Biggest problem
+- inconsistent structure of the book
+- html structure of the title, author, table of contents and chapters is inconsistent between different books
+- one way to solve it is by implementing a classifier
+- classify html tags into "title" "author" "chapter title" "chapter text" "other"
+- as features use things like text length, nesting depth, parent tag name, sibling tag names, distance from the top
+- as it seems they are not liniarly classifiable, use a 1 hidden layered perceptron
+- we need 4 classes, so 4 different classifiers.
+
+-> what's next
+- improving the web interface -> this week
+- implementing the ML approach -> by 6th of december
+- generating the pdf -> by 12th of december
+- testing, fixing, improving the common words accurracy -> by 16th of december
+
+will have a proper MVP by winter break.
+
+-> after winter
+-implementing extra annotations for geographical places, historical events, etc -> by 24th january
+-adding in images for the extra annotations -> by 29th january
+-testing & optimising everything -> by 31st january
+-implementing annotation likelihood and user feedback
+-if there's still time left, I'd like to see if it's possible to study the meaning of every sentence and reduce the complexity of them.
