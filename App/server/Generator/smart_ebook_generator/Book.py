@@ -66,15 +66,22 @@ class Book:
     analyser = Analyser()
     for index, current_word in enumerate(words):
       # We need to remove extra stuff, like when looked for annotations
-      processed_word = sorted(analyser.preprocess_input(current_word).split())[-1]
+      processed_word = sorted(analyser.preprocess_input(current_word).split(' '))[0]
       if processed_word in words_to_annotate:
         # Get the annotation tag
         ann = self.annotations[words_to_annotate.index(processed_word)]
+        # We didn't find the meaning
+        if ann.data is None:
+          continue
         tag = enclose_in_html_tag('a', str(processed_word), {'class': 'annotation',\
-                                                  'def': str(ann.data),\
-                                                  'url': str(ann.url)})
+                                                  'data-content': 'Def: ' + str(ann.data),\
+                                                  'title': "<a href='" + str(ann.url) + "'>More</a>"})
         # Replace the processed word found with a tag with the annotation
         words[index] = re.sub(processed_word, tag, current_word)
+        # Remove annotation from list
+        if ann in self.annotations:
+          self.annotations.remove(ann)
+          words_to_annotate.remove(processed_word)
     # Rebuild the original text
     text = ' '.join(words)
     return text

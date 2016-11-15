@@ -1,0 +1,53 @@
+body {
+  color: #333;
+  background-color: #f8f8f8;
+}
+
+a {
+  text-decoration: none;
+}
+
+.popover {
+  max-width: 500px;
+}
+
+.header .navbar-default {
+  background-color: #fefefe;
+}
+
+.title {
+  text-align: center;
+}
+
+.author {
+  text-align: center;
+}
+
+.chapter_title {
+  list-style: none;
+  list-style-type: none;
+  padding: none;
+  text-align: center;
+}
+
+.chapter {
+  padding: 0 15px;
+}
+
+.chapter .chapter-title {
+  color: #222;
+  text-transform: capitalize;
+  text-decoration: underline;
+}
+
+.annotation {
+  cursor: pointer;
+  text-decoration: underline;
+  color: rgb(0, 37, 216);
+}
+
+@media (min-width: 1200px){
+  .container {
+    width: 970px; 
+  }
+}

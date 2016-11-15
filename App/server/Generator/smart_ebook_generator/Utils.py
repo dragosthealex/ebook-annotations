@@ -14,7 +14,9 @@ URLS = {
   'GUTENBERG_SEARCH' : 'http://www.gutenberg.org/ebooks/search/?query=',
   'EREMITA_MIRROR' : 'http://eremita.di.uminho.pt/gutenberg/',
   'BOOK_INDEX' : 'http://eremita.di.uminho.pt/gutenberg/GUTINDEX.ALL',
-  'GUTENBERG_RDF_CATALOG': 'https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.zip'
+  'GUTENBERG_RDF_CATALOG': 'https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.zip',
+  'DICTIONARY_URL': 'http://www.ldoceonline.com/dictionary/',
+  'DICTIONARY_API_URL': 'http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword='
 }
 COMMON_WORDS_FILE_NAME = os.path.join(os.path.dirname(__file__), './common_words')
 RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__), './rdf-files/cache/epub')

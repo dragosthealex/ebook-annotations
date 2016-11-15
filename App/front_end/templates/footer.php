@@ -21,6 +21,9 @@ include_once 'default.php';
               },
               success: function(data, status, xhr) {
                         $("#main-content").html(data);
+                        setTimeout(function(){
+                          $(".annotation").popover({html: true});
+                        },1000);
                       },
               error: function(xhr, status, error) {
                 $("#main-content").html("<span class='error'>An error occurred: " + error + "</span>");
