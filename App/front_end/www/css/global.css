@@ -6,6 +6,35 @@ body {
 a {
   text-decoration: none;
 }
+.book-result {
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 1px 5px -2px rgba(0,0,0,0.5);
+  overflow: hidden;
+  background-color: white;
+  margin: 15px 0;
+}
+.book-result:hover {
+  box-shadow: 0 1px 5px 0px rgba(0,0,0,0.5);
+}
+.book-result .result-title {
+  margin: 0;
+}
+.book-result .result-title a {
+  padding: 10px;
+  display: block;
+  color: #333;
+  font-size: 20px;
+  text-transform: capitalize;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 60px;
+  text-align: center;
+  box-sizing: content-box;
+}
+.book-result .result-title a:hover {
+  text-decoration: none;
+}
 
 .popover {
   max-width: 500px;
@@ -48,6 +77,6 @@ a {
 
 @media (min-width: 1200px){
   .container {
-    width: 970px; 
+    width: 970px;
   }
 }

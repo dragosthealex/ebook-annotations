@@ -7,9 +7,11 @@ from Utils import *
 
 __all__ = ['Book', 'BookSource']
 
+
 # Book source. Currently just gutenberg
 class BookSource:
   GUTENBERG = 1
+
 
 # The parsed book
 class Book:
@@ -23,7 +25,7 @@ class Book:
   chapters = None
   annotations = None
 
-  def __init__(self, url, the_id, source = BookSource.GUTENBERG):
+  def __init__(self, url, the_id, source=BookSource.GUTENBERG):
     if source == BookSource.GUTENBERG:
       self.parser = GutenbergParser(url)
     self.the_id = the_id
@@ -31,7 +33,7 @@ class Book:
   # Check if we already have the html version of this book
   def is_cached_html(self):
     conn, c = connect_database()
-    c.execute('''SELECT html_file_name FROM books WHERE id = ?''', \
+    c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
               (self.the_id,))
     html_file_name = c.fetchone()[0]
     if html_file_name is None or html_file_name == '':
@@ -66,16 +68,19 @@ class Book:
     analyser = Analyser()
     for index, current_word in enumerate(words):
       # We need to remove extra stuff, like when looked for annotations
-      processed_word = sorted(analyser.preprocess_input(current_word).split(' '))[0]
+      processed_word = sorted(analyser.preprocess_input(current_word)
+                              .split(' '))[0]
       if processed_word in words_to_annotate:
         # Get the annotation tag
         ann = self.annotations[words_to_annotate.index(processed_word)]
         # We didn't find the meaning
         if ann.data is None:
           continue
-        tag = enclose_in_html_tag('a', str(processed_word), {'class': 'annotation',\
-                                                  'data-content': 'Def: ' + str(ann.data),\
-                                                  'title': "<a href='" + str(ann.url) + "'>More</a>"})
+        tag = enclose_in_html_tag('a', str(processed_word),
+                                  {'class': 'annotation',
+                                   'data-content': 'Def: ' + str(ann.data),
+                                   'title': "<a href='" + str(ann.url) +
+                                   "'>More</a>"})
         # Replace the processed word found with a tag with the annotation
         words[index] = re.sub(processed_word, tag, current_word)
         # Remove annotation from list
@@ -85,6 +90,7 @@ class Book:
     # Rebuild the original text
     text = ' '.join(words)
     return text
+
 
 if __name__ == '__main__':
   pass

@@ -1,6 +1,8 @@
 <?php
 // Set time infinite
 set_time_limit (0);
+// Includes
+include('config.php');
 
 // Get a post variable
 function get_post($key) {
@@ -20,8 +22,8 @@ if(!$query || !$source) {
 
 switch ($source) {
   case 'web':
-    // It means call came from web, so return html
-    $command = escapeshellcmd('python search.py "' . $query . '"');
+    // It means call came from web, so return the json
+    $command = escapeshellcmd(PYTHON_COMMAND . ' search.py "' . $query . '"');
     echo(shell_exec($command));
     exit();
     break;

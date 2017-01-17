@@ -9,6 +9,7 @@ from Utils import *
 
 __all__ = ['Generator']
 
+
 class Generator:
 
   book = None
@@ -19,6 +20,11 @@ class Generator:
   def __init__(self):
     self.searcher = BookSearcher()
     pass
+
+  # Searches for a query and returns the possible matches
+  def get_json_results(self, query):
+    results = self.searcher.get_results_for(query)
+    return results
 
   # Generate the html book given a title.
   # Returns the absolute path to the file
@@ -41,23 +47,29 @@ class Generator:
     # Put the table of contents in tags
     table_of_contents = ''
     for index, chapter_title in enumerate(book.chapter_titles):
-      chapter_tag = enclose_in_html_tag('a', chapter_title, {'href': '#ch-' + str(index)})
+      chapter_tag = enclose_in_html_tag('a', chapter_title,
+                                        {'href': '#ch-' + str(index)})
       table_of_contents += enclose_in_html_tag('li', chapter_tag)
-    table_of_contents = enclose_in_html_tag('ul', table_of_contents, {'class': 'chapter_title'})
+    table_of_contents = enclose_in_html_tag('ul', table_of_contents,
+                                            {'class': 'chapter_title'})
     # Annotate the text (in chapters)
     book.get_annotations()
     book.annotate()
     # Put the chapters in tags
     chapters = ''
     for index, chapter in enumerate(book.chapters):
-      ch_title = enclose_in_html_tag('a', book.chapter_titles[index], {'name': 'ch-' + str(index)})
-      ch_title = enclose_in_html_tag('h3', ch_title, {'class': 'chapter-title'})
+      ch_title = enclose_in_html_tag('a', book.chapter_titles[index],
+                                     {'name': 'ch-' + str(index)})
+      ch_title = enclose_in_html_tag('h3', ch_title,
+                                     {'class': 'chapter-title'})
       # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)
       chapter = enclose_in_html_tag('p', chapter, {'class': 'chapter-body'})
-      tag = enclose_in_html_tag('div', ch_title + chapter, {'class': 'chapter'})
+      tag = enclose_in_html_tag('div', ch_title + chapter,
+                                {'class': 'chapter'})
       chapters += tag
     # Enclose everything in a div tag with class book
-    html = enclose_in_html_tag('div', title + author + table_of_contents + chapters, {'class': 'book'})
+    html = enclose_in_html_tag('div', title + author + table_of_contents +
+                               chapters, {'class': 'book'})
     file_name = HTML_BOOKS_FOLDER + '/' + str(the_id) + '.html'
     # Create the html file
     with open(file_name, 'w') as f:
@@ -65,11 +77,12 @@ class Generator:
     # Return its name
     return file_name
 
+
 if __name__ == '__main__':
 
   title = raw_input('Input the title to search for: \n')
   searcher = UrlSearcher2()
   url = searcher.search_for(title)
-  print url
+  print(url)
   book = Book(url)
   book.print_txt(title + '.txt')
