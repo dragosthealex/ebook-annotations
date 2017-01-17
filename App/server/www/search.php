@@ -11,25 +11,33 @@ function get_post($key) {
   }
   return '';
 }
-trim($query = get_post('query'));
-$source = get_post('source');
-$redirect_url = get_post('redirect_url');
-
-if(!$query || !$source) {
-  echo "Error: No query or source were provided.";
+// If single
+if(get_post('type') == 'single') {
+  $id = trim(get_post('id'));
+  $command = escapeshellcmd(PYTHON_COMMAND . ' search.py single "' . $id . '"');
+  echo(shell_exec($command));
   exit();
-}
+} else {
+  $query = trim(get_post('query'));
+  $source = get_post('source');
+  $redirect_url = get_post('redirect_url');
 
-switch ($source) {
-  case 'web':
-    // It means call came from web, so return the json
-    $command = escapeshellcmd(PYTHON_COMMAND . ' search.py "' . $query . '"');
-    echo(shell_exec($command));
+  if(!$query || !$source) {
+    echo "Error: No query or source were provided.";
     exit();
-    break;
+  }
 
-  default:
-    # code...
-    break;
+  switch ($source) {
+    case 'web':
+      // It means call came from web, so return the json
+      $command = escapeshellcmd(PYTHON_COMMAND . ' search.py all "' . $query . '"');
+      echo(shell_exec($command));
+      exit();
+      break;
+
+    default:
+      # code...
+      break;
+  }
 }
 ?>

@@ -28,9 +28,9 @@ class Generator:
 
   # Generate the html book given a title.
   # Returns the absolute path to the file
-  def generate_html_book(self, query):
+  def generate_html_book(self, query=None, the_id=None):
     # Get the url and the source from the query
-    url, the_id, source = self.searcher.search_for(query)
+    url, the_id, source = self.searcher.search_for(query, the_id)
     # Create the book from url and source
     book = Book(url, the_id, source)
     # If book cached, return the file

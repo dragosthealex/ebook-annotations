@@ -1,0 +1,81 @@
+Aim:
+To understand whether the developed application would be found useful
+by users, and if it would be perceived to solve a problem / improve a feature
+over current technologies.
+
+Structure:
+The questions are designed to tackle 8 main issues plus a suggestion box. Most questions
+are closed, multiple choice - single answer. Some of them are mixed, having multiple possible
+answers and an "other" open field. The number of fully open questions is limited, as it has been
+shown most people leave those fields blank if they are not required, and if they are marked as
+required, it might cause people abandoning the survey.
+
+1. Are people even interested in ebooks?
+- how many books does the user read per month/year on average? (closed - multiple choice)
+0 | 1-5 | 6-10 | 11 - 20 | 20+
+- how many of these are ebooks? (closed - multiple choice)
+none | few | about half | most | all
+- how many of these are not technical? (closed - multiple choice)
+none | few | about half | most | all
+
+2. Could the existing technologies affect people's interest?
+- what is the primary means of reading an ebook? (closed - multiple choice)
+desktop/laptop - native app | desktop/laptop - web | smartphone/tablet - web | smartphone/tablet - native app | ebook reader
+- has the user tried other technologies except that one? (closed - multiple choice)
+yes | maybe | no | don't know
+- how often is the user usually reading ebooks online? (closed - multiple choice)
+never | rarely | sometimes | often | always
+- what features does the user likes the most? (open)
+
+3. Are there any deal-breakers?
+- why is the user primarily using their favourite technology? (multiple answer + open)
+price | features | availability of books | other
+- what drove the user off the others? (multiple answer + open)
+price | features | availability of books | other
+- what would make the user stop using their favourite technology immediately? (open)
+
+4. Are uncommon / unknown words encountered oftenly?
+- how often does the user encounter unknown words in a book? (closed - multiple choice)
+never | rarely | sometimes | often | always
+- how often are they explained in footnotes / annexes ? (closed - multiple choice)
+never | rarely | sometimes | often | always
+
+5. How do they affect the experience?
+- how does the user deal with unknown words in a physical book? (multiple answer + open)
+search online | search in dictionary | ask someone | other
+- how does the user deal with unknown words in an ebook? (multiple answer + open)
+search online | search in dictionary | ask someone | other
+- how much time would the user spend away from the book to search for a word? (open - number)
+- how much does not knowing a word affect the overall reading experience? (closed - multiple choice)
+not at all | a bit | somwehat | pretty much | a lot
+- how much does having to go through multiple steps to research a word affect
+the overall experience? (closed - multiple choice)
+not at all | a bit | somwehat | pretty much | a lot
+
+6. Are key names encountered oftenly?
+- how often does the user encounter historically important personalities,
+geographical places, or other key issues in a book? (closed - multiple choice)
+never | rarely | sometimes | often | always
+- how often do these things present interest for the user? (closed - multiple choice)
+never | rarely | sometimes | often | always
+
+7. How do they affect the experience?
+- what does the user do when encountering an important name when they want to
+find out more about it? (multiple answer + open)
+search online | search in dictionary | ask someone | other
+- how much time does the user spend away from the book while doing that? (open - number)
+- how much does not knowing about an important name affect the overall reading
+experience? (closed - multiple choice)
+not at all | a bit | somwehat | pretty much | a lot
+- how much does having to research affect the overall reading experience? (closed - multiple choice)
+not at all | a bit | somwehat | pretty much | a lot
+
+8. Would the current application be suited?
+- in the context of unknown words, would a simple, basic definition be sufficient? (closed - multiple choice)
+yes | maybe | no | don't know
+- in the context of important names, would a simple few-rows description be sufficient? (closed - multiple choice)
+yes | maybe | no | don't know
+- how much does the user think these features would improve the overall reading experience? (closed - multiple choice)
+not at all | a bit | somwehat | pretty much | a lot
+
+9. suggestions. (open)

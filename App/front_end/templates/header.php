@@ -13,6 +13,7 @@ include_once 'default.php';
     crossorigin="anonymous">
     <link rel="stylesheet"
     href="./css/global.css">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
   </head>
   <body>
     <header class="header">
@@ -25,7 +26,7 @@ include_once 'default.php';
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Home</a>
+            <a class="navbar-brand" href="./">Home</a>
           </div>
           <div class="collapse navbar-collapse" id="main-nav-collapse">
             <ul class="nav navbar-nav">

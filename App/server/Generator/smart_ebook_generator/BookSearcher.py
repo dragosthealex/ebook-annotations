@@ -71,9 +71,12 @@ class BookSearcher:
     return result_url
 
   # Do a search from a query
-  def search_for(self, query):
+  def search_for(self, query, the_id=None):
     self.search_query = query
-    the_id = self.get_book_id()
+    if the_id is None:
+      the_id = self.get_book_id()
+    else:
+      self.book_id = the_id
     the_url = str(self.get_html_book_url())
     return (the_url, the_id, BookSource.GUTENBERG)
 

@@ -3,7 +3,6 @@ include_once 'default.php';
 ?>
     </div>
   </body>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
   <!-- Bootstrap -->
   <script
   src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'
@@ -13,9 +12,18 @@ include_once 'default.php';
   $(document).ready(function() {
     $('#nav-search').submit(function(e) {
       e.preventDefault();
+      window.location=("./?" + $(this).serialize());
+      return;
+    });
+    <?php if(isset($_GET['query'], $_GET['source'])) {
+    ?>
+      search("<?=$_GET['source']?>", "<?=$_GET['query']?>");
+    <?php
+    }?>
+    function search(source, query) {
       $.ajax({url: '<?=$env['API_ROOT']?>/search',
               type: 'POST',
-              data: $(this).serialize(),
+              data: {"source": "web", "query": query},
               beforeSend: function(xhr) {
                 $('#book-results').html("<span class='loading' id='loading'>Loading...</span>");
               },
@@ -42,15 +50,13 @@ include_once 'default.php';
                                   </div>`;
                           $("#book-results").append(html);
                         }
-                        // setTimeout(function(){
-                        //   $('.annotation').popover({html: true});
-                        // },1000);
+
                       },
               error: function(xhr, status, error) {
                 $('#main-content').html("<span class='error'>An error occurred: ' + error + '</span>");
               }
-              });
-    });
+            });
+      }
   });
   </script>
 </html>
