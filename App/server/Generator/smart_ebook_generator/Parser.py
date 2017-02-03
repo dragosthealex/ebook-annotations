@@ -5,16 +5,20 @@ from bs4 import BeautifulSoup
 
 __all__ = ['GutenbergParser']
 
+
 # Parser class
 class Parser():
   # Make unicode-converted strings back into utf8, and replace <br> with spaces
   def stringy(self, string):
-    def replace_br(string):
-      return re.sub('(<br>)|(<br\/>)',' ',string)
-    return replace_br(str(string.encode('utf-8').strip()))
+    if not string or string is None or string == '':
+      return ''
 
-  def get_id(self):
-    pass
+    try:
+      def replace_br(string):
+        return re.sub(r'(<br>)|(<br\/>)', ' ', string)
+      return replace_br(string.strip()) + ' '
+    except TypeError:
+      return ''
 
   def get_title(self):
     pass
@@ -27,6 +31,7 @@ class Parser():
 
   def get_chapters(self):
     pass
+
 
 # Parse the html ebook from gutenberg
 class GutenbergParser(Parser):
@@ -66,15 +71,16 @@ class GutenbergParser(Parser):
       self.chapter_title_tag = 'h3'
 
   # Chapters are marked with a h2/h3 tag
-  # Filter out the others, such as illustrations and contents table, also marked with h2 tag
+  # Filter out the others, such as illustrations and contents table, also
+  # marked with h2 tag
   # Also filter out the author
   def filter_chapters(self, tag):
     s = self.stringy(tag.text)
     return s and tag.name == self.chapter_title_tag \
-             and not re.compile('(((?i)by *$)|((?i)by ))').search(s) \
-             and not re.compile('((?i)^[/\n/\r ]*contents)').search(s) \
-             and not re.compile('((?i)^[/\n/\r ]*illustrations)').search(s) \
-             and not re.compile('((?i)' + self.get_author() + ')').search(s)
+        and not re.compile('(((?i)by *$)|((?i)by ))').search(s) \
+        and not re.compile('((?i)^[/\n/\r ]*contents)').search(s) \
+        and not re.compile('((?i)^[/\n/\r ]*illustrations)').search(s) \
+        and not re.compile('((?i)' + self.get_author() + ')').search(s)
 
   # Get the table of contents
   def get_chapter_titles(self):

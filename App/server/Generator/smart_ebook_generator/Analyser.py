@@ -50,7 +50,11 @@ class Analyser:
 
   # Eliminate punctuation and other tokens except plain words
   def preprocess_input(self, text):
-    return re.sub("[^a-zA-Z -]+", ' ', text)
+    text = re.sub(r"([^a-zA-Z -]+ +[^a-zA-Z -]*|[^a-zA-Z -]* +[^a-zA-Z -]+)",
+                  ' ', text)
+    text = re.sub(r"([^a-zA-Z -]+$|^[^a-zA-Z -]+)", '', text)
+    text = re.sub(r"([a-zA-Z -]+)([^a-zA-Z -])([a-zA-Z -]+)", r"\1'\3", text)
+    return re.sub(r"([^a-zA-Z \-\'])", '', text)
 
   # Return the nltk Text object from given string
   def nltk_text(self, text):
@@ -61,8 +65,8 @@ class Analyser:
   def eliminate_common(self, text=None):
     if text is None:
       text = self.nltk_text(self.text)
-    text = set(w.lower() for w in text if w.lower() not in self.common_words)
-    text = set(w.lower() for w in text if w.lower()
+    text = set(w for w in text if w.lower() not in self.common_words)
+    text = set(w for w in text if w.lower()
                not in stopwords.words('english'))
     return text
 

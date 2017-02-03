@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import requests
 import json
 from Utils import *
@@ -31,7 +33,8 @@ class TextAnnotation:
   def get_meaning(self):
     dict_url = URLS["DICTIONARY_URL"]
     dict_api_url = URLS["DICTIONARY_API_URL"]
-    result = json.loads(requests.get(dict_api_url + self.word).content)
+    # When searching use lower case version
+    result = json.loads(requests.get(dict_api_url + self.word.lower()).content)
 
     try:
       if result['status'] == 200 and result['total'] > 0:

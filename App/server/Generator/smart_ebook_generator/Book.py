@@ -53,7 +53,7 @@ class Book:
     # for chapter in self.chapters:
     #   text += str(chapter)
     # Use analyser for first chapter only
-    analyser = Analyser(str(self.chapters[0]))
+    analyser = Analyser(self.chapters[0])
     self.annotations = analyser.generate_annotations()
 
   def annotate(self):
@@ -69,8 +69,8 @@ class Book:
     analyser = Analyser()
     for index, current_word in enumerate(words):
       # We need to remove extra stuff, like when looked for annotations
-      processed_word = sorted(analyser.preprocess_input(current_word)
-                              .split(' '))[0]
+      processed_word = analyser.preprocess_input(current_word)
+      # Check if the word or its lower case version is to be annotated
       if processed_word in words_to_annotate:
         # Get the annotation tag
         ann = self.annotations[words_to_annotate.index(processed_word)]
