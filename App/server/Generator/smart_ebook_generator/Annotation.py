@@ -4,9 +4,11 @@ from Utils import *
 
 __all__ = ['TextAnnotation', 'AnnotationType']
 
+
 class AnnotationType:
   UNCOMMON_WORD = 0
   EXTRA = 1
+
 
 class TextAnnotation:
 
@@ -25,7 +27,7 @@ class TextAnnotation:
       self.get_info()
 
   # Gets the meaning of the set word
-  # TODO: Implement code to get the meaning
+  # TODO: implement caching of meaning
   def get_meaning(self):
     dict_url = URLS["DICTIONARY_URL"]
     dict_api_url = URLS["DICTIONARY_API_URL"]

@@ -49,10 +49,11 @@ class Book:
 
   # Get the annotations from the chapters
   def get_annotations(self):
-    text = ''
-    for chapter in self.chapters:
-      text += str(chapter)
-    analyser = Analyser(text)
+    # text = ''
+    # for chapter in self.chapters:
+    #   text += str(chapter)
+    # Use analyser for first chapter only
+    analyser = Analyser(str(self.chapters[0]))
     self.annotations = analyser.generate_annotations()
 
   def annotate(self):

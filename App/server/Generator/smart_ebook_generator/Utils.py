@@ -15,6 +15,7 @@ __all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'enclose_in_html_tag',
 URLS = {
     'GUTENBERG_SEARCH': 'http://www.gutenberg.org/ebooks/search/?query=',
     'EREMITA_MIRROR': 'http://eremita.di.uminho.pt/gutenberg/',
+    'MIRRORSERVICE': 'http://www.mirrorservice.org/sites/gutenberg.org/',
     'BOOK_INDEX': 'http://eremita.di.uminho.pt/gutenberg/GUTINDEX.ALL',
     'GUTENBERG_RDF_CATALOG':
     'https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.zip',

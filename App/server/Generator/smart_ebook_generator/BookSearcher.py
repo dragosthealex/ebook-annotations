@@ -66,7 +66,7 @@ class BookSearcher:
     good_link = good_link + the_id + '/' + the_id +\
         '-h/' + the_id + '-h.htm'
 
-    result_url = URLS['EREMITA_MIRROR'] + good_link
+    result_url = URLS['MIRRORSERVICE'] + good_link
     self.result_url = result_url
     return result_url
 

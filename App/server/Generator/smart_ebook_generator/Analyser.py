@@ -14,18 +14,20 @@ __all__ = ['Analyser']
 
 # TODO: Make annotations user-influenced
 
+
 class Analyser:
   text = None
   common_words = None
   uncommon_treshold = None
 
-  def __init__(self, text = None):
+  def __init__(self, text=None):
     if text is not None:
       self.text = self.preprocess_input(text)
     self.load_common_words()
 
-  # Return the list of Annotation objects with the words and their respective definition
-  def generate_annotations(self, text = None):
+  # Return the list of Annotation objects with the words and their respective
+  # definition
+  def generate_annotations(self, text=None):
     if text is None:
       text = self.text
     else:
@@ -56,11 +58,12 @@ class Analyser:
     return text
 
   # Eliminate the common words from a nltk Text list
-  def eliminate_common(self, text = None):
+  def eliminate_common(self, text=None):
     if text is None:
       text = self.nltk_text(self.text)
     text = set(w.lower() for w in text if w.lower() not in self.common_words)
-    text = set(w.lower() for w in text if w.lower() not in stopwords.words('english'))
+    text = set(w.lower() for w in text if w.lower()
+               not in stopwords.words('english'))
     return text
 
   # Find out which words / group of words represent a geographical
@@ -73,6 +76,7 @@ class Analyser:
   def load_common_words(self):
     with open(COMMON_WORDS_FILE_NAME, 'r') as f:
       self.common_words = self.nltk_text(f.read().decode('utf-8'))
+
 
 if __name__ == '__main__':
   pass
