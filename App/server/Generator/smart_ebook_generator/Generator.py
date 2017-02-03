@@ -3,6 +3,7 @@
 import os
 import sys
 import re
+import codecs
 from Book import *
 from BookSearcher import BookSearcher
 from Utils import *
@@ -72,7 +73,7 @@ class Generator:
                                chapters, {'class': 'book'})
     file_name = HTML_BOOKS_FOLDER + '/' + str(the_id) + '.html'
     # Create the html file
-    with open(file_name, 'w') as f:
+    with codecs.open(file_name, 'w', encoding="utf-8") as f:
       f.write(html)
     # Return its name
     return file_name

@@ -98,7 +98,7 @@ def enclose_in_html_tag(tag, data, attributes={}):
   text = '<' + str(tag) + ' ' + \
          ' '.join(str(key) + '="' + str(value) + '"'
                   for key, value in attributes.iteritems()) + '>'
-  text += str(data)
+  text += data
   text += '</' + tag + '>'
   return text
 
