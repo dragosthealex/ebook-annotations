@@ -2,6 +2,7 @@
 
 import requests
 import json
+from SPARQLWrapper import SPARQLWrapper, JSON
 from Utils import *
 
 __all__ = ['TextAnnotation', 'AnnotationType']

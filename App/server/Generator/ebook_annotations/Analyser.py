@@ -50,11 +50,13 @@ class Analyser:
 
   # Eliminate punctuation and other tokens except plain words
   def preprocess_input(self, text):
-    text = re.sub(r"([^a-zA-Z -]+ +[^a-zA-Z -]*|[^a-zA-Z -]* +[^a-zA-Z -]+)",
-                  ' ', text)
-    text = re.sub(r"([^a-zA-Z -]+$|^[^a-zA-Z -]+)", '', text)
-    text = re.sub(r"([a-zA-Z -]+)([^a-zA-Z -])([a-zA-Z -]+)", r"\1'\3", text)
-    return re.sub(r"([^a-zA-Z \-\'])", '', text)
+    text = re.sub(ur"([^a-zA-Z0-9 -]+ +[^a-zA-Z0-9 -]*|[^a-zA-Z0-9 -]* +[^a-zA-Z0-9 -]+)", ' ', text)
+    text = re.sub(ur"([^a-zA-Z0-9 -]+$|^[^a-zA-Z0-9 -]+)", '', text)
+    # text = re.sub(ur"([a-zA-Z0-9 -]+?)([^a-zA-Z0-9 -])([a-zA-Z0-9 -]+?)",
+    #               r"\1'\3", text)
+    text = re.sub(ur"([\x00-\x7F -]+?)([^a-zA-Z0-9 -]+)([\x00-\x7F -]+?)",
+                  ur"\1'\3", text.decode('utf-8')).encode("utf-8")
+    return re.sub(ur"([^a-zA-Z0-9 \-\'])", '', text)
 
   # Return the nltk Text object from given string
   def nltk_text(self, text):
@@ -68,6 +70,7 @@ class Analyser:
     # Remove the upper case words
     # Remove common words
     # Remove stopwords
+    # TODO: maybe check just for nouns / verbs ???
     text = set(w for w in text if w == w.lower() and
                w.lower() not in self.common_words and
                w.lower() not in stopwords.words('english'))
@@ -77,12 +80,52 @@ class Analyser:
   # Find out which words / group of words represent a geographical
   # place / historical event / VIP, etc
   # TODO
-  def get_extras(self, text):
+  def get_extras(self, text=None):
     if text is None:
       text = self.nltk_text(self.text)
-    # Keep only uppercase words
-    text = set(w for w in text if w != w.lower())
-    return self.nltk_text('')
+    # Tag parts of speech
+    tagged = nltk.pos_tag(text)
+    # Try for composed NNP / NNPS
+    isProperNoun = False
+    text = []
+    properNoun = ""
+    print(tagged)
+    for index, (word, tag) in enumerate(tagged):
+      if not isProperNoun and (tag == 'NNP' or tag == 'NNPS'):
+        # Start building a proper noun
+        properNoun = word
+        # Set it true
+        isProperNoun = True
+        # Add it to annotations anyway
+        text.append(word)
+        print(word + " -> nnp")
+      elif tag == 'NNP' or tag == 'NNPS':
+        # Previous was proper noun. So it may be combined
+        properNoun += " " + word
+        # Add the single word to annotations anyway, in case it might be not
+        text.append(word)
+        print(word + " -> nnp2")
+      elif isProperNoun and tag == 'IN':
+        # Add what we have by now to the text
+        text.append(properNoun)
+        # Previous was proper noun. So it may be composed
+        properNoun += " " + word
+      elif isProperNoun:
+        # Add what we have by now to the text
+        text.append(properNoun)
+        # Finished with proper noun, so set it false
+        isProperNoun = False
+
+    # Remove duplicates
+    seen = {}
+    result = []
+    for w in text:
+      if w in seen:
+        continue
+      seen[w] = 1
+      result.append(w)
+
+    return result
 
   # Load the common words list
   def load_common_words(self):
