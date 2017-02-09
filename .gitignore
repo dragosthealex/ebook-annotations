@@ -4,3 +4,4 @@ App/server/Generator/ebook_annotations/rdf-files*
 App/server/Generator/ebook_annotations/rdf-files
 *.pyc
 *.html
+*.env
