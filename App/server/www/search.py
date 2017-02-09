@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath('../Generator'))
 import json
-from smart_ebook_generator.Generator import Generator
-from smart_ebook_generator.Utils import BookNotFoundException
+from ebook_annotations.Generator import Generator
+from ebook_annotations.Utils import BookNotFoundException
 
 if __name__ == '__main__':
   search_type = sys.argv[1]

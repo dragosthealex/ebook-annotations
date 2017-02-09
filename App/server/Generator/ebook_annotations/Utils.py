@@ -6,6 +6,8 @@ import os
 import sys
 import rdflib
 import sqlite3
+import zipfile
+import tarfile
 from tqdm import tqdm
 
 __all__ = ['URLS', 'DB_FILE_NAME', 'connect_database', 'enclose_in_html_tag',
@@ -63,6 +65,30 @@ def reset_database():
   conn.close()
 
 
+# Download the book index RDF files
+def download_index_file():
+  path = os.path.dirname(__file__)
+  url = URLS['GUTENBERG_RDF_CATALOG']
+  response = requests.get(url, stream=True)
+  # Save the file, showing progress bar while streaming
+  if not os.path.isfile(path + '/rdf-files.tar.zip'):
+    print("Downloading book index file...\n")
+    with open(path + '/rdf-files.tar.zip', 'wb') as f:
+      for data in response.iter_content(chunk_size=1024):
+        if data:
+          f.write(data)
+      print("Download complete. Unzipping...\n")
+  if not os.path.isfile(path + '/rdf-files.tar'):
+    with zipfile.ZipFile(path + '/rdf-files.tar.zip', 'r') as f:
+      print("Extracting zip...")
+      f.extractall(path)
+  if not os.path.isdir(path + '/rdf-files'):
+    with tarfile.open(path + '/rdf-files.tar', 'r:') as f:
+      print("Extracting tar...")
+      f.extractall(path + '/rdf-files')
+  print("Done.")
+
+
 # Update the book index file
 def update_index_file(url=None):
   dcterms = rdflib.Namespace('http://purl.org/dc/terms/')
@@ -71,6 +97,7 @@ def update_index_file(url=None):
   # Get db connection and cursor
   conn, c = connect_database()
   # Go through all rdf files
+  print("Parsing RDF files. If this process is stopped, the progress is lost.")
   for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))):
     rdf_file_name = RDF_CATALOG_PATH + '/' + directory + '/pg' + directory + \
         '.rdf'
@@ -109,4 +136,5 @@ class BookNotFoundException(Exception):
 
 
 if __name__ == '__main__':
-  update_index_file()
+  # update_index_file()
+  pass

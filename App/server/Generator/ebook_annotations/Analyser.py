@@ -65,15 +65,23 @@ class Analyser:
   def eliminate_common(self, text=None):
     if text is None:
       text = self.nltk_text(self.text)
-    text = set(w for w in text if w.lower() not in self.common_words)
-    text = set(w for w in text if w.lower()
-               not in stopwords.words('english'))
+    # Remove the upper case words
+    # Remove common words
+    # Remove stopwords
+    text = set(w for w in text if w == w.lower() and
+               w.lower() not in self.common_words and
+               w.lower() not in stopwords.words('english'))
+
     return text
 
   # Find out which words / group of words represent a geographical
   # place / historical event / VIP, etc
   # TODO
   def get_extras(self, text):
+    if text is None:
+      text = self.nltk_text(self.text)
+    # Keep only uppercase words
+    text = set(w for w in text if w != w.lower())
     return self.nltk_text('')
 
   # Load the common words list
