@@ -37,6 +37,7 @@ class BookSearcher:
       # Delete book from db if invalid url
       if not self.test_valid_book_url(self.get_html_book_url(book[0])):
         self.delete_book_from_db(book[0])
+        continue
 
       result.append({"id": book[0], "title": book[1]})
     return result
@@ -97,8 +98,8 @@ class BookSearcher:
     # Search the db for id
     conn, c = connect_database()
     c.execute('''DELETE FROM books
-                 WHERE id = ?''', (the_id,))
-
+                 WHERE id=?''', (the_id,))
+    conn.commit()
 
 if __name__ == '__main__':
   pass
