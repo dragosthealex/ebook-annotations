@@ -81,7 +81,6 @@ class Analyser:
   # place / historical event / VIP, etc
   # TODO
   def get_extras(self, text=None):
-    return self.nltk_text("")
     if text is None:
       text = self.nltk_text(self.text)
     # Tag parts of speech
@@ -116,7 +115,6 @@ class Analyser:
         text.append(properNoun)
         # Finished with proper noun, so set it false
         isProperNoun = False
-
     # Remove duplicates
     seen = {}
     result = []
@@ -125,7 +123,9 @@ class Analyser:
         continue
       seen[w] = 1
       result.append(w)
-
+    # Eliminate common
+    result = [w for w in result if w.lower() not in self.common_words and
+              w.lower() not in stopwords.words('english')]
     return result
 
   # Load the common words list
