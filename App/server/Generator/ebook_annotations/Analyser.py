@@ -52,10 +52,10 @@ class Analyser:
   def preprocess_input(self, text):
     text = re.sub(ur"([^a-zA-Z0-9 -]+ +[^a-zA-Z0-9 -]*|[^a-zA-Z0-9 -]* +[^a-zA-Z0-9 -]+)", ' ', text)
     text = re.sub(ur"([^a-zA-Z0-9 -]+$|^[^a-zA-Z0-9 -]+)", '', text)
-    # text = re.sub(ur"([a-zA-Z0-9 -]+?)([^a-zA-Z0-9 -])([a-zA-Z0-9 -]+?)",
-    #               r"\1'\3", text)
+    text = re.sub(ur"([a-zA-Z0-9 -]+?)([^a-zA-Z0-9 -])([a-zA-Z0-9 -]+?)",
+                  r"\1'\3", text)
     text = re.sub(ur"([\x00-\x7F -]+?)([^a-zA-Z0-9 -]+)([\x00-\x7F -]+?)",
-                  ur"\1'\3", text.decode('utf-8')).encode("utf-8")
+                  ur"\1'\3", text).encode("utf-8")
     return re.sub(ur"([^a-zA-Z0-9 \-\'])", '', text)
 
   # Return the nltk Text object from given string
@@ -81,6 +81,7 @@ class Analyser:
   # place / historical event / VIP, etc
   # TODO
   def get_extras(self, text=None):
+    return self.nltk_text("")
     if text is None:
       text = self.nltk_text(self.text)
     # Tag parts of speech

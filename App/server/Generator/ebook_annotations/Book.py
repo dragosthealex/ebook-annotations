@@ -79,8 +79,8 @@ class Book:
           continue
         tag = enclose_in_html_tag('a', str(processed_word),
                                   {'class': 'annotation',
-                                   'data-content': 'Def: ' + str(ann.data),
-                                   'title': "<a href='" + str(ann.url) +
+                                   'data-content': 'Def: ' + ann.data,
+                                   'title': "<a href='" + ann.url +
                                    "'>More</a>"})
         # Replace the processed word found with a tag with the annotation
         words[index] = re.sub(processed_word, tag, current_word)

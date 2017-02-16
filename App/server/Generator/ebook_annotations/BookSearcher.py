@@ -34,6 +34,10 @@ class BookSearcher:
     books = c.fetchall()
     result = []
     for book in books:
+      # Delete book from db if invalid url
+      if not self.test_valid_book_url(self.get_html_book_url(book[0])):
+        self.delete_book_from_db(book[0])
+
       result.append({"id": book[0], "title": book[1]})
     return result
 
@@ -70,6 +74,14 @@ class BookSearcher:
     self.result_url = result_url
     return result_url
 
+  def test_valid_book_url(self, url=None):
+    r = requests.get(url)
+    self.root = BeautifulSoup(r.content, "html.parser")
+    # If no pre, then wrong link
+    if len(self.root.find_all('pre')) == 0:
+      return False
+    return True
+
   # Do a search from a query
   def search_for(self, query, the_id=None):
     self.search_query = query
@@ -79,6 +91,13 @@ class BookSearcher:
       self.book_id = the_id
     the_url = str(self.get_html_book_url())
     return (the_url, the_id, BookSource.GUTENBERG)
+
+  # Deletes a book from db by ID
+  def delete_book_from_db(self, the_id):
+    # Search the db for id
+    conn, c = connect_database()
+    c.execute('''DELETE FROM books
+                 WHERE id = ?''', (the_id,))
 
 
 if __name__ == '__main__':

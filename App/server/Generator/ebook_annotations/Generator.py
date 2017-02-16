@@ -59,8 +59,10 @@ class Generator:
     # Put the chapters in tags
     chapters = ''
     for index, chapter in enumerate(book.chapters):
-      ch_title = enclose_in_html_tag('a', book.chapter_titles[index],
-                                     {'name': 'ch-' + str(index)})
+      ch_title = ""
+      if len(book.chapter_titles) > 0:
+        ch_title = enclose_in_html_tag('a', book.chapter_titles[index],
+                                       {'name': 'ch-' + str(index)})
       ch_title = enclose_in_html_tag('h3', ch_title,
                                      {'class': 'chapter-title'})
       # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)

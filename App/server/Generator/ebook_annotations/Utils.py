@@ -123,7 +123,7 @@ def update_index_file(url=None):
 # Enclose some data in a given tag
 def enclose_in_html_tag(tag, data, attributes={}):
   text = '<' + str(tag) + ' ' + \
-         ' '.join(str(key) + '="' + str(value) + '"'
+         ' '.join(key + '="' + value + '"'
                   for key, value in attributes.iteritems()) + '>'
   text += data
   text += '</' + tag + '>'
