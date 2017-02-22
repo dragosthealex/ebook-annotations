@@ -24,6 +24,11 @@ $(document).ready(function() {
                 $("#main-content").html("<span class='error'>An error occurred: " + error + "</span>");
               }
               });
+    $(document).click(function(e) {
+      if(!$(e.target).hasClass("annotation")) {
+        $(".annotation").popover("hide");
+      }
+    });
 });
 </script>
 <?php
