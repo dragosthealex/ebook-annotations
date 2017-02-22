@@ -42,8 +42,7 @@ class Analyser:
     # Generate the annotations
     annotations = []
     for word in uncommon_words:
-      pass
-      # annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD))
+      annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD))
     for word in extras:
       annotations.append(TextAnnotation(word, AnnotationType.EXTRA))
     # Return the list of annotations
