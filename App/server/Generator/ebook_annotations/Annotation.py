@@ -40,7 +40,8 @@ class TextAnnotation:
 
     try:
       if result['status'] == 200 and result['total'] > 0:
-        self.data = (((result['results'])[0]['senses'])[0]['definition'])[0]
+        self.data = 'Def:&nbsp;' +\
+            (((result['results'])[0]['senses'])[0]['definition'])[0]
       else:
         self.data = None
     except Exception:
@@ -81,5 +82,8 @@ class TextAnnotation:
       return
     # Assign the value
     r = r[0]["abstract"]["value"]
-    self.data = r
     self.url = "http://wikipedia.org/wiki/" + self.word
+    # Make sure no more than 300 chars
+    if len(r) > 500:
+      r = r[:500] + "..."
+    self.data = 'About:&nbsp;' + r
