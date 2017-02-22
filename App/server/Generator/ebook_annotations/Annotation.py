@@ -2,6 +2,7 @@
 
 import requests
 import json
+import re
 from SPARQLWrapper import SPARQLWrapper, JSON
 from Utils import *
 
@@ -50,5 +51,35 @@ class TextAnnotation:
   # Gets the info about the set word (valid for extras)
   # TODO: Implement code to get the info
   def get_info(self):
-    self.data = 'Placeholder info here'
-    self.url = 'www.example-wikipedia.com'
+    w = re.sub(r"[ \"\']", '_', self.word)
+    # Do sparql stuff
+    sparql = SPARQLWrapper("http://dbpedia.org/sparql")
+    sparql.setQuery("""
+        PREFIX dbpprop: <http://dbpedia.org/property/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX yago:<http://dbpedia.org/class/yago/>
+        PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+        PREFIX category: <http://dbpedia.org/resource/Category:>
+        PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+        PREFIX dbpedia:<http://dbpedia.org/resource/>
+
+        SELECT ?abstract ?thumbnail
+        WHERE
+        {
+          dbpedia:%s dbpedia-owl:abstract ?abstract ;
+                                   dbpedia-owl:thumbnail ?thumbnail .
+          filter(langMatches(lang(?abstract),"en"))
+        }
+    """ % (w))
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    r = results["results"]["bindings"]
+    # No result
+    if(len(r) == 0):
+      self.data = None
+      self.url = None
+      return
+    # Assign the value
+    r = r[0]["abstract"]["value"]
+    self.data = r
+    self.url = "http://wikipedia.org/wiki/" + self.word

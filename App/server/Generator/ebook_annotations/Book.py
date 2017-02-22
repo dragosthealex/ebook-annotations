@@ -57,7 +57,7 @@ class Book:
     self.annotations = analyser.generate_annotations()
 
   def annotate(self):
-    for index, chapter in enumerate(self.chapters):
+    for index, chapter in enumerate(self.chapters[:1]):
       self.chapters[index] = self.apply_annotations(chapter)
 
   # Apply the annotations on the words
@@ -67,27 +67,60 @@ class Book:
     # Get just the annotation words
     words_to_annotate = [ann.word for ann in self.annotations]
     analyser = Analyser()
+    # Deal with multiple words proper nouns
+    proposed_ann_word = words[0]
+    in_word = False
+    number_of_words = 1
     for index, current_word in enumerate(words):
       # We need to remove extra stuff, like when looked for annotations
-      processed_word = analyser.preprocess_input(current_word)
+      current_word = analyser.preprocess_input(current_word)
+      # Test next word
+      next_word = "~!~"
+      if index + 1 < len(words):
+        next_word = analyser.preprocess_input(words[index + 1])
+
+      if not in_word:
+        if (current_word + " " + next_word) in words_to_annotate:
+          proposed_ann_word = current_word + " " + next_word
+          number_of_words = 2
+          in_word = True
+          continue
+        else:
+          proposed_ann_word = current_word
+          number_of_words = 1
+      else:
+        if (proposed_ann_word + " " + next_word) in words_to_annotate:
+          proposed_ann_word += " " + next_word
+          number_of_words += 1
+          continue
+        else:
+          in_word = False
+
       # Check if the word or its lower case version is to be annotated
-      if processed_word in words_to_annotate:
+      if proposed_ann_word in words_to_annotate:
         # Get the annotation tag
-        ann = self.annotations[words_to_annotate.index(processed_word)]
+        ann = self.annotations[words_to_annotate.index(proposed_ann_word)]
         # We didn't find the meaning
         if ann.data is None:
           continue
-        tag = enclose_in_html_tag('a', str(processed_word),
+        tag = enclose_in_html_tag('a', str(proposed_ann_word),
                                   {'class': 'annotation',
-                                   'data-content': 'Def: ' + ann.data,
+                                   'data-content': 'Def: ' +
+                                   ann.data,
                                    'title': "<a href='" + ann.url +
                                    "'>More</a>"})
         # Replace the processed word found with a tag with the annotation
-        words[index] = re.sub(processed_word, tag, current_word)
+        if number_of_words == 1:
+          words[index] = re.sub(proposed_ann_word, tag, current_word)
+        else:
+          # Delete words
+          words[index - number_of_words + 1:index + 1] = []
+          # Replace with tag
+          words.insert(index - number_of_words + 1, tag)
         # Remove annotation from list
         if ann in self.annotations:
           self.annotations.remove(ann)
-          words_to_annotate.remove(processed_word)
+          words_to_annotate.remove(proposed_ann_word)
     # Rebuild the original text
     text = ' '.join(words)
     return text

@@ -42,7 +42,8 @@ class Analyser:
     # Generate the annotations
     annotations = []
     for word in uncommon_words:
-      annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD))
+      pass
+      # annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD))
     for word in extras:
       annotations.append(TextAnnotation(word, AnnotationType.EXTRA))
     # Return the list of annotations
@@ -89,7 +90,6 @@ class Analyser:
     isProperNoun = False
     text = []
     properNoun = ""
-    print(tagged)
     for index, (word, tag) in enumerate(tagged):
       if not isProperNoun and (tag == 'NNP' or tag == 'NNPS'):
         # Start building a proper noun
@@ -98,13 +98,11 @@ class Analyser:
         isProperNoun = True
         # Add it to annotations anyway
         text.append(word)
-        print(word + " -> nnp")
       elif tag == 'NNP' or tag == 'NNPS':
         # Previous was proper noun. So it may be combined
         properNoun += " " + word
         # Add the single word to annotations anyway, in case it might be not
         text.append(word)
-        print(word + " -> nnp2")
       elif isProperNoun and tag == 'IN':
         # Add what we have by now to the text
         text.append(properNoun)
