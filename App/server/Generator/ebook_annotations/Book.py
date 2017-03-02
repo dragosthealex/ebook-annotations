@@ -52,12 +52,12 @@ class Book:
     # text = ''
     # for chapter in self.chapters:
     #   text += str(chapter)
-    # Use analyser for first chapter only
-    analyser = Analyser(self.chapters[0])
+    # Use analyser for first 2 chapters only
+    analyser = Analyser(self.chapters[:2])
     self.annotations = analyser.generate_annotations()
 
   def annotate(self):
-    for index, chapter in enumerate(self.chapters[:1]):
+    for index, chapter in enumerate(self.chapters[:2]):
       self.chapters[index] = self.apply_annotations(chapter)
 
   # Apply the annotations on the words
