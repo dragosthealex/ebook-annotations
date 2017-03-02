@@ -58,7 +58,7 @@ class Generator:
     book.annotate()
     # Put the chapters in tags
     chapters = ''
-    for index, chapter in enumerate(book.chapters[:1]):
+    for index, chapter in enumerate(book.chapters):
       ch_title = ""
       if len(book.chapter_titles) > 0:
         ch_title = enclose_in_html_tag('a', book.chapter_titles[index],

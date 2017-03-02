@@ -60,7 +60,6 @@ class GutenbergParser(Parser):
     self.find_chapter_title_tag()
     self.url = url
 
-  # Get the title of the book
   def get_title(self):
     """
     Returns the title of the book, from the H1 element.
@@ -75,7 +74,6 @@ class GutenbergParser(Parser):
       title = title + self.stringy(child)
     return title
 
-  # Get the author of the book
   def get_author(self):
     """
     Returns the author of the book, using either H1 or H2 elements.
@@ -91,7 +89,6 @@ class GutenbergParser(Parser):
       author = author + self.stringy(child)
     return author
 
-  # Find out whther the chapters are marked by h2 or h3 tags
   def find_chapter_title_tag(self):
     """
     Find what tag corresponds to chapter titles. Can be either H2 or H3.
@@ -102,10 +99,6 @@ class GutenbergParser(Parser):
     if len(self.root.find_all(self.filter_chapters)) < 3:
       self.chapter_title_tag = 'h3'
 
-  # Chapters are marked with a h2/h3 tag
-  # Filter out the others, such as illustrations and contents table, also
-  # marked with h2 tag
-  # Also filter out the author
   def filter_chapters(self, tag):
     """
     Function that takes a tag and returns true if it's probable to be a
@@ -119,7 +112,6 @@ class GutenbergParser(Parser):
         and not re.compile('((?i)^[/\n/\r ]*illustrations)').search(s) \
         and not re.compile('((?i)' + self.get_author() + ')').search(s)
 
-  # Get the table of contents
   def get_chapter_titles(self):
     """
     Get a list with the chapter titles.
