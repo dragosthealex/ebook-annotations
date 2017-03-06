@@ -38,9 +38,7 @@ HTML_BOOKS_FOLDER = os.path.join(os.path.dirname(__file__), '../../html_books')
 
 
 def represents_int(s):
-  """
-  Checks whether a given string represents an int.
-  """
+  """Check whether a given string represents an int."""
   try:
     int(s)
     return True
@@ -49,18 +47,14 @@ def represents_int(s):
 
 
 def connect_database():
-  """
-  Connects to the local database, returning the connection and a cursor.
-  """
+  """Connect to the local database, returning the connection and a cursor."""
   conn = sqlite3.connect(DB_FILE_NAME)
   c = conn.cursor()
   return (conn, c)
 
 
 def reset_database():
-  """
-  Resets the database, parsing the RDF files to index them
-  """
+  """Reset the database, parsing the RDF files to index them."""
   # Delete the file if it exists
   if os.path.isfile(DB_FILE_NAME):
     os.unlink(DB_FILE_NAME)
@@ -78,7 +72,8 @@ def reset_database():
 
 
 def download_index_file():
-  """
+  """Download the RDF files.
+
   Connects to a gutenberg mirror and downloads the RDF catalog that contains
   indices for all the books.
   """
@@ -105,7 +100,8 @@ def download_index_file():
 
 
 def reseed_db_indices(url=None):
-  """
+  """Reset the database, and reseed it.
+
   Resets the database, re-inserting the book entries parsed from the downloaded
   RDF files. If the RDF files are not found try to download them.
   """
@@ -142,10 +138,7 @@ def reseed_db_indices(url=None):
 
 
 def enclose_in_html_tag(tag, data, attributes={}):
-  """
-  Encloses the given string data in a HTML tag, optionally with HTML
-  attributes.
-  """
+  """Enclose the data in a HTML tag with attributes."""
   text = '<' + str(tag) + ' ' + \
          ' '.join(key + '="' + value + '"'
                   for key, value in attributes.iteritems()) + '>'
@@ -154,8 +147,9 @@ def enclose_in_html_tag(tag, data, attributes={}):
   return text
 
 
-# Exceptions
 class BookNotFoundException(Exception):
+  """Thrown if a book was not found."""
+
   pass
 
 

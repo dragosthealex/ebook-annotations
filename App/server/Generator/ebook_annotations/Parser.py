@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Parser module and its descendants."""
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -9,10 +10,13 @@ __all__ = ['GutenbergParser']
 
 # Parser class
 class Parser():
+  """Parses the HTML into useful information."""
 
   def stringy(self, string):
-    """
-    Make unicode-converted strings back into utf8, and replace <br> with spaces.
+    """Format a string into a ready-to-use form.
+
+    Make unicode-converted strings back into utf8, and replace <br> with
+    spaces.
     """
     if not string or string is None or string == '':
       return ''
@@ -39,15 +43,24 @@ class Parser():
 
 # Parse the html ebook from gutenberg
 class GutenbergParser(Parser):
+  """A parser for Gutenberg Project source.
 
-  # The url of the html book
+  Attributes:
+    url (str): The url of the HTML book
+    root (:obj:`Tag`): The root of the document
+    chapter_title_tag (str): The chapter title, either h2 or h3
+  """
+
   url = None
-  # The root element
   root = None
-  # The chapter title can be h2/h3
   chapter_title_tag = None
 
   def __init__(self, url):
+    """Initialise the parser.
+
+    Args:
+      url (string): The url to be used for retrieving the HTML.
+    """
     r = requests.get(url)
     # Extract all line breaks
     content = re.sub(r'(?i)(\<br\>|\<\/br\>|\< \/br\>|\<\/ br\>|\< \\br\>)', '', r.content)
@@ -61,9 +74,7 @@ class GutenbergParser(Parser):
     self.url = url
 
   def get_title(self):
-    """
-    Returns the title of the book, from the H1 element.
-    """
+    """Return the title of the book, from the H1 element."""
     title = ''
     if self.root.h1 is None:
       for child in self.root.h2.descendants:
@@ -75,9 +86,7 @@ class GutenbergParser(Parser):
     return title
 
   def get_author(self):
-    """
-    Returns the author of the book, using either H1 or H2 elements.
-    """
+    """Return the author of the book, using either H1 or H2 elements."""
     author = ''
     # Try with h1
     if self.root.h2 is None:
@@ -90,8 +99,9 @@ class GutenbergParser(Parser):
     return author
 
   def find_chapter_title_tag(self):
-    """
-    Find what tag corresponds to chapter titles. Can be either H2 or H3.
+    """Find what tag corresponds to chapter titles.
+
+    Can be either H2 or H3.
     Set the attribute with the tag name.
     """
     # We assume it's h2. If we don't have too many, it means it's h3
@@ -100,9 +110,13 @@ class GutenbergParser(Parser):
       self.chapter_title_tag = 'h3'
 
   def filter_chapters(self, tag):
-    """
-    Function that takes a tag and returns true if it's probable to be a
-    title of a chapter.
+    """Check if the tag contains the title of a chapter.
+
+    Args:
+      tag (string): the HTML tag to be checked.
+    Returns:
+      True if it passes the regex check (if it's a chapter title)
+      false otherwise.
     """
     s = self.stringy(tag.text)
     return s and tag.name == self.chapter_title_tag \
@@ -113,21 +127,20 @@ class GutenbergParser(Parser):
         and not re.compile('((?i)' + self.get_author() + ')').search(s)
 
   def get_chapter_titles(self):
-    """
-    Get a list with the chapter titles.
+    """Get a list with the chapter titles.
+
+    Returns:
+      A list of chapter titles.
     """
     chapter_titles = []
     chapter_tags = self.root.find_all(self.filter_chapters)
     # Construct the list with chapters
     for chapter_tag in chapter_tags:
       chapter_titles.append(self.stringy(chapter_tag.text))
-
     return chapter_titles
 
   def get_chapters_2(self):
-    """
-    Old function for getting chapters.
-    """
+    """Old function for getting chapters."""
     chapters = []
     chapters.append('')
     for sibling in self.root.find(self.filter_chapters).next_siblings:
@@ -138,9 +151,13 @@ class GutenbergParser(Parser):
     return chapters
 
   def get_chapters(self):
-    """
-    Get a list of chapters in the book. Based on the chapter titles tags,
+    """Get a list of chapters in the book.
+
+    Based on the chapter titles tags,
     which can be H2 or H3. Returns just the text of the chapters.
+
+    Returns:
+      A list containing the chapters in string form.
     """
     # Initialise chapters
     chapters = []
