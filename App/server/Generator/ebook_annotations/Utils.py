@@ -30,7 +30,8 @@ COMMON_WORDS_FILE_NAME = os.path.join(os.path.dirname(__file__),
                                       './common_words')
 RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__),
                                 './rdf-files/cache/epub')
-DB_FILE_NAME = os.path.join(os.path.dirname(__file__), './database.db')
+DB_FILE_NAME = os.path.join(os.path.dirname(__file__),
+                            './database/database.db')
 HTML_BOOKS_FOLDER = os.path.join(os.path.dirname(__file__), '../../html_books')
 
 
