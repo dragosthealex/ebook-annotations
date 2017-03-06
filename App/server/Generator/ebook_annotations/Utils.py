@@ -77,8 +77,11 @@ def reset_database():
     import migration
 
 
-# Download the book index RDF files
 def download_index_file():
+  """
+  Connects to a gutenberg mirror and downloads the RDF catalog that contains
+  indices for all the books.
+  """
   path = os.path.dirname(__file__)
   url = URLS['GUTENBERG_RDF_CATALOG']
   response = requests.get(url, stream=True)
@@ -101,13 +104,19 @@ def download_index_file():
   print("Done.")
 
 
-# Update the book index file
-def update_index_file(url=None):
+def reseed_db_indices(url=None):
+  """
+  Resets the database, re-inserting the book entries parsed from the downloaded
+  RDF files. If the RDF files are not found try to download them.
+  """
   dcterms = rdflib.Namespace('http://purl.org/dc/terms/')
   # Reset the db
   reset_database()
   # Get db connection and cursor
   conn, c = connect_database()
+  # Check we have rdf, else download
+  if not os.isdir(RDF_CATALOG_PATH):
+    download_index_file()
   # Go through all rdf files
   print("Parsing RDF files. If this process is stopped, the progress is lost.")
   for index, directory in tqdm(list(enumerate(os.listdir(RDF_CATALOG_PATH)))):
@@ -132,8 +141,11 @@ def update_index_file(url=None):
   conn.commit()
 
 
-# Enclose some data in a given tag
 def enclose_in_html_tag(tag, data, attributes={}):
+  """
+  Encloses the given string data in a HTML tag, optionally with HTML
+  attributes.
+  """
   text = '<' + str(tag) + ' ' + \
          ' '.join(key + '="' + value + '"'
                   for key, value in attributes.iteritems()) + '>'
@@ -148,5 +160,5 @@ class BookNotFoundException(Exception):
 
 
 if __name__ == '__main__':
-  # update_index_file()
+  # reseed_db_indices()
   pass

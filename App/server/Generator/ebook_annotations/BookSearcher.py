@@ -1,3 +1,4 @@
+"""Book searcher module."""
 import requests
 import re
 from urllib import quote
@@ -12,19 +13,36 @@ __all__ = ['BookSearcher']
 
 
 class BookSearcher:
+  """Deals with searching the books by query / id.
 
-  # The query that we are searching for
+  Attributes:
+    search_query (str): The query we are searching for.
+    book_id (int): The retrieved book id.
+    result_url (str): The url that we got after a search.
+  """
+
   search_query = None
-  # The book id
   book_id = None
-  # The URL of the actual HTML book
   result_url = None
-  # Whether to display everything
 
   def __init__(self, search_query=None):
+    """Initialise the searcher with an optional query.
+
+    Args:
+      search_query (str, optional): The query we will use to search.
+    """
     self.search_query = search_query
 
   def get_results_for(self, query=None):
+    """Get all results for a given query.
+
+    Args:
+      query (str, optional): The query used to search. If it is not provided
+                             `self.search_query` will be used.
+    Returns:
+      A list of dicts containing the book id and title of all the resulted
+      books.
+    """
     if query is None:
       query = self.search_query
     # Search for the item in db
@@ -42,8 +60,15 @@ class BookSearcher:
       result.append({"id": book[0], "title": book[1]})
     return result
 
-  # Get the id of the book by searching in db
   def get_book_id(self, query=None):
+    """Get the id of the book by searching in db.
+
+    Args:
+      query (str, optional): The query used to search. If it is not provided
+                             `self.search_query` will be used.
+    Returns:
+      The book ID if it is found, else throws BookNotFoundException
+    """
     if query is None:
       query = self.search_query
     # Search the db for id
@@ -58,8 +83,15 @@ class BookSearcher:
     self.book_id = book_id
     return book_id
 
-  # Create the url of the book from its id
   def get_html_book_url(self, the_id=None):
+    """Create the url of the book from its id.
+
+    Args:
+      the_id (int, optional): The id of the book. If it is not provided
+                             `self.book_id` will be used.
+    Returns:
+      The resulted URL.
+    """
     if the_id is None:
       the_id = self.book_id
     # The way file resources work is, if we have a book number 12333,
@@ -76,6 +108,14 @@ class BookSearcher:
     return result_url
 
   def test_valid_book_url(self, url=None):
+    """Test whether a book URL is valid.
+
+    Args:
+      url (string, optional): The  url to test. If it is not provided
+                             `self.result_url` will be used.
+    Returns:
+      True if the URL is valid, false otherwise.
+    """
     r = requests.get(url)
     self.root = BeautifulSoup(r.content, "html.parser")
     # If no pre, then wrong link
@@ -85,6 +125,17 @@ class BookSearcher:
 
   # Do a search from a query
   def search_for(self, query, the_id=None):
+    """Search for a given ID, also keeping the query.
+
+    Args:
+      query (str): The query to set the searcher to.
+      the_id (int, optional): The id of the book. If it is not provided
+                             `self.book_id` will be used.
+    Returns:
+      A touple (url, id, source), where url is the book URL, id is the id
+      of the book and source is the source where the book was parsed from
+      (just Gutenberg for now).
+    """
     self.search_query = query
     if the_id is None:
       the_id = self.get_book_id()
@@ -93,8 +144,12 @@ class BookSearcher:
     the_url = str(self.get_html_book_url())
     return (the_url, the_id, BookSource.GUTENBERG)
 
-  # Deletes a book from db by ID
   def delete_book_from_db(self, the_id):
+    """Delete a book from db by ID.
+
+    Args:
+      the_id (int): The id of the book that must be deleted.
+    """
     # Search the db for id
     conn, c = connect_database()
     c.execute('''DELETE FROM books
