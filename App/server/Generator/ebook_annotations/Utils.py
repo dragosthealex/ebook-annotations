@@ -32,11 +32,15 @@ RDF_CATALOG_PATH = os.path.join(os.path.dirname(__file__),
                                 './rdf-files/cache/epub')
 DB_FILE_NAME = os.path.join(os.path.dirname(__file__),
                             './database/database.db')
+DB_MIGRATIONS_FOLDER = os.path.join(os.path.dirname(__file__),
+                                    './database/migrations')
 HTML_BOOKS_FOLDER = os.path.join(os.path.dirname(__file__), '../../html_books')
 
 
-# Check if string s represents an int
 def represents_int(s):
+  """
+  Checks whether a given string represents an int.
+  """
   try:
     int(s)
     return True
@@ -44,15 +48,19 @@ def represents_int(s):
     return False
 
 
-# Connect to the database, returning the connection and a cursor
 def connect_database():
+  """
+  Connects to the local database, returning the connection and a cursor.
+  """
   conn = sqlite3.connect(DB_FILE_NAME)
   c = conn.cursor()
   return (conn, c)
 
 
-# Create the sqlite database
 def reset_database():
+  """
+  Resets the database, parsing the RDF files to index them
+  """
   # Delete the file if it exists
   if os.path.isfile(DB_FILE_NAME):
     os.unlink(DB_FILE_NAME)
@@ -64,6 +72,9 @@ def reset_database():
               url text)''')
   conn.commit()
   conn.close()
+  # Run all the migrations (modifications made to the db)
+  for migration in os.listdir(DB_MIGRATIONS_FOLDER):
+    import migration
 
 
 # Download the book index RDF files
