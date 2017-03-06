@@ -12,8 +12,7 @@ class Parser():
 
   def stringy(self, string):
     """
-    Make unicode-converted strings back into utf8, and replace <br> with
-    spaces.
+    Make unicode-converted strings back into utf8, and replace <br> with spaces.
     """
     if not string or string is None or string == '':
       return ''
@@ -51,8 +50,7 @@ class GutenbergParser(Parser):
   def __init__(self, url):
     r = requests.get(url)
     # Extract all line breaks
-    content = re.sub(r'(?i)(\<br\>|\<\/br\>|\< \/br\>|\<\/ br\>|\< \\br\>)',
-                     '', r.content)
+    content = re.sub(r'(?i)(\<br\>|\<\/br\>|\< \/br\>|\<\/ br\>|\< \\br\>)', '', r.content)
     self.root = BeautifulSoup(content, "html.parser")
     # If no pre, then wrong link
     if len(self.root.find_all('pre')) == 0:
