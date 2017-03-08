@@ -68,6 +68,7 @@ class Migration(BaseMigration):
     self.assertEqual('stuff', row[1])
     # If successful, delete the table
     c.execute("DROP TABLE IF EXISTS test")
+    c.execute("DROP TABLE IF EXISTS migrations")
     conn.commit()
 
   def test_migrate_rollback(self):
@@ -97,4 +98,5 @@ class Migration(BaseMigration):
                  WHERE type='table' AND name='test'""")
     self.assertEqual(len(c.fetchall()), 0)
     c.execute("DROP TABLE IF EXISTS test")
+    c.execute("DROP TABLE IF EXISTS migrations")
     conn.commit()

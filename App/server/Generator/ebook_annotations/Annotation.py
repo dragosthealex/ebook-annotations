@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-
+"""Contains the Annotation classes."""
 import requests
+import hashlib
 import json
 import re
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -10,29 +11,40 @@ __all__ = ['TextAnnotation', 'AnnotationType']
 
 
 class AnnotationType:
+  """Enum for Annotation types."""
+
   UNCOMMON_WORD = 0
   EXTRA = 1
 
 
 class TextAnnotation:
+  """Annotation that contains some text.
+
+  TODO: Make proper docstrings.
+  """
 
   the_type = None
   word = None
   data = None
   url = None
+  votes = None
 
   def __init__(self, word, the_type):
+    """Initialise the Annotation."""
     self.the_type = the_type
     self.word = word
+    self.votes = 0
 
     if the_type == AnnotationType.UNCOMMON_WORD:
       self.get_meaning()
     elif the_type == AnnotationType.EXTRA:
       self.get_info()
 
-  # Gets the meaning of the set word
-  # TODO: implement caching of meaning
   def get_meaning(self):
+    """Get the meaning of the set word."""
+    # Try from db first
+    if self.get_from_db():
+      return
     dict_url = URLS["DICTIONARY_URL"]
     dict_api_url = URLS["DICTIONARY_API_URL"]
     # When searching use lower case version
@@ -49,9 +61,11 @@ class TextAnnotation:
 
     self.url = dict_url + self.word
 
-  # Gets the info about the set word (valid for extras)
-  # TODO: Implement code to get the info
   def get_info(self):
+    """Get the info about the set word (valid for extras)."""
+    # Try from db first
+    if self.get_from_db(case_sensitive=True):
+      return
     w = re.sub(r"[ \"\']", '_', self.word)
     # Do sparql stuff
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
@@ -87,3 +101,24 @@ class TextAnnotation:
     if len(r) > 500:
       r = r[:500] + "..."
     self.data = 'About:&nbsp;' + r
+
+  def get_from_db(self, case_sensitive=False):
+    """Get the info from the database.
+
+    Returns:
+      True if the annotation was populated from db, otherwise False.
+    """
+    m = hashlib.sha256()
+    if case_sensitive:
+      m.update(self.word)
+    else:
+      m.update(self.word.lower())
+    conn, c = connect_database()
+    c.execute('''SELECT * FROM annotations
+                 WHERE hash=?
+                 LIMIT 1''', (m.hexdigest(),))
+    result = c.fetchone()
+    if result is None:
+      return False
+    self.data = result[3]
+    self.votes = result[4]

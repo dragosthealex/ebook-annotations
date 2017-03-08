@@ -11,3 +11,4 @@ from Analyser import *
 from BookSearcher import *
 from Generator import *
 from Utils import *
+from Annotation import *
