@@ -16,7 +16,7 @@ from tqdm import tqdm
 __all__ = ['URLS', 'DB_FILE_NAME', 'DB_MIGRATIONS_FOLDER', 'connect_database',
            'enclose_in_html_tag', 'COMMON_WORDS_FILE_NAME',
            'HTML_BOOKS_FOLDER', 'BookNotFoundException',
-           'migrate_up', 'migrate_rollback']
+           'migrate_up', 'migrate_rollback', 'CachingType']
 
 URLS = {
     'GUTENBERG_SEARCH': 'http://www.gutenberg.org/ebooks/search/?query=',
@@ -183,7 +183,6 @@ class CachingType:
   HTML = 1
   ANNOTATIONS = 2
   HTML_ANNOTATIONS = 3
-
 
 
 if __name__ == '__main__':

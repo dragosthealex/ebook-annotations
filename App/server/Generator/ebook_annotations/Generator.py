@@ -46,18 +46,6 @@ class Generator:
     self._html_file_name = value
 
   @property
-  def pdf_file_name(self):
-    """Get the resulted url."""
-    if self._pdf_file_name is None:
-      raise AttributeError("Attribute pdf_file_name was not set.")
-    return self._pdf_file_name
-
-  @pdf_file_name.setter
-  def pdf_file_name(self, value):
-    """Set the resulted url."""
-    self._pdf_file_name = value
-
-  @property
   def searcher(self):
     """Get the resulted url."""
     if self._searcher is None:
@@ -73,7 +61,6 @@ class Generator:
     """Initialise the Generator."""
     self._book = None
     self._html_file_name = None
-    self._pdf_file_name = None
     self._searcher = BookSearcher()
 
   def search_for_query(self, query):
@@ -87,10 +74,10 @@ class Generator:
       books.
     """
     self.searcher.search_query = query
-    results = self.searcher.get_json_results(query)
+    results = self.searcher.search_for_query()
     return results
 
-  def generate_html_book(self, the_id, caching=None):
+  def generate_html_book(self, the_id, caching=CachingType.NONE):
     """Generate the html book given a title.
 
     Args:
@@ -103,8 +90,10 @@ class Generator:
     url, the_id, source = self.searcher.get_book_info()
     # Create the book from url and source
     book = Book(url, the_id, source)
-    # If book cached, return the file
-    if(book.is_cached_html()):
+
+    # Check html caching
+    if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
+       book.is_cached_html():
       return book.get_html_file_name()
     # Else, parse the book into the object
     book.populate_content()
@@ -122,9 +111,11 @@ class Generator:
       table_of_contents += enclose_in_html_tag('li', chapter_tag)
     table_of_contents = enclose_in_html_tag('ul', table_of_contents,
                                             {'class': 'chapter_title'})
+
     # Annotate the text (in chapters)
     book.get_annotations()
     book.annotate()
+
     # Put the chapters in tags
     chapters = ''
     for index, chapter in enumerate(book.chapters):
@@ -146,15 +137,22 @@ class Generator:
     # Create the html file
     with codecs.open(file_name, 'w', encoding="utf-8") as f:
       f.write(html)
+
     # Return its name
     return file_name
 
 
-if __name__ == '__main__':
-
+def main():
+  """Run this module as stand-alone."""
   title = raw_input('Input the title to search for: \n')
-  searcher = UrlSearcher2()
-  url = searcher.search_for(title)
-  print(url)
-  book = Book(url)
-  book.print_txt(title + '.txt')
+  g = Generator()
+  results = g.search_for_query(title)
+  if len(results) == 0:
+    print("No results.")
+    return
+  file_name = g.generate_html_book(results[0]["id"])
+  print(file_name)
+  g.book.print_text(title + '.txt')
+
+if __name__ == '__main__':
+  main()

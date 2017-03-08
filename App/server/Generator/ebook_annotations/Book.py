@@ -124,6 +124,16 @@ class Book:
     text = ' '.join(words)
     return text
 
+  def print_text(self, file_name='book.txt'):
+    """Print the book contents into a text file."""
+    with codecs.open(file_name, 'w') as f:
+      f.write(self.title)
+      f.write('\n')
+      f.write(self.author)
+      f.write('\n')
+      f.write(' '.join(self.chapter_titles))
+      f.write('\n')
+      f.write('\n'.join(self.chapters))
 
 if __name__ == '__main__':
   pass
