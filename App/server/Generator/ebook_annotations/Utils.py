@@ -9,6 +9,7 @@ import rdflib
 import sqlite3
 import zipfile
 import tarfile
+import argparse
 from limigrations import limigrations
 from tqdm import tqdm
 
@@ -56,14 +57,20 @@ def connect_database():
   return (conn, c)
 
 
+def reset_migrations():
+  """Drop the migrations table."""
+  conn, c = connect_database()
+  c.execute('''DROP TABLE IF EXISTS migrations''')
+  conn.commit()
+
+
 def reset_database():
-  """Reset the database, parsing the RDF files to index them."""
+  """Reset the database, creating the books table."""
   # Delete the file if it exists
   if os.path.isfile(DB_FILE_NAME):
     os.unlink(DB_FILE_NAME)
   # Create and connect to db
   conn, c = connect_database()
-  # Create the books table
   c.execute('''CREATE TABLE books
               (id text, title text, html_file_name text, pdf_file_name,
               url text)''')
@@ -73,10 +80,12 @@ def reset_database():
 
 
 def migrate_up():
+  """Run all the migrations."""
   limigrations.migrate(DB_FILE_NAME, DB_MIGRATIONS_FOLDER)
 
 
 def migrate_rollback():
+  """Roll back the last migration."""
   limigrations.rollback(DB_FILE_NAME, DB_MIGRATIONS_FOLDER)
 
 
@@ -108,7 +117,7 @@ def download_index_file():
   print("Done.")
 
 
-def reseed_db_indices(url=None):
+def reset_refresh(url=None):
   """Reset the database, and reseed it.
 
   Resets the database, re-inserting the book entries parsed from the downloaded
@@ -162,5 +171,22 @@ class BookNotFoundException(Exception):
 
 
 if __name__ == '__main__':
-  # reseed_db_indices()
+  parser = argparse.ArgumentParser()
+  parser.add_argument("action", help="The action to be taken. Can be " +
+                      "migrate, rollback, reset_db, download_rdf, " +
+                      "reset_migrations")
+  args = parser.parse_args()
+  if args.action == 'migrate':
+    migrate_up()
+  elif args.action == 'rollback':
+    migrate_rollback()
+  elif args.action == 'reset_db':
+    reset_refresh()
+  elif args.action == 'download_rdf':
+    download_index_file()
+  elif args.action == 'reset_migrations':
+    reset_migrations()
+  else:
+    print("Invalid action.")
+    parser.print_help()
   pass
