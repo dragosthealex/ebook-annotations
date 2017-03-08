@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Test the book searcher."""
 import unittest
 from context import BookSearcher
@@ -7,23 +8,32 @@ from context import BookSource
 class TestBookSearcher(unittest.TestCase):
   """Test case for the book searcher."""
 
-  def test_get_book_id(self):
-    searcher = BookSearcher()
-    the_id = searcher.get_book_id('moorish literature')
-    self.assertIsNot(the_id, None)
-    self.assertEqual(str(the_id), '10085')
+  def test_search_for_query(self):
+    """Test whether the correct json results are retrieved."""
+    pass
 
-  def test_get_html_book_url(self):
+  def test_construct_url_from_id(self):
+    """Test if the correct url is constructed."""
     searcher = BookSearcher()
-    url = searcher.get_html_book_url('10085')
+    searcher.book_id = '10085'
+    url = searcher.construct_url_from_id()
     self.assertIsNot(url, None)
     self.assertEqual(str(url),
                      'http://www.mirrorservice.org/sites/gutenberg.org' +
                      '/1/0/0/8/10085/10085-h/10085-h.htm')
 
-  def test_search_for(self):
+  def test_get_book_info(self):
+    """Test if the correct book info is retrieved."""
     searcher = BookSearcher()
-    url, the_id, source = searcher.search_for('moorish literature')
+    searcher.search_query = 'moorish literature'
+    # Get the results
+    results = searcher.search_for_query()
+    # We only care about the first
+    first_id = results[0]["id"]
+    searcher.book_id = first_id
+    # Get the info
+    url, the_id, source = searcher.get_book_info()
+    # Test the assertions
     self.assertIsNot(the_id, None)
     self.assertIsNot(url, None)
     self.assertIsNot(source, None)

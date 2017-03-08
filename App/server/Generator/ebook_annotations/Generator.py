@@ -31,12 +31,13 @@ class Generator:
     self.searcher = BookSearcher()
     pass
 
-  def get_json_results(self, query):
+  def search_for_query(self, query):
     """Searche for a query and returns the possible matches."""
-    results = self.searcher.get_results_for(query)
+    self.searcher.search_query = query
+    results = self.searcher.get_json_results(query)
     return results
 
-  def generate_html_book(self, query=None, the_id=None, caching=None):
+  def generate_html_book(self, the_id, caching=None):
     """Generate the html book given a title.
 
     Args:
@@ -45,7 +46,8 @@ class Generator:
       The absolute path to the generated file.
     """
     # Get the url and the source from the query
-    url, the_id, source = self.searcher.search_for(query, the_id)
+    self.searcher.book_id = the_id
+    url, the_id, source = self.searcher.get_book_info()
     # Create the book from url and source
     book = Book(url, the_id, source)
     # If book cached, return the file

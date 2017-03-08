@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Book searcher module."""
 import requests
 import re
@@ -21,19 +22,53 @@ class BookSearcher:
     result_url (str): The url that we got after a search.
   """
 
-  search_query = None
-  book_id = None
-  result_url = None
+  @property
+  def search_query(self):
+    """Get the search query."""
+    if self._search_query is None:
+      raise AttributeError("Attribute search_query was not set.")
+    return self._search_query
 
-  def __init__(self, search_query=None):
+  @search_query.setter
+  def search_query(self, value):
+    """Set the search query."""
+    self._search_query = value
+
+  @property
+  def book_id(self):
+    """Get the book id."""
+    if self._book_id is None:
+      raise AttributeError("Attribute book_id was not set.")
+    return self._book_id
+
+  @book_id.setter
+  def book_id(self, value):
+    """Set the book id."""
+    self._book_id = value
+
+  @property
+  def result_url(self):
+    """Get the resulted url."""
+    if self._result_url is None:
+      raise AttributeError("Attribute result_url was not set.")
+    return self._result_url
+
+  @result_url.setter
+  def result_url(self, value):
+    """Set the resulted url."""
+    self._result_url = value
+
+  def __init__(self, search_query=None, book_id=None):
     """Initialise the searcher with an optional query.
 
     Args:
       search_query (str, optional): The query we will use to search.
     """
-    self.search_query = search_query
+    self._search_query = search_query
+    self._book_id = book_id
+    self._result_url = None
 
-  def get_results_for(self, query=None):
+  def search_for_query(self):
     """Get all results for a given query.
 
     Args:
@@ -43,8 +78,7 @@ class BookSearcher:
       A list of dicts containing the book id and title of all the resulted
       books.
     """
-    if query is None:
-      query = self.search_query
+    query = self.search_query
     # Search for the item in db
     conn, c = connect_database()
     c.execute('''SELECT * FROM books
@@ -53,37 +87,13 @@ class BookSearcher:
     result = []
     for book in books:
       # Delete book from db if invalid url
-      if not self.test_valid_book_url(self.get_html_book_url(book[0])):
+      if not self.test_valid_book_url(self.construct_url_from_id(book[0])):
         self.delete_book_from_db(book[0])
         continue
-
       result.append({"id": book[0], "title": book[1]})
     return result
 
-  def get_book_id(self, query=None):
-    """Get the id of the book by searching in db.
-
-    Args:
-      query (str, optional): The query used to search. If it is not provided
-                             `self.search_query` will be used.
-    Returns:
-      The book ID if it is found, else throws BookNotFoundException
-    """
-    if query is None:
-      query = self.search_query
-    # Search the db for id
-    conn, c = connect_database()
-    c.execute('''SELECT id FROM books
-                 WHERE title LIKE ?
-                 LIMIT 1''', ('%' + query.lower() + '%',))
-    book_id = c.fetchone()
-    if book_id is None:
-      raise BookNotFoundException()
-    book_id = book_id[0]
-    self.book_id = book_id
-    return book_id
-
-  def get_html_book_url(self, the_id=None):
+  def construct_url_from_id(self, the_id=None):
     """Create the url of the book from its id.
 
     Args:
@@ -107,7 +117,7 @@ class BookSearcher:
     self.result_url = result_url
     return result_url
 
-  def test_valid_book_url(self, url=None):
+  def test_valid_book_url(self, url):
     """Test whether a book URL is valid.
 
     Args:
@@ -124,8 +134,8 @@ class BookSearcher:
     return True
 
   # Do a search from a query
-  def search_for(self, query, the_id=None):
-    """Search for a given ID, also keeping the query.
+  def get_book_info(self):
+    """Get a nicely formated touple containing the resulted book information.
 
     Args:
       query (str): The query to set the searcher to.
@@ -136,12 +146,8 @@ class BookSearcher:
       of the book and source is the source where the book was parsed from
       (just Gutenberg for now).
     """
-    self.search_query = query
-    if the_id is None:
-      the_id = self.get_book_id()
-    else:
-      self.book_id = the_id
-    the_url = str(self.get_html_book_url())
+    the_id = self.book_id
+    the_url = str(self.construct_url_from_id())
     return (the_url, the_id, BookSource.GUTENBERG)
 
   def delete_book_from_db(self, the_id):
