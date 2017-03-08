@@ -72,9 +72,11 @@ def reset_database():
   # Create and connect to db
   conn, c = connect_database()
   c.execute('''CREATE TABLE books
-              (id text, title text, html_file_name text, pdf_file_name,
+              (id text, title text UNIQUE, html_file_name text, pdf_file_name,
               url text)''')
   conn.commit()
+  c.execute('''ADD INDEX books_index (title)''')
+  conn.execute()
   conn.close()
   migrate_up()
 
@@ -147,9 +149,13 @@ def reset_refresh(url=None):
     title = g.objects(None, dcterms.title).next()
     the_id = directory
     # Put title and id in db
-    c.execute('''INSERT INTO books (id, title, html_file_name, pdf_file_name, url)
+    c.execute('''INSERT ON CONFLICT IGNORE
+                 INTO books (id, title, html_file_name, pdf_file_name, url)
                  VALUES (?, ?, ?, ?, ?)''',
               (the_id, title.lower(), '', '', ''))
+    if index > 5000 and index % 5000 == 0:
+      c.commit()
+      print("Processed " + index)
   # Commit the query
   conn.commit()
 
