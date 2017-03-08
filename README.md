@@ -25,10 +25,10 @@ App\setup.bat
 
 A one-time only step is the indexing of the available books, which is done *(automatically, by the setup script)* by downloading the project gutenberg RDF files and parsing them into a local db. This step will take some time
 The RDF files archive is pretty big (~50MB) so the download time will depend on your connection speed. Then it needs to be extracted, and it will take some more time.
-And the slow part is parsing all the RDF files into the db. This takes really long (~30 min on Windows 6th gen Core i7).
+And the slow part is parsing all the RDF files into the db. This takes really long (~2h min on Windows 6th gen Core i7).
 You can take a walk, grab a coffe, ~~watch some p\*rn~~ or anything you might like.
 
-Also, remember to **prevent the computer from turning off or otherwise interrupt the process, because all the progress would be lost**. I could have made it to insert each entry in db as it was read, but it would have taken ten times longer.
+Also, it is recommended to **prevent the computer from turning off or otherwise interrupt the process**. Every 5000 files the connection commits the inserts, so the max number of files not inserted will be 5000. But if you interrupt the process and start again, for every insert a check will have to be made, which takes extra time, making the total duration a little bit longer.
 
 After enabling the PHP server, make a symlink from your server root (htdocs in Apache) to point to App/front_end/www
 You can name this how you want. (e.g. `ln -s ~/ebook-annotations/App/front_end/www /var/www/html/ebook-annotations`)
