@@ -176,6 +176,16 @@ class BookNotFoundException(Exception):
   pass
 
 
+class CachingType:
+  """Type of caching used."""
+
+  NONE = 0
+  HTML = 1
+  ANNOTATIONS = 2
+  HTML_ANNOTATIONS = 3
+
+
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument("action", help="The action to be taken. Can be " +

@@ -21,18 +21,71 @@ class Generator:
   a html file for a given ID and returning the results.
   """
 
-  book = None
-  html_book_file_name = None
-  pdf_book_file_name = None
-  searcher = None
+  @property
+  def book(self):
+    """Get the book."""
+    if self._book is None:
+      raise AttributeError("Attribute book was not set.")
+    return self._book
+
+  @book.setter
+  def book(self, value):
+    """Set the book."""
+    self._book = value
+
+  @property
+  def html_file_name(self):
+    """Get the html book file name."""
+    if self._html_file_name is None:
+      raise AttributeError("Attribute html_file_name was not set.")
+    return self._html_file_name
+
+  @html_file_name.setter
+  def html_file_name(self, value):
+    """Set the html book file name."""
+    self._html_file_name = value
+
+  @property
+  def pdf_file_name(self):
+    """Get the resulted url."""
+    if self._pdf_file_name is None:
+      raise AttributeError("Attribute pdf_file_name was not set.")
+    return self._pdf_file_name
+
+  @pdf_file_name.setter
+  def pdf_file_name(self, value):
+    """Set the resulted url."""
+    self._pdf_file_name = value
+
+  @property
+  def searcher(self):
+    """Get the resulted url."""
+    if self._searcher is None:
+      raise AttributeError("Attribute searcher was not set.")
+    return self._searcher
+
+  @searcher.setter
+  def searcher(self, value):
+    """Set the resulted url."""
+    self._searcher = value
 
   def __init__(self):
     """Initialise the Generator."""
-    self.searcher = BookSearcher()
-    pass
+    self._book = None
+    self._html_file_name = None
+    self._pdf_file_name = None
+    self._searcher = BookSearcher()
 
   def search_for_query(self, query):
-    """Searche for a query and returns the possible matches."""
+    """Search for a query and returns the possible matches.
+
+    Params:
+      query (str): The query to search for.
+
+    Returns:
+      A list of dicts containing the book id and title of all the resulted
+      books.
+    """
     self.searcher.search_query = query
     results = self.searcher.get_json_results(query)
     return results
