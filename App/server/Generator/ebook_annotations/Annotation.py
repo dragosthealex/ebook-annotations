@@ -146,6 +146,6 @@ class TextAnnotation:
     c.execute('''INSERT INTO annotations
                  (hash, word, data, votes)
                  VALUES (?, ?, ?, ?)''',
-              (m.hexdigest(), self.word, self.data, 0))
+              (m.hexdigest(), self.word, self.data, self.votes))
     conn.commit()
     return True
