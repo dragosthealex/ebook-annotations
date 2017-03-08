@@ -122,3 +122,30 @@ class TextAnnotation:
       return False
     self.data = result[3]
     self.votes = result[4]
+    return True
+
+  def save_to_db(self, case_sensitive=False):
+    """Save the info to the database.
+
+    Returns:
+      True if the annotation was populated from db, otherwise False.
+    """
+    m = hashlib.sha256()
+    if case_sensitive:
+      m.update(self.word)
+    else:
+      m.update(self.word.lower())
+    conn, c = connect_database()
+    c.execute('''SELECT * FROM annotations
+                 WHERE hash=?
+                 LIMIT 1''', (m.hexdigest(),))
+    result = c.fetchone()
+    if result is not None:
+      # Already in, so don't save
+      return False
+    c.execute('''INSERT INTO annotations
+                 (hash, word, data, votes)
+                 VALUES (?, ?, ?, ?)''',
+              (m.hexdigest(), self.word, self.data, 0))
+    conn.commit()
+    return True
