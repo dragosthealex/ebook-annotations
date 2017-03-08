@@ -7,6 +7,7 @@ import os
 import sys
 import re
 import codecs
+import argparse
 from Book import *
 from BookSearcher import BookSearcher
 from Utils import *
@@ -144,15 +145,33 @@ class Generator:
 
 def main():
   """Run this module as stand-alone."""
-  title = raw_input('Input the title to search for: \n')
+  parser = argparse.ArgumentParser()
+  parser.add_argument("action", help="Action to take. Can have two values:" +
+                      " `search` - searches for the book by title, returning" +
+                      " the ids of matching books | `get` - gets the book by" +
+                      " ID.")
+  parser.add_argument("query", help="If the action is `search`, this should " +
+                      "be the title to search for. If the action is `get`, " +
+                      "this should be the ID of the book.")
+  parser.add_argument("--caching", help="The caching level. 0 = No caching, " +
+                      "1 = HTML, 2 = ANNOTATIONS, 3 = HTML + ANNOTATIONS",
+                      default=0, type=int)
+  args = parser.parse_args()
   g = Generator()
-  results = g.search_for_query(title)
-  if len(results) == 0:
-    print("No results.")
-    return
-  file_name = g.generate_html_book(results[0]["id"])
-  print(file_name)
-  g.book.print_text(title + '.txt')
+  if args.action == 'search':
+    result = g.search_for_query(args.query)
+    if len(result) == 0:
+      result = 'No results.'
+    else:
+      result = '\n'.join(str(result))
+  elif args.action == 'get':
+    result = g.generate_html_book(args.query, args.caching)
+    g.book.print_text('result.txt')
+    print('Book contents were printed in result.txt')
+  else:
+    print("Invalid action.")
+    parser.print_help()
+  print(result)
 
 if __name__ == '__main__':
   main()
