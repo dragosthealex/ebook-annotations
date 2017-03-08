@@ -46,15 +46,18 @@ class TestUtils(unittest.TestCase):
     # Create a migration
     with open(DB_MIGRATIONS_FOLDER + "/test_migration.py", "w") as f:
       f.write("""\
-def up(conn, c):
-  c.execute('''CREATE TABLE IF NOT EXISTS test
-               ('col1' text, 'col2' text)''')
-  conn.commit()
-  c.execute('''INSERT INTO test
-               VALUES (?, ?)''', ('lol', 'stuff'))
-  conn.commit()
-def down(conn, c):
-  pass""")
+from limigrations.migration import BaseMigration
+
+class Migration(BaseMigration):
+  def up(self, conn, c):
+    c.execute('''CREATE TABLE IF NOT EXISTS test
+                 ('col1' text, 'col2' text)''')
+    conn.commit()
+    c.execute('''INSERT INTO test
+                 VALUES (?, ?)''', ('lol', 'stuff'))
+    conn.commit()
+  def down(self, conn, c):
+    pass""")
     # Migrate
     migrate_up()
     # Test whether the table was created
@@ -72,15 +75,18 @@ def down(conn, c):
     # Create a migration
     with open(DB_MIGRATIONS_FOLDER + "/test_migration.py", "w") as f:
       f.write("""\
-def up(conn, c):
-  c.execute('''CREATE TABLE IF NOT EXISTS test
-               ('col1' text, 'col2' text)''')
-  conn.commit()
-  c.execute('''INSERT INTO test
-               VALUES (?, ?)''', ('lol', 'stuff'))
-  conn.commit()
-def down(conn, c):
-  c.execute('''DROP TABLE IF EXISTS test''')
+from limigrations.migration import BaseMigration
+
+class Migration(BaseMigration):
+  def up(self, conn, c):
+    c.execute('''CREATE TABLE IF NOT EXISTS test
+                 ('col1' text, 'col2' text)''')
+    conn.commit()
+    c.execute('''INSERT INTO test
+                 VALUES (?, ?)''', ('lol', 'stuff'))
+    conn.commit()
+  def down(self, conn, c):
+    c.execute('''DROP TABLE IF EXISTS test''')
   conn.commit()""")
     # Migrate and then rollback
     migrate_up()

@@ -9,6 +9,7 @@ import rdflib
 import sqlite3
 import zipfile
 import tarfile
+from limigrations import limigrations
 from tqdm import tqdm
 
 __all__ = ['URLS', 'DB_FILE_NAME', 'DB_MIGRATIONS_FOLDER', 'connect_database',
@@ -72,54 +73,11 @@ def reset_database():
 
 
 def migrate_up():
-  """Run the migrations."""
-  conn, c = connect_database()
-  # Create migrations table if not existent
-  c.execute('''CREATE TABLE IF NOT EXISTS migrations
-             (file text, status text, created_at datetime)''')
-  conn.commit()
-  # Get all migrations
-  query = "SELECT * FROM migrations"
-  migrations = [row[0] for row in c.execute(query)]
-  # Upload the new ones
-  for mig in os.listdir(DB_MIGRATIONS_FOLDER):
-    if mig not in migrations:
-      c.execute("""INSERT INTO migrations
-                   VALUES (?, ?, ?)""",
-                (mig, 'down', time.strftime('%Y-%m-%d %H:%M:%S')))
-  conn.commit()
-  # Add migrations to import path
-  sys.path.append(DB_MIGRATIONS_FOLDER)
-  # For any migration that is down, run it
-  for row in c.execute("""SELECT * FROM migrations
-                          WHERE status='down'
-                          ORDER BY date(created_at) DESC"""):
-    # Import it
-    mig = __import__(row[0].split('.py')[0])
-    mig.up(conn, c)
-    # Modify it
-    c.execute("""UPDATE migrations SET status='up'
-                 WHERE file=?""", (row[0],))
-    conn.commit()
+  limigrations.migrate(DB_FILE_NAME, DB_MIGRATIONS_FOLDER)
 
 
 def migrate_rollback():
-  """Roll back a migration.
-
-  Assumes the migration table exists.
-  """
-  conn, c = connect_database()
-  c.execute("""SELECT * FROM migrations
-               WHERE status='up'
-               ORDER BY date(created_at) DESC
-               LIMIT 1""")
-  row = c.fetchone()
-  mig = __import__((row[0].split('.py'))[0])
-  mig.down(conn, c)
-  # Update it
-  c.execute("""UPDATE migrations SET status='down'
-                 WHERE file=?""", (row[0],))
-  conn.commit()
+  limigrations.rollback(DB_FILE_NAME, DB_MIGRATIONS_FOLDER)
 
 
 def download_index_file():
