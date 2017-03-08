@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+"""This module contains the Generator class.
 
+Used to generate the HTML file from a given ID / query.
+"""
 import os
 import sys
 import re
@@ -12,6 +15,11 @@ __all__ = ['Generator']
 
 
 class Generator:
+  """The main class for of the module.
+
+  Implements the pipeline, providing a method for generating
+  a html file for a given ID and returning the results.
+  """
 
   book = None
   html_book_file_name = None
@@ -19,17 +27,23 @@ class Generator:
   searcher = None
 
   def __init__(self):
+    """Initialise the Generator."""
     self.searcher = BookSearcher()
     pass
 
-  # Searches for a query and returns the possible matches
   def get_json_results(self, query):
+    """Searche for a query and returns the possible matches."""
     results = self.searcher.get_results_for(query)
     return results
 
-  # Generate the html book given a title.
-  # Returns the absolute path to the file
-  def generate_html_book(self, query=None, the_id=None):
+  def generate_html_book(self, query=None, the_id=None, caching=None):
+    """Generate the html book given a title.
+
+    Args:
+      query (str): The query to search for. If set, it returns the first
+    Returns:
+      The absolute path to the generated file.
+    """
     # Get the url and the source from the query
     url, the_id, source = self.searcher.search_for(query, the_id)
     # Create the book from url and source
