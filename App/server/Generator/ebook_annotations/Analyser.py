@@ -89,7 +89,21 @@ class Analyser:
     return annotations
 
   def preprocess_input(self, text):
-    """Eliminate punctuation and other tokens except plain words."""
+    """Eliminate punctuation and other tokens except plain words.
+
+    Remove trailing and starting special characters, such as (),'," etc,
+    replacing them with spaces.
+    Then replace all the speial characters inside words with apostrophe,
+    as it is the only char that can be there.
+    Do this again, taking unicode into account
+    Finally remove anything that is not an alphanumeric char, or space, dash or
+    apostrophe.
+    Args:
+      text (str): The text to process.
+
+    Returns:
+      The processed text.
+    """
     text = re.sub(r"([^a-zA-Z0-9 -]+ +[^a-zA-Z0-9 -]*|[^a-zA-Z0-9 -]*" +
                   " +[^a-zA-Z0-9 -]+)", ' ', text, flags=re.UNICODE)
     text = re.sub(r"([^a-zA-Z0-9 -]+$|^[^a-zA-Z0-9 -]+)", '', text)
@@ -135,6 +149,9 @@ class Analyser:
 
     Filters the words that are most likely proper nouns, in
     order to process them as annotations of type EXTRA.
+
+    Args:
+      text (:obj:nltk.Text): The text to analyse.
 
     Returns:
       A list of the words that are most likely proper nouns.

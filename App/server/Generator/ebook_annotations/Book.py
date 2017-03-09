@@ -170,8 +170,6 @@ class Book:
                                    'data-content': '' + ann.data,
                                    'title': "<a href='" + ann.url +
                                    "'>More</a>"})
-        # Annotation valid, so save it to db
-        ann.save_to_db()
         # Replace the processed word found with a tag with the annotation
         if number_of_words == 1:
           words[index] = re.sub(proposed_ann_word, tag, current_word)
