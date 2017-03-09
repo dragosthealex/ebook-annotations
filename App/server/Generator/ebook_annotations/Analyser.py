@@ -74,22 +74,30 @@ class Analyser:
     # Generate the annotations
     annotations = []
     for word in uncommon_words:
-      annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD,
-                                        caching))
+      ann = TextAnnotation(word, AnnotationType.UNCOMMON_WORD, caching)
+      ann.save_to_db()
+      if ann.data is None or not ann.data:
+        continue
+      annotations.append(ann)
     for word in extras:
-      annotations.append(TextAnnotation(word, AnnotationType.EXTRA, caching))
+      ann = TextAnnotation(word, AnnotationType.EXTRA, caching)
+      ann.save_to_db(case_sensitive=True)
+      if ann.data is None or not ann.data:
+        continue
+      annotations.append(ann)
     # Return the list of annotations
     return annotations
 
   def preprocess_input(self, text):
     """Eliminate punctuation and other tokens except plain words."""
-    text = re.sub(ur"([^a-zA-Z0-9 -]+ +[^a-zA-Z0-9 -]*|[^a-zA-Z0-9 -]* +[^a-zA-Z0-9 -]+)", ' ', text)
-    text = re.sub(ur"([^a-zA-Z0-9 -]+$|^[^a-zA-Z0-9 -]+)", '', text)
-    text = re.sub(ur"([a-zA-Z0-9 -]+?)([^a-zA-Z0-9 -])([a-zA-Z0-9 -]+?)",
-                  r"\1'\3", text)
-    text = re.sub(ur"([\x00-\x7F -]+?)([^a-zA-Z0-9 -]+)([\x00-\x7F -]+?)",
-                  ur"\1'\3", text).encode("utf-8")
-    return re.sub(ur"([^a-zA-Z0-9 \-\'])", '', text)
+    text = re.sub(r"([^a-zA-Z0-9 -]+ +[^a-zA-Z0-9 -]*|[^a-zA-Z0-9 -]*" +
+                  " +[^a-zA-Z0-9 -]+)", ' ', text, flags=re.UNICODE)
+    text = re.sub(r"([^a-zA-Z0-9 -]+$|^[^a-zA-Z0-9 -]+)", '', text)
+    text = re.sub(r"([a-zA-Z0-9 -]+?)([^a-zA-Z0-9 -])([a-zA-Z0-9 -]+?)",
+                  r"\1'\3", text, flags=re.UNICODE)
+    text = re.sub(r"([\x00-\x7F -]+?)([^a-zA-Z0-9 -]+)([\x00-\x7F -]+?)",
+                  r"\1'\3", text, flags=re.UNICODE).encode("utf-8")
+    return re.sub(r"([^a-zA-Z0-9 \-\'])", '', text, flags=re.UNICODE)
 
   def nltk_text(self, text):
     """Convert the text to nltk.Text.
@@ -136,32 +144,32 @@ class Analyser:
     # Tag parts of speech
     tagged = nltk.pos_tag(text)
     # Try for composed NNP / NNPS
-    isProperNoun = False
+    is_proper_noun = False
     text = []
-    properNoun = ""
+    proper_noun = ""
     for index, (word, tag) in enumerate(tagged):
-      if not isProperNoun and (tag == 'NNP' or tag == 'NNPS'):
+      if not is_proper_noun and (tag == 'NNP' or tag == 'NNPS'):
         # Start building a proper noun
-        properNoun = word
+        proper_noun = word
         # Set it true
-        isProperNoun = True
+        is_proper_noun = True
         # Add it to annotations anyway
         text.append(word)
       elif tag == 'NNP' or tag == 'NNPS':
         # Previous was proper noun. So it may be combined
-        properNoun += " " + word
+        proper_noun += " " + word
         # Add the single word to annotations anyway, in case it might be not
         text.append(word)
-      elif isProperNoun and tag == 'IN':
+      elif is_proper_noun and tag == 'IN':
         # Add what we have by now to the text
-        text.append(properNoun)
+        text.append(proper_noun)
         # Previous was proper noun. So it may be composed
-        properNoun += " " + word
-      elif isProperNoun:
+        proper_noun += " " + word
+      elif is_proper_noun:
         # Add what we have by now to the text
-        text.append(properNoun)
+        text.append(proper_noun)
         # Finished with proper noun, so set it false
-        isProperNoun = False
+        is_proper_noun = False
     # Remove duplicates
     seen = {}
     result = []

@@ -67,7 +67,7 @@ class TextAnnotation:
 
     try:
       if result['status'] == 200 and result['total'] > 0:
-        self.data = 'Def:&nbsp;' +\
+        self.data = 'Def (from Pearson Dictionary):&nbsp;' +\
             (((result['results'])[0]['senses'])[0]['definition'])[0]
       else:
         self.data = None
@@ -116,7 +116,7 @@ class TextAnnotation:
     # Make sure no more than 300 chars
     if len(r) > 500:
       r = r[:500] + "..."
-    self.data = 'About:&nbsp;' + r
+    self.data = 'About (from Wikipedia):&nbsp;' + r
 
   def get_from_db(self, case_sensitive=False):
     """Get the info from the database.
@@ -161,7 +161,7 @@ class TextAnnotation:
       # Already in, so don't save
       return False
     c.execute('''INSERT INTO annotations
-                 (hash, word, data, votes)
+                 (hash, word, data, url, votes)
                  VALUES (?, ?, ?, ?, ?)''',
               (m.hexdigest(), self.word, self.data, self.url, self.votes))
     conn.commit()
