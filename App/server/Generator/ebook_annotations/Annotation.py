@@ -34,10 +34,10 @@ class TextAnnotation:
 
     Args:
       word (str): The word this annotation is for.
-      the_type (:obj:AnnotationType): The type of the annotation. Can be
+      the_type (:obj:`AnnotationType`): The type of the annotation. Can be
                                       AnnotationType.UNCOMMON_WORD or
                                       AnnotationType.EXTRA
-      caching (:obj:CachingType, optional, default=0): What caching type to
+      caching (:obj:`CachingType`, optional, default=0): What caching type to
                                       use. Can be CachingType.NONE,
                                       CachingType.ANNOTATIONS,
                                       CachingType.HTML,

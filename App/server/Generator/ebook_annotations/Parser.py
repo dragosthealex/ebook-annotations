@@ -16,6 +16,12 @@ class Parser():
     """Format a string into a ready-to-use form.
 
     Make unicode-converted strings back into utf8, and replace <br> with
+
+    Args:
+      string (str): The string to process.
+
+    Returns:
+      The processed string.
     spaces.
     """
     if not string or string is None or string == '':
@@ -29,15 +35,19 @@ class Parser():
       return ''
 
   def get_title(self):
+    """Parse the title."""
     pass
 
   def get_author(self):
+    """Parse the author."""
     pass
 
   def get_chapter_titles(self):
+    """Parse the chapter titles."""
     pass
 
   def get_chapters(self):
+    """Parse the chapters."""
     pass
 
 
@@ -63,7 +73,8 @@ class GutenbergParser(Parser):
     """
     r = requests.get(url)
     # Extract all line breaks
-    content = re.sub(r'(?i)(\<br\>|\<\/br\>|\< \/br\>|\<\/ br\>|\< \\br\>)', '', r.content)
+    content = re.sub(r'(?i)(\<br\>|\<\/br\>|\< \/br\>|\<\/ br\>|\< \\br\>)',
+                     '', r.content)
     self.root = BeautifulSoup(content, "html.parser")
     # If no pre, then wrong link
     if len(self.root.find_all('pre')) == 0:
@@ -140,7 +151,11 @@ class GutenbergParser(Parser):
     return chapter_titles
 
   def get_chapters_2(self):
-    """Old function for getting chapters."""
+    """Old function for getting chapters.
+  
+    Returns:
+      A list of chapters
+    """
     chapters = []
     chapters.append('')
     for sibling in self.root.find(self.filter_chapters).next_siblings:

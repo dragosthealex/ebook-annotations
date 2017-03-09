@@ -22,9 +22,9 @@ class Generator:
   a html file for a given ID and returning the results.
 
   Attributes:
-    book (:obj:Book): An instance of the book that is currently generated.
+    book (:obj:`Book`): An instance of the book that is currently generated.
     html_file_name (str): The name of the generated HTML file.
-    searcher (:obj:BookSearcher): An instance of the searcher used
+    searcher (:obj:`BookSearcher`): An instance of the searcher used
                                   to get books.
   """
 
@@ -90,7 +90,7 @@ class Generator:
 
     Args:
       query (str): The query to search for. If set, it returns the first
-      caching (:obj:CachingType, optional, default=0): What caching type to
+      caching (:obj:`CachingType`, optional, default=0): What caching type to
                                       use. Can be CachingType.NONE,
                                       CachingType.ANNOTATIONS,
                                       CachingType.HTML,

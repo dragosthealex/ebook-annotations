@@ -25,14 +25,14 @@ class Book:
 
   Attributes:
     the_id (str): The id of this book.
-    parser (:obj:Parser): An instance of the parser used to parse
+    parser (:obj:`Parser`): An instance of the parser used to parse
                           this book.
     title (str): The title of the book.
     author (str): The author of the book.
     chapter_titles (:list:str): A list containing the parsed chapter
                                 titles.
     chapters (:list:str): A list containing the parsed chapters.
-    annotations (:list:obj:Annotation): A list containing all the
+    annotations (:list:obj:`Annotation`): A list containing all the
                                         annotations of this book.
     html_file_name (str): The name of the HTML file for this book.
   """
@@ -88,7 +88,7 @@ class Book:
     Args:
       chapters (int, optional, default=0): How many chapters to analyse.
                                            0 means analyse all.
-      caching (:obj:CachingType, optional, default=0): What caching type to
+      caching (:obj:`CachingType, optional, default=0): What caching type to
                                       use. Can be CachingType.NONE,
                                       CachingType.ANNOTATIONS,
                                       CachingType.HTML,

@@ -58,7 +58,7 @@ class Analyser:
     """Generate the annotations for the current text.
 
     Args:
-      caching (:obj:CachingType, optional, default=0): What caching type to
+      caching (:obj:`CachingType`, optional, default=0): What caching type to
                                       use. Can be CachingType.NONE,
                                       CachingType.ANNOTATIONS,
                                       CachingType.HTML,
@@ -126,7 +126,7 @@ class Analyser:
     """Eliminate the common words from a nltk Text list.
 
     Args:
-      text (:obj:nltk.Text): The text to eliminate common words
+      text (:obj:`nltk.Text`): The text to eliminate common words
                              from.
 
     Returns:
@@ -151,7 +151,7 @@ class Analyser:
     order to process them as annotations of type EXTRA.
 
     Args:
-      text (:obj:nltk.Text): The text to analyse.
+      text (:obj:`nltk.Text`): The text to analyse.
 
     Returns:
       A list of the words that are most likely proper nouns.
