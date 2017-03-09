@@ -64,6 +64,14 @@ def reset_migrations():
   conn.commit()
 
 
+def reset_annotations():
+  """Truncate the annotations table."""
+  conn, c = connect_database()
+  c.execute('''DELETE FROM annotations''')
+  c.execute('''DELETE FROM SQLITE_SEQUENCE WHERE name='annotations' ''')
+  conn.commit()
+
+
 def reset_database():
   """Reset the database, creating the books table."""
   # Delete the file if it exists
@@ -189,7 +197,7 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument("action", help="The action to be taken. Can be " +
                       "migrate, rollback, reset_db, download_rdf, " +
-                      "reset_migrations")
+                      "reset_migrations, reset_annotations")
   args = parser.parse_args()
   if args.action == 'migrate':
     migrate_up()
@@ -201,7 +209,8 @@ if __name__ == '__main__':
     download_index_file()
   elif args.action == 'reset_migrations':
     reset_migrations()
+  elif args.action == 'reset_annotations':
+    reset_annotations()
   else:
     print("Invalid action.")
     parser.print_help()
-  pass

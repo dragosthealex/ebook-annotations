@@ -90,8 +90,13 @@ class Generator:
 
     Args:
       query (str): The query to search for. If set, it returns the first
-      max_chapters (int): The maximum numbers of chapters to analyse and
-                          annotate. 0 means analyse all.
+      caching (:obj:CachingType, optional, default=0): What caching type to
+                                      use. Can be CachingType.NONE,
+                                      CachingType.ANNOTATIONS,
+                                      CachingType.HTML,
+                                      CachingType.HTML_ANNOTATIONS
+      max_chapters (int, default=0): The maximum numbers of chapters to analyse
+                                     and annotate. 0 means analyse all.
 
     Returns:
       The absolute path to the generated file.

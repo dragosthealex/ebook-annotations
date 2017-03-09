@@ -88,8 +88,11 @@ class Book:
     Args:
       chapters (int, optional, default=0): How many chapters to analyse.
                                            0 means analyse all.
-      caching (int, optional, default=0): What caching type to use. 0
-                                          means no caching.
+      caching (:obj:CachingType, optional, default=0): What caching type to
+                                      use. Can be CachingType.NONE,
+                                      CachingType.ANNOTATIONS,
+                                      CachingType.HTML,
+                                      CachingType.HTML_ANNOTATIONS
     """
     if chapters == 0:
       text = ' '.join(self.chapters)
@@ -167,6 +170,8 @@ class Book:
                                    'data-content': '' + ann.data,
                                    'title': "<a href='" + ann.url +
                                    "'>More</a>"})
+        # Annotation valid, so save it to db
+        ann.save_to_db()
         # Replace the processed word found with a tag with the annotation
         if number_of_words == 1:
           words[index] = re.sub(proposed_ann_word, tag, current_word)

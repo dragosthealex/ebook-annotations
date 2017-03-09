@@ -30,7 +30,19 @@ class TextAnnotation:
   votes = None
 
   def __init__(self, word, the_type, caching=CachingType.NONE):
-    """Initialise the Annotation."""
+    """Initialise the Annotation.
+
+    Args:
+      word (str): The word this annotation is for.
+      the_type (:obj:AnnotationType): The type of the annotation. Can be
+                                      AnnotationType.UNCOMMON_WORD or
+                                      AnnotationType.EXTRA
+      caching (:obj:CachingType, optional, default=0): What caching type to
+                                      use. Can be CachingType.NONE,
+                                      CachingType.ANNOTATIONS,
+                                      CachingType.HTML,
+                                      CachingType.HTML_ANNOTATIONS
+    """
     self.the_type = the_type
     self.word = word
     self.votes = 0
@@ -125,7 +137,8 @@ class TextAnnotation:
     if result is None:
       return False
     self.data = result[3]
-    self.votes = result[4]
+    self.url = result[4]
+    self.votes = result[5]
     return True
 
   def save_to_db(self, case_sensitive=False):
@@ -149,7 +162,7 @@ class TextAnnotation:
       return False
     c.execute('''INSERT INTO annotations
                  (hash, word, data, votes)
-                 VALUES (?, ?, ?, ?)''',
-              (m.hexdigest(), self.word, self.data, self.votes))
+                 VALUES (?, ?, ?, ?, ?)''',
+              (m.hexdigest(), self.word, self.data, self.url, self.votes))
     conn.commit()
     return True

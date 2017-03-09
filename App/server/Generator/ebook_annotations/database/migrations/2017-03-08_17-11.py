@@ -13,6 +13,7 @@ class Migration(BaseMigration):
                   hash text UNIQUE,
                   word text,
                   data text,
+                  url text,
                   votes integer
                   )''')
     conn.commit()
