@@ -8,6 +8,7 @@ import sys
 import re
 import codecs
 import argparse
+from argparse import RawTextHelpFormatter
 from Book import *
 from BookSearcher import BookSearcher
 from Utils import *
@@ -160,18 +161,23 @@ class Generator:
 
 def main():
   """Run this module as stand-alone."""
-  parser = argparse.ArgumentParser()
-  parser.add_argument("action", help="Action to take. Can have two values:" +
-                      " `search` - searches for the book by title, returning" +
-                      " the ids of matching books | `get` - gets the book by" +
-                      " ID.")
-  parser.add_argument("query", help="If the action is `search`, this should " +
-                      "be the title to search for. If the action is `get`, " +
-                      "this should be the ID of the book.")
-  parser.add_argument("--caching", help="The caching level. 0 = No caching, " +
-                      "1 = HTML, 2 = ANNOTATIONS, 3 = HTML + ANNOTATIONS",
+  parser = argparse.ArgumentParser(prog="python Generator.py",
+                                   formatter_class=RawTextHelpFormatter)
+  parser.add_argument("action", help="Action to take.\n" +
+                      "search = look for the book by title, returning the\n" +
+                      "         ids of matching books. Query should be\n" +
+                      "         the title.\n" +
+                      "get = generates the html of the book by ID, query\n" +
+                      "      should be the ID",
+                      choices=['search', 'get'])
+  parser.add_argument("query", help="The query to use when searching.")
+  parser.add_argument("-c", "--caching", help="The caching level.\n" +
+                      "0 = No caching\n" +
+                      "1 = Just HTML\n" +
+                      "2 = Just annotations\n" +
+                      "3 = Both HTML and annotations", choices=[0, 1, 2, 3],
                       default=0, type=int)
-  parser.add_argument("--max-chapters", help="The maximum amount of " +
+  parser.add_argument("-m", "--max-chapters", help="The maximum amount of " +
                       "chapters to annotate. 0 means all", default=2, type=int)
   args = parser.parse_args()
   g = Generator()

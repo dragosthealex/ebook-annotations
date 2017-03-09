@@ -10,6 +10,7 @@ import sqlite3
 import zipfile
 import tarfile
 import argparse
+from argparse import RawTextHelpFormatter
 from limigrations import limigrations
 from tqdm import tqdm
 
@@ -194,22 +195,32 @@ class CachingType:
 
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  parser.add_argument("action", help="The action to be taken. Can be " +
-                      "migrate, rollback, reset_db, download_rdf, " +
-                      "reset_migrations, reset_annotations")
+  parser = argparse.ArgumentParser(prog="python Utils.py",
+                                   formatter_class=RawTextHelpFormatter)
+  parser.add_argument("action", help="The action to be taken.\n" +
+                      "   m_up = Migrate the database\n" +
+                      "   m_down = Roll back the last\n" +
+                      "              migration\n" +
+                      "   r_db = Reset the database,\n" +
+                      "              truncating all tables\n" +
+                      "   rdf = Download the RDF files\n" +
+                      "   r_mig = Delete migrations\n" +
+                      "   r_ann = Delete annotations",
+                      choices=['m_up', 'm_down', 'r_db',
+                               'rdf', 'r_mig',
+                               'r_ann'])
   args = parser.parse_args()
-  if args.action == 'migrate':
+  if args.action == 'm_up':
     migrate_up()
-  elif args.action == 'rollback':
+  elif args.action == 'm_down':
     migrate_rollback()
-  elif args.action == 'reset_db':
+  elif args.action == 'r_db':
     reset_refresh()
-  elif args.action == 'download_rdf':
+  elif args.action == 'rdf':
     download_index_file()
-  elif args.action == 'reset_migrations':
+  elif args.action == 'r_mig':
     reset_migrations()
-  elif args.action == 'reset_annotations':
+  elif args.action == 'r_ann':
     reset_annotations()
   else:
     print("Invalid action.")
