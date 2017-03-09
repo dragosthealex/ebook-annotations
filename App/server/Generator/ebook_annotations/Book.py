@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+"""This module contains Book and BookSource classes.
 
+Book represents a parsed book.
+BookSource is an enum that provides maintainability
+if more sources (except Gutenberg) will be added.
+"""
 import re
+import codecs
 from Parser import GutenbergParser
 from Analyser import Analyser
 from Utils import *
@@ -8,65 +14,118 @@ from Utils import *
 __all__ = ['Book', 'BookSource']
 
 
-# Book source. Currently just gutenberg
 class BookSource:
+  """Contains the possible sources for the original books."""
+
   GUTENBERG = 1
 
 
-# The parsed book
 class Book:
+  """Represents the parsed book.
 
-  parser = None
+  Attributes:
+    the_id (str): The id of this book.
+    parser (:obj:Parser): An instance of the parser used to parse
+                          this book.
+    title (str): The title of the book.
+    author (str): The author of the book.
+    chapter_titles (:list:str): A list containing the parsed chapter
+                                titles.
+    chapters (:list:str): A list containing the parsed chapters.
+    annotations (:list:obj:Annotation): A list containing all the
+                                        annotations of this book.
+    html_file_name (str): The name of the HTML file for this book.
+  """
 
-  the_id = None
-  title = None
-  author = None
-  chapter_titles = None
-  chapters = None
-  annotations = None
+  @property
+  def parser(self):
+    """Get the parser."""
+    if self._parser is None:
+      raise AttributeError("Attribute parser was not set.")
+    return self._parser
+
+  @parser.setter
+  def parser(self, value):
+    """Set the parser."""
+    self._parser = value
 
   def __init__(self, url, the_id, source=BookSource.GUTENBERG):
-    if source == BookSource.GUTENBERG:
-      self.parser = GutenbergParser(url)
+    """Initialise the book."""
+    self._parser = GutenbergParser(url)
     self.the_id = the_id
+    self.title = None
+    self.author = None
+    self.chapter_titles = []
+    self.chapters = []
+    self.annotations = []
 
-  # Check if we already have the html version of this book
   def is_cached_html(self):
+    """Check if we already have the html version of this book.
+
+    Returns:
+    """
     conn, c = connect_database()
     c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
               (self.the_id,))
     html_file_name = c.fetchone()[0]
     if html_file_name is None or html_file_name == '':
       return False
-    return html_file_name
+    self.html_file_name = html_file_name
+    return True
 
-  # Use the parser to parse everything and get the content
   def populate_content(self):
+    """Use the parser to parse everything and get the content."""
     self.title = self.parser.get_title()
     self.author = self.parser.get_author()
     self.chapter_titles = self.parser.get_chapter_titles()
     self.chapters = self.parser.get_chapters()
 
-  # Get the annotations from the chapters
-  def get_annotations(self):
-    # text = ''
-    # for chapter in self.chapters:
-    #   text += str(chapter)
-    # Use analyser for first 2 chapters only
-    analyser = Analyser(self.chapters[0] + ' ' + self.chapters[1])
-    self.annotations = analyser.generate_annotations()
+  def create_annotations(self, chapters=0, caching=CachingType.NONE):
+    """Analyse the text and create the annotations.
 
-  def annotate(self):
-    for index, chapter in enumerate(self.chapters[:2]):
-      self.chapters[index] = self.apply_annotations(chapter)
+    Using the analyser, generate the annotations for all the chapters.
 
-  # Apply the annotations on the words
+    Args:
+      chapters (int, optional, default=0): How many chapters to analyse.
+                                           0 means analyse all.
+      caching (int, optional, default=0): What caching type to use. 0
+                                          means no caching.
+    """
+    if chapters == 0:
+      text = ' '.join(self.chapters)
+    else:
+      text = ' '.join(self.chapters[:chapters])
+    analyser = Analyser(text)
+    self.annotations = analyser.generate_annotations(caching)
+
+  def annotate(self, chapters=0):
+    """Apply the annotations for all the chapters.
+
+    Args:
+      chapters (int, optional, default=0): How many chapters to annotate.
+                                           0 means analyse all.
+    """
+    if chapters == 0:
+      for index, chapter in enumerate(self.chapters):
+        self.chapters[index] = self.apply_annotations(chapter)
+    else:
+      for index, chapter in enumerate(self.chapters[:chapters]):
+        self.chapters[index] = self.apply_annotations(chapter)
+
   def apply_annotations(self, text):
+    """Apply the annotations on the words.
+
+    Args:
+      text (str): The text to annotate.
+
+    Returns:
+      The annotated text.
+    """
     # split text into individual words
     words = text.split(' ')
     # Get just the annotation words
     words_to_annotate = [ann.word for ann in self.annotations]
-    analyser = Analyser()
+    analyser = Analyser(None)
     # Deal with multiple words proper nouns
     proposed_ann_word = words[0]
     in_word = False
@@ -125,7 +184,11 @@ class Book:
     return text
 
   def print_text(self, file_name='book.txt'):
-    """Print the book contents into a text file."""
+    """Print the book contents into a text file.
+
+    Args:
+      file_name (str): The file name where to print the text.
+    """
     with codecs.open(file_name, 'w') as f:
       f.write(self.title)
       f.write('\n')

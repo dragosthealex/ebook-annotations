@@ -20,20 +20,18 @@ class Analyser:
   common_words = None
   uncommon_treshold = None
 
-  def __init__(self, text=None):
+  def __init__(self, text):
     if text is not None:
       self.text = self.preprocess_input(text)
+    else:
+      self.text = None
     self.load_common_words()
 
   # Return the list of Annotation objects with the words and their respective
   # definition
-  def generate_annotations(self, text=None):
-    if text is None:
-      text = self.text
-    else:
-      text = self.preprocess_input(text)
+  def generate_annotations(self, caching=CachingType.NONE):
     # Make the nltk Text list of words
-    text = self.nltk_text(text)
+    text = self.nltk_text(self.text)
 
     # Get the uncommon_words
     uncommon_words = self.eliminate_common(text)
@@ -42,9 +40,13 @@ class Analyser:
     # Generate the annotations
     annotations = []
     for word in uncommon_words:
-      annotations.append(TextAnnotation(word, AnnotationType.UNCOMMON_WORD))
+      ann = TextAnnotation(word, AnnotationType.UNCOMMON_WORD, caching)
+      annotations.append(ann)
+      ann.save_to_db()
     for word in extras:
-      annotations.append(TextAnnotation(word, AnnotationType.EXTRA))
+      ann = TextAnnotation(word, AnnotationType.EXTRA, caching)
+      annotations.append(ann)
+      ann.save_to_db(case_sensitive=True)
     # Return the list of annotations
     return annotations
 

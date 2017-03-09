@@ -20,6 +20,12 @@ class Generator:
 
   Implements the pipeline, providing a method for generating
   a html file for a given ID and returning the results.
+
+  Attributes:
+    book (:obj:Book): An instance of the book that is currently generated.
+    html_file_name (str): The name of the generated HTML file.
+    searcher (:obj:BookSearcher): An instance of the searcher used
+                                  to get books.
   """
 
   @property
@@ -78,11 +84,15 @@ class Generator:
     results = self.searcher.search_for_query()
     return results
 
-  def generate_html_book(self, the_id, caching=CachingType.NONE):
+  def generate_html_book(self, the_id, caching=CachingType.NONE,
+                         max_chapters=0):
     """Generate the html book given a title.
 
     Args:
       query (str): The query to search for. If set, it returns the first
+      max_chapters (int): The maximum numbers of chapters to analyse and
+                          annotate. 0 means analyse all.
+
     Returns:
       The absolute path to the generated file.
     """
@@ -114,8 +124,8 @@ class Generator:
                                             {'class': 'chapter_title'})
 
     # Annotate the text (in chapters)
-    book.get_annotations()
-    book.annotate()
+    book.create_annotations(max_chapters, caching)
+    book.annotate(max_chapters)
 
     # Put the chapters in tags
     chapters = ''
@@ -156,6 +166,8 @@ def main():
   parser.add_argument("--caching", help="The caching level. 0 = No caching, " +
                       "1 = HTML, 2 = ANNOTATIONS, 3 = HTML + ANNOTATIONS",
                       default=0, type=int)
+  parser.add_argument("--max-chapters", help="The maximum amount of " +
+                      "chapters to annotate. 0 means all", default=2, type=int)
   args = parser.parse_args()
   g = Generator()
   if args.action == 'search':
@@ -163,9 +175,9 @@ def main():
     if len(result) == 0:
       result = 'No results.'
     else:
-      result = '\n'.join(str(result))
+      result = '\n'.join([str(r) for r in result])
   elif args.action == 'get':
-    result = g.generate_html_book(args.query, args.caching)
+    result = g.generate_html_book(args.query, args.caching, args.max_chapters)
     g.book.print_text('result.txt')
     print('Book contents were printed in result.txt')
   else:

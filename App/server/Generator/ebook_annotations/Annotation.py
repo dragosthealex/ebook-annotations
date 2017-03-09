@@ -29,11 +29,12 @@ class TextAnnotation:
   url = None
   votes = None
 
-  def __init__(self, word, the_type):
+  def __init__(self, word, the_type, caching=CachingType.NONE):
     """Initialise the Annotation."""
     self.the_type = the_type
     self.word = word
     self.votes = 0
+    self.caching = caching
 
     if the_type == AnnotationType.UNCOMMON_WORD:
       self.get_meaning()
@@ -43,7 +44,9 @@ class TextAnnotation:
   def get_meaning(self):
     """Get the meaning of the set word."""
     # Try from db first
-    if self.get_from_db():
+    if self.caching in \
+       [CachingType.ANNOTATIONS, CachingType.HTML_ANNOTATIONS] and\
+       self.get_from_db():
       return
     dict_url = URLS["DICTIONARY_URL"]
     dict_api_url = URLS["DICTIONARY_API_URL"]
@@ -58,13 +61,14 @@ class TextAnnotation:
         self.data = None
     except Exception:
       self.data = None
-
     self.url = dict_url + self.word
 
   def get_info(self):
     """Get the info about the set word (valid for extras)."""
     # Try from db first
-    if self.get_from_db(case_sensitive=True):
+    if self.caching in \
+       [CachingType.ANNOTATIONS, CachingType.HTML_ANNOTATIONS] and\
+       self.get_from_db(case_sensitive=True):
       return
     w = re.sub(r"[ \"\']", '_', self.word)
     # Do sparql stuff
