@@ -1,24 +1,49 @@
+# -*- coding: utf-8 -*-
+"""The middleware between front-end and generator."""
 import sys
 import os
 sys.path.insert(0, os.path.abspath('../Generator'))
 import json
+import argparse
+from argparse import RawTextHelpFormatter
 from ebook_annotations.Generator import Generator
 from ebook_annotations.Utils import BookNotFoundException
 from ebook_annotations.Utils import CachingType
 
-if __name__ == '__main__':
-  search_type = sys.argv[1]
-  query = sys.argv[2]
+
+def main():
+  """The main method."""
+  parser = argparse.ArgumentParser(prog="python search.py",
+                                   formatter_class=RawTextHelpFormatter)
+  parser.add_argument("action", help="The action to be taken.\n" +
+                      "  all = Search for the query, getting the results\n" +
+                      "        as JSON\n" +
+                      "  single = Get a book by ID.",
+                      choices=['all', 'single'])
+  parser.add_argument("query", help="The query to search for.")
+  parser.add_argument("-c", "--caching", help="The caching level.\n" +
+                      "0 = No caching\n" +
+                      "1 = Just HTML\n" +
+                      "2 = Just annotations\n" +
+                      "3 = Both HTML and annotations", choices=[0, 1, 2, 3],
+                      default=0, type=int)
+  args = parser.parse_args()
   generator = Generator()
-  if search_type == 'all':
-    results = generator.search_for_query(query)
+  if args.action == 'all':
+    results = generator.search_for_query(args.query)
     print(json.dumps(results))
     sys.exit()
-  elif search_type == 'single':
+  elif args.action == 'single':
     try:
       # The arg query will be an ID
-      file_name = generator.generate_html_book(query, CachingType.NONE, 2)
+      file_name = generator.generate_html_book(args.query, args.caching, 2)
       with open(file_name, 'r') as f:
         print(f.read())
     except BookNotFoundException:
-      print("Book not found.")
+      print("<div class='alert alert-danger'><p>Book not found.</p></div>")
+  else:
+    print("Invalid action.")
+    parser.print_help()
+
+if __name__ == '__main__':
+  main()

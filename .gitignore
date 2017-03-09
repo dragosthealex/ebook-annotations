@@ -3,6 +3,7 @@ App/server/prototypes/Generator/smart_ebook_generator/rdf-files/
 App/server/Generator/ebook_annotations/rdf-files*
 App/server/Generator/ebook_annotations/rdf-files
 App/server/Generator/ebook_annotations/database/database.db
+.phpintel
 *.pyc
 *.html
 *.env

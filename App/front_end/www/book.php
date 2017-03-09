@@ -7,6 +7,7 @@ include '../templates/header.php';
 <script>
 $(document).ready(function() {
   id = <?=$_GET['id']?>;
+  caching = <?=$env['CACHING']?>
   // Get the book
   $.ajax({url: "<?=$env['API_ROOT']?>/search",
               type: "POST",
