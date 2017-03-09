@@ -19,7 +19,7 @@ class TestParser(unittest.TestCase):
         the_id = random.randrange(11, 10000)
         self.p = GutenbergParser(b.construct_url_from_id(str(the_id)))
         good_book = True
-      except BookNotFoundException:
+      except Exception:
         good_book = False
 
   def test_parse_random_100(self):

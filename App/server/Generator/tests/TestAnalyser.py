@@ -36,4 +36,5 @@ class TestAnalyser(unittest.TestCase):
     """
     analyser = Analyser(text)
     test = analyser.get_extras()
-    print(test)
+    self.assertEqual(test, ['Antipathies', "Please Ma'am", 'Zealand',
+                            'New Zealand', 'Australia'])

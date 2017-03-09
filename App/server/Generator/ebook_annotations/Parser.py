@@ -131,11 +131,15 @@ class GutenbergParser(Parser):
     """
     s = self.stringy(tag.text)
     return s and tag.name == self.chapter_title_tag \
-        and not re.compile('((?i)Part)').search(s) \
-        and not re.compile('(((?i)by *$)|((?i)by ))').search(s) \
-        and not re.compile('((?i)^[/\n/\r ]*contents)').search(s) \
-        and not re.compile('((?i)^[/\n/\r ]*illustrations)').search(s) \
-        and not re.compile('((?i)' + self.get_author() + ')').search(s)
+        and not re.compile('((?i)Part)', flags=re.UNICODE).search(s) \
+        and not re.compile('(((?i)by *$)|((?i)by ))',
+                           flags=re.UNICODE).search(s) \
+        and not re.compile('((?i)^[/\n/\r ]*contents)',
+                           flags=re.UNICODE).search(s) \
+        and not re.compile('((?i)^[/\n/\r ]*illustrations)',
+                           flags=re.UNICODE).search(s) \
+        and not re.compile('((?i)' + self.get_author() + ')',
+                           flags=re.UNICODE).search(s)
 
   def get_chapter_titles(self):
     """Get a list with the chapter titles.
@@ -152,7 +156,7 @@ class GutenbergParser(Parser):
 
   def get_chapters_2(self):
     """Old function for getting chapters.
-  
+
     Returns:
       A list of chapters
     """

@@ -131,6 +131,8 @@ class BookSearcher:
     # If no pre, then wrong link
     if len(self.root.find_all('pre')) == 0:
       return False
+    if self.root.h2 is None and self.root.h1 is None:
+      return False
     return True
 
   # Do a search from a query
