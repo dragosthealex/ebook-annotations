@@ -68,7 +68,8 @@ class Migration(BaseMigration):
     self.assertEqual('stuff', row[1])
     # If successful, delete the table
     c.execute("DROP TABLE IF EXISTS test")
-    c.execute("DROP TABLE IF EXISTS migrations")
+    c.execute("""DELETE FROM migrations
+                 WHERE file=? """, ('test_migration.py',))
     conn.commit()
 
   def test_migrate_rollback(self):
@@ -88,15 +89,16 @@ class Migration(BaseMigration):
     conn.commit()
   def down(self, conn, c):
     c.execute('''DROP TABLE IF EXISTS test''')
-  conn.commit()""")
+    conn.commit()""")
     # Migrate and then rollback
     migrate_up()
     migrate_rollback()
-    # Test whether rollback works
     conn, c = connect_database()
+    # Test whether rollback works
     c.execute("""SELECT name FROM sqlite_master
                  WHERE type='table' AND name='test'""")
     self.assertEqual(len(c.fetchall()), 0)
     c.execute("DROP TABLE IF EXISTS test")
-    c.execute("DROP TABLE IF EXISTS migrations")
+    c.execute("""DELETE FROM migrations
+                 WHERE file=? """, ('test_migration.py',))
     conn.commit()

@@ -13,7 +13,6 @@ class TestAnnotation(unittest.TestCase):
 
   def setUp(self):
     """Called before every test."""
-    pass
 
   def tearDown(self):
     """Called after every test."""
@@ -29,13 +28,12 @@ class TestAnnotation(unittest.TestCase):
     c.execute('''DELETE FROM annotations
                  WHERE hash=?''', (m.hexdigest(),))
     conn.commit()
-    pass
 
   def test_get_meaning(self):
     """Test if the meaning is retrieved successfully (by API)."""
     ann = TextAnnotation('exquisite', AnnotationType.UNCOMMON_WORD)
-    self.assertEqual(ann.data, "Def:&nbsp;extremely beautiful and very" +
-                     " delicately made")
+    self.assertEqual(ann.data, "Def (from Pearson Dictionary):&nbsp;" +
+                     "extremely beautiful and very delicately made")
     self.assertFalse(ann.get_from_db())
 
   def test_get_info(self):
@@ -54,8 +52,8 @@ class TestAnnotation(unittest.TestCase):
     ann.save_to_db()
     # Should be in db
     self.assertTrue(ann.get_from_db())
-    self.assertEqual(ann.data, "Def:&nbsp;extremely beautiful and very" +
-                     " delicately made")
+    self.assertEqual(ann.data, "Def (from Pearson Dictionary):&nbsp;" +
+                     "extremely beautiful and very delicately made")
 
   def test_get_info_db(self):
     """Test if the info is saved and retrieved successfully from DB."""
