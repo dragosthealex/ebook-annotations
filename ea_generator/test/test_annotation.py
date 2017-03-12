@@ -3,9 +3,10 @@
 import unittest
 import hashlib
 import codecs
-from context import TextAnnotation
-from context import AnnotationType
-from context import connect_database
+import os
+from ea_generator.annotation import TextAnnotation
+from ea_generator.annotation import AnnotationType
+from ea_generator.utils import connect_database
 
 
 class TestAnnotation(unittest.TestCase):
@@ -13,6 +14,7 @@ class TestAnnotation(unittest.TestCase):
 
   def setUp(self):
     """Called before every test."""
+    self.data_dir = os.path.abspath(os.path.dirname(__file__)) + '/test_annotation.data'
 
   def tearDown(self):
     """Called after every test."""
@@ -30,21 +32,21 @@ class TestAnnotation(unittest.TestCase):
     conn.commit()
 
   def test_get_meaning(self):
-    """Test if the meaning is retrieved successfully (by API)."""
+    """The meaning should be retrieved by API."""
     ann = TextAnnotation('exquisite', AnnotationType.UNCOMMON_WORD)
     self.assertEqual(ann.data, "Def (from Pearson Dictionary):&nbsp;" +
                      "extremely beautiful and very delicately made")
     self.assertFalse(ann.get_from_db())
 
   def test_get_info(self):
-    """Test if the info is retrieved successfully (by API)."""
+    """The info should be retrieved by API."""
     ann = TextAnnotation('Loch_Ness', AnnotationType.EXTRA)
-    with codecs.open('test_annotation.data', 'r', encoding="utf-8") as f:
+    with codecs.open(self.data_dir, 'r', encoding="utf-8") as f:
       self.assertEqual(ann.data, f.read())
     self.assertFalse(ann.get_from_db(case_sensitive=True))
 
   def test_get_meaning_db(self):
-    """Test if the meaning is saved and retrieved successfully from DB."""
+    """The meaning should be saved and retrieved from DB."""
     ann = TextAnnotation('exquisite', AnnotationType.UNCOMMON_WORD)
     # Should not be in db now
     self.assertFalse(ann.get_from_db())
@@ -56,7 +58,7 @@ class TestAnnotation(unittest.TestCase):
                      "extremely beautiful and very delicately made")
 
   def test_get_info_db(self):
-    """Test if the info is saved and retrieved successfully from DB."""
+    """The info should be saved and retrieved from DB."""
     ann = TextAnnotation('Loch_Ness', AnnotationType.EXTRA)
     # Should not be in db
     self.assertFalse(ann.get_from_db())

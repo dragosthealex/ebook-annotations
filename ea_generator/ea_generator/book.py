@@ -7,9 +7,9 @@ if more sources (except Gutenberg) will be added.
 """
 import re
 import codecs
-from Parser import GutenbergParser
-from Analyser import Analyser
-from Utils import *
+import parser
+import analyser
+from utils import *
 
 __all__ = ['Book', 'BookSource']
 
@@ -51,7 +51,7 @@ class Book:
 
   def __init__(self, url, the_id, source=BookSource.GUTENBERG):
     """Initialise the book."""
-    self._parser = GutenbergParser(url)
+    self._parser = parser.GutenbergParser(url)
     self.the_id = the_id
     self.title = None
     self.author = None
@@ -98,8 +98,8 @@ class Book:
       text = ' '.join(self.chapters)
     else:
       text = ' '.join(self.chapters[:chapters])
-    analyser = Analyser(text)
-    self.annotations = analyser.generate_annotations(caching)
+    ana = analyser.Analyser(text)
+    self.annotations = ana.generate_annotations(caching)
 
   def annotate(self, chapters=0):
     """Apply the annotations for all the chapters.
@@ -128,18 +128,18 @@ class Book:
     words = text.split(' ')
     # Get just the annotation words
     words_to_annotate = [ann.word for ann in self.annotations]
-    analyser = Analyser(None)
+    ana = analyser.Analyser(None)
     # Deal with multiple words proper nouns
     proposed_ann_word = words[0]
     in_word = False
     number_of_words = 1
     for index, current_word in enumerate(words):
       # We need to remove extra stuff, like when looked for annotations
-      current_word = analyser.preprocess_input(current_word)
+      current_word = ana.preprocess_input(current_word)
       # Test next word
       next_word = "~!~"
       if index + 1 < len(words):
-        next_word = analyser.preprocess_input(words[index + 1])
+        next_word = ana.preprocess_input(words[index + 1])
 
       if not in_word:
         if (current_word + " " + next_word) in words_to_annotate:

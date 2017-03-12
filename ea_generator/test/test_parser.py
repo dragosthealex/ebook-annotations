@@ -2,9 +2,9 @@
 """Test for the parser module."""
 import unittest
 import random
-from context import GutenbergParser
-from context import BookSearcher
-from context import BookNotFoundException
+from ea_generator.parser import GutenbergParser
+from ea_generator.book_searcher import BookSearcher
+from ea_generator.utils import BookNotFoundException
 
 
 class TestParser(unittest.TestCase):

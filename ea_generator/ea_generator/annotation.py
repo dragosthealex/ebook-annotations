@@ -5,7 +5,7 @@ import hashlib
 import json
 import re
 from SPARQLWrapper import SPARQLWrapper, JSON
-from Utils import *
+from utils import *
 
 __all__ = ['TextAnnotation', 'AnnotationType']
 

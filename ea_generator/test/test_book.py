@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Tests the Book class."""
 import unittest
-from context import Book
-from context import BookSource
-from context import URLS
-from context import CachingType
+from ea_generator.book import Book
+from ea_generator.book import BookSource
+from ea_generator.utils import URLS
+from ea_generator.utils import CachingType
 
 
 class TestBook(unittest.TestCase):
@@ -19,11 +19,11 @@ class TestBook(unittest.TestCase):
     self.book = None
 
   def test_is_cached_html(self):
-    """Test the method that checks for cached books."""
+    """Should check for cached books."""
     self.assertTrue(True)
 
   def test_populate_content(self):
-    """Test the book population works."""
+    """Should correctly populate the book."""
     self.book.populate_content()
     self.assertIsNot(None, self.book.title)
     self.assertIsNot(None, self.book.author)
@@ -31,18 +31,18 @@ class TestBook(unittest.TestCase):
     self.assertIsNot(None, self.book.chapters)
 
   def test_create_annotations(self):
-    """Test that annotations are generated properly."""
+    """Should create the annotations."""
     self.book.populate_content()
     self.book.create_annotations(chapters=2)
 
   def test_annotate(self):
-    """Test that annotations are applied."""
+    """Should create and apply the annotations."""
     self.book.populate_content()
     self.book.create_annotations(chapters=2)
     self.book.annotate(chapters=2)
 
   def test_annotate_caching(self):
-    """Test that annotations are applied (with caching)."""
+    """Should create the annotations from cache and apply the."""
     self.book.populate_content()
     self.book.create_annotations(chapters=2, caching=CachingType.ANNOTATIONS)
     self.book.annotate(chapters=2)

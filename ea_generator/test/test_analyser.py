@@ -2,7 +2,7 @@
 """Tests for analyser module."""
 
 import unittest
-from context import Analyser
+from ea_generator.analyser import Analyser
 
 
 class TestAnalyser(unittest.TestCase):

@@ -1,8 +1,7 @@
 Misc/
-App/server/prototypes/Generator/smart_ebook_generator/rdf-files/
-App/server/Generator/ebook_annotations/rdf-files*
-App/server/Generator/ebook_annotations/rdf-files
-App/server/Generator/ebook_annotations/database/database.db
+ea_generator/ea_generator/rdf-files*
+ea_generator/ea_generator/rdf-files
+ea_generator/ea_generator/database/database.db
 .phpintel
 *.pyc
 *.html

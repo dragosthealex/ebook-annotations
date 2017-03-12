@@ -3,7 +3,7 @@
 import requests
 import re
 from bs4 import BeautifulSoup
-from Utils import BookNotFoundException
+from utils import BookNotFoundException
 
 __all__ = ['GutenbergParser']
 

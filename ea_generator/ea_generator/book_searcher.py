@@ -4,8 +4,8 @@ import requests
 import re
 from urllib import quote
 from bs4 import BeautifulSoup
-from Utils import *
-from Book import BookSource
+from utils import *
+from book import BookSource
 
 # TODO : make a cache
 # TODO : make cronjob for updating index file

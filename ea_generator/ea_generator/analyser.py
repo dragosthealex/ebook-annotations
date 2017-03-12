@@ -7,9 +7,9 @@ from nltk import word_tokenize
 from nltk import FreqDist
 from nltk.corpus import gutenberg
 from nltk.corpus import stopwords
-from Utils import *
-from Annotation import TextAnnotation
-from Annotation import AnnotationType
+from utils import *
+import annotation as annot
+from annotation import AnnotationType
 
 __all__ = ['Analyser']
 
@@ -74,13 +74,13 @@ class Analyser:
     # Generate the annotations
     annotations = []
     for word in uncommon_words:
-      ann = TextAnnotation(word, AnnotationType.UNCOMMON_WORD, caching)
+      ann = annot.TextAnnotation(word, AnnotationType.UNCOMMON_WORD, caching)
       ann.save_to_db()
       if ann.data is None or not ann.data:
         continue
       annotations.append(ann)
     for word in extras:
-      ann = TextAnnotation(word, AnnotationType.EXTRA, caching)
+      ann = annot.TextAnnotation(word, AnnotationType.EXTRA, caching)
       ann.save_to_db(case_sensitive=True)
       if ann.data is None or not ann.data:
         continue

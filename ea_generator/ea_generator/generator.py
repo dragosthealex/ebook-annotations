@@ -9,9 +9,9 @@ import re
 import codecs
 import argparse
 from argparse import RawTextHelpFormatter
-from Book import *
-from BookSearcher import BookSearcher
-from Utils import *
+import book as bk
+import book_searcher as b_searcher
+from utils import *
 
 __all__ = ['Generator']
 
@@ -69,7 +69,7 @@ class Generator:
     """Initialise the Generator."""
     self._book = None
     self._html_file_name = None
-    self._searcher = BookSearcher()
+    self._searcher = b_searcher.BookSearcher()
 
   def search_for_query(self, query):
     """Search for a query and returns the possible matches.
@@ -106,7 +106,7 @@ class Generator:
     self.searcher.book_id = the_id
     url, the_id, source = self.searcher.get_book_info()
     # Create the book from url and source
-    book = Book(url, the_id, source)
+    book = bk.Book(url, the_id, source)
 
     # Check html caching
     if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\

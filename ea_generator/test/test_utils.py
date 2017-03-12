@@ -2,7 +2,7 @@
 """Test for utils module."""
 import unittest
 import os
-from context import *
+from ea_generator.utils import *
 
 
 class TestUtils(unittest.TestCase):
@@ -18,14 +18,14 @@ class TestUtils(unittest.TestCase):
       os.unlink(DB_MIGRATIONS_FOLDER + '/test_migration.py')
 
   def test_connect_db(self):
-    """Test whether the connection to db is made."""
+    """Should make a connection to DB."""
     conn, c = None, None
     conn, c = connect_database()
     self.assertIsNot(conn, None)
     self.assertIsNot(c, None)
 
   def test_enclose_in_tag(self):
-    """Test whether the function to enclose in tags works."""
+    """Should enclose some data in the title tag."""
     enclosed_no_attributes = enclose_in_html_tag('title', 'Some title')
     self.assertEqual(enclosed_no_attributes, '<title >Some title</title>')
 
@@ -35,14 +35,14 @@ class TestUtils(unittest.TestCase):
                      '<title attr="awesome">Some title</title>')
 
   def test_recursive_enclose_in_tag(self):
-    """Test the tag enclosure function with recursive tags."""
+    """Should recursively enclose the data in title then in head."""
     recursive_enclosed = enclose_in_html_tag('title', 'Some Title')
     recursive_enclosed = enclose_in_html_tag('head', recursive_enclosed)
     self.assertEqual(recursive_enclosed,
                      '<head ><title >Some Title</title></head>')
 
   def test_migrate(self):
-    """Test whether the migration system works."""
+    """Should create a migration and run it."""
     # Create a migration
     with open(DB_MIGRATIONS_FOLDER + "/test_migration.py", "w") as f:
       f.write("""\
@@ -73,7 +73,7 @@ class Migration(BaseMigration):
     conn.commit()
 
   def test_migrate_rollback(self):
-    """Test whether the rollback works."""
+    """Should migrate and rollback."""
     # Create a migration
     with open(DB_MIGRATIONS_FOLDER + "/test_migration.py", "w") as f:
       f.write("""\
