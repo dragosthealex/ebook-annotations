@@ -16,5 +16,6 @@ exclude_lines =
     def main
 
 [run]
+source = ea_generator
 omit =
     *limigrations*
