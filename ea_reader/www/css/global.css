@@ -69,6 +69,10 @@ a {
   text-decoration: underline;
 }
 
+.chapter .chapter-body {
+  text-align: justify;
+}
+
 .annotation {
   cursor: pointer;
   text-decoration: underline;

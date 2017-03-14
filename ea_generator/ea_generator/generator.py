@@ -110,7 +110,7 @@ class Generator(object):
         # Check html caching
         if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
                 book.is_cached_html():
-            return book.get_html_file_name()
+            return book.get_html_from_db()
         # Else, parse the book into the object
         book.populate_content()
         self.book = book
@@ -153,6 +153,7 @@ class Generator(object):
             f.write(enclose_in_html_tag('div', title + author +
                                         table_of_contents +
                                         chapters, {'class': 'book'}))
+        book.cache_to_db(file_name)
         # Return its name
         return file_name
 
@@ -189,7 +190,13 @@ def main():
     elif args.action == 'get':
         result = g.generate_html_book(args.query, args.caching,
                                       args.max_chapters)
-        g.book.print_text('result.txt')
+        if args.caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS]:
+            r = codecs.open(result, "r", encoding="utf-8")
+            r = r.read()
+            with codecs.open('result.txt', 'w', encoding="utf-8") as f:
+                f.write(r)
+        else:
+            g.book.print_text('result.txt')
         print('Book contents were printed in result.txt')
     else:
         print("Invalid action.")

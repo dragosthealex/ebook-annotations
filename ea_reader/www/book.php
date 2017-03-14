@@ -3,7 +3,6 @@
 $header['title'] = 'Annotated eBook Reader';
 include '../templates/header.php';
 ?>
-
 <script>
 $(document).ready(function() {
   id = <?=$_GET['id']?>;

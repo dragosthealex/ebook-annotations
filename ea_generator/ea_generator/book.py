@@ -72,6 +72,35 @@ class Book(object):
         self.html_file_name = html_file_name
         return True
 
+    def cache_to_db(self, file_name=None):
+        """Cache this book to db.
+
+        Args:
+            file_name (str): The filename of this html.
+                             If let empty, will remove cache.
+        """
+        if file_name is None:
+            file_name = ''
+        conn, c = connect_database()
+        c.execute('''UPDATE books
+                     SET html_file_name = ?
+                     WHERE id = ?''', (file_name, self.the_id))
+        conn.commit()
+        conn.close()
+
+    def get_html_from_db(self):
+        """Return the filename of this book form DB.
+
+        Returns:
+            The filename of this html book.
+        """
+        conn, c = connect_database()
+        c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
+                  (self.the_id,))
+        html_file_name = c.fetchone()[0]
+        conn.close()
+        return html_file_name
+
     def populate_content(self):
         """Use the parser to parse everything and get the content."""
         self.title = self.parser.get_title()
