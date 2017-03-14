@@ -89,7 +89,24 @@ a {
   text-decoration: underline;
   color: rgb(0, 37, 216);
 }
-
+.top-link {
+  position: fixed;
+  bottom: 30px;
+  right: 150px;
+}
+.btn-round {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 15px 0;
+  text-align: center;
+  color: #333;
+  border: none;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.4);
+}
+.btn-primary.btn-round {
+  background-color: rgba(65, 154, 231, 0.64);
+}
 @media (min-width: 1200px){
   .container {
     width: 970px;
