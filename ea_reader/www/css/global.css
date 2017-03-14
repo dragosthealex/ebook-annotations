@@ -59,6 +59,10 @@ a {
   text-align: center;
 }
 
+.chapter_title li {
+  
+}
+
 .chapter {
   padding: 0 15px;
 }
@@ -67,6 +71,10 @@ a {
   color: #222;
   text-transform: capitalize;
   text-decoration: underline;
+}
+
+.chapter .chapter-title:hover {
+  color: #337ab7;
 }
 
 .chapter .chapter-body {

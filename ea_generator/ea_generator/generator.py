@@ -124,7 +124,10 @@ class Generator(object):
         for index, chapter in enumerate(book.chapter_titles):
             chapter_tag = enclose_in_html_tag('a', chapter,
                                               {'href': '#ch-' + str(index)})
-            table_of_contents += enclose_in_html_tag('li', chapter_tag)
+            table_of_contents += enclose_in_html_tag('li', chapter_tag,
+                                                     {'class': 'col-xs-12 ' +
+                                                      'col-sm-6 col-' +
+                                                      'md-4 col-lg-3'})
         table_of_contents = enclose_in_html_tag('ul', table_of_contents,
                                                 {'class': 'chapter_title'})
 
