@@ -23,7 +23,7 @@ class TestGenerator(unittest.TestCase):
         """Should generate the html book."""
         file = self.g.generate_html_book('11', CachingType.ANNOTATIONS, 2)
         self.assertIsNot(file, None)
-        self.assertEqual(file, '11.html')
+        self.assertEqual(file, 'ea_generator\../html-books/11.html')
         html_path = os.path.abspath(os.path.dirname(__file__)) + \
             '../html-books/'
         self.assertTrue(os.path.isfile(html_path + '11.html'))
