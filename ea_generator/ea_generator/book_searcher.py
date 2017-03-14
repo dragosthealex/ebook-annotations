@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Book searcher module."""
 import requests
-import re
-from urllib import quote
 from bs4 import BeautifulSoup
 from utils import *
 from book import BookSource
@@ -13,7 +11,7 @@ from book import BookSource
 __all__ = ['BookSearcher']
 
 
-class BookSearcher:
+class BookSearcher(object):
     """Deals with searching the books by query / id.
 
     Attributes:
@@ -23,38 +21,38 @@ class BookSearcher:
     """
 
     @property
-    def search_query(self):
+    def search_query(self):  # pragma: no-cover
         """Get the search query."""
         if self._search_query is None:
             raise AttributeError("Attribute search_query was not set.")
         return self._search_query
 
     @search_query.setter
-    def search_query(self, value):
+    def search_query(self, value):  # pragma: no-cover
         """Set the search query."""
         self._search_query = value
 
     @property
-    def book_id(self):
+    def book_id(self):  # pragma: no-cover
         """Get the book id."""
         if self._book_id is None:
             raise AttributeError("Attribute book_id was not set.")
         return self._book_id
 
     @book_id.setter
-    def book_id(self, value):
+    def book_id(self, value):  # pragma: no-cover
         """Set the book id."""
         self._book_id = value
 
     @property
-    def result_url(self):
+    def result_url(self):  # pragma: no-cover
         """Get the resulted url."""
         if self._result_url is None:
             raise AttributeError("Attribute result_url was not set.")
         return self._result_url
 
     @result_url.setter
-    def result_url(self, value):
+    def result_url(self, value):  # pragma: no-cover
         """Set the resulted url."""
         self._result_url = value
 
@@ -84,6 +82,7 @@ class BookSearcher:
         c.execute('''SELECT * FROM books
                      WHERE title LIKE ?''', ('%' + query.lower() + '%',))
         books = c.fetchall()
+        conn.close()
         result = []
         for book in books:
             # Delete book from db if invalid url

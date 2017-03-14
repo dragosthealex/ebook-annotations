@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """Misc useful functions."""
 import requests
-import re
 import os
-import sys
-import time
 import rdflib
 import sqlite3
 import zipfile
@@ -129,7 +126,7 @@ def download_index_file():
     print("Done.")
 
 
-def reset_refresh(url=None):
+def reset_refresh():
     """Reset the database, and reseed it.
 
     Resets the database, re-inserting the book entries parsed from the
@@ -172,8 +169,10 @@ def reset_refresh(url=None):
     conn.commit()
 
 
-def enclose_in_html_tag(tag, data, attributes={}):
+def enclose_in_html_tag(tag, data, attributes=None):
     """Enclose the data in a HTML tag with attributes."""
+    if attributes is None:
+        attributes = {}
     text = '<' + str(tag) + ' ' + \
            ' '.join(key + '="' + value + '"'
                     for key, value in attributes.iteritems()) + '>'
@@ -188,7 +187,7 @@ class BookNotFoundException(Exception):
     pass
 
 
-class CachingType:
+class CachingType(object):
     """Type of caching used."""
 
     NONE = 0

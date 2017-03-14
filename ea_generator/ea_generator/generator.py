@@ -3,9 +3,6 @@
 
 Used to generate the HTML file from a given ID / query.
 """
-import os
-import sys
-import re
 import codecs
 import argparse
 from argparse import RawTextHelpFormatter
@@ -16,7 +13,7 @@ from utils import *
 __all__ = ['Generator']
 
 
-class Generator:
+class Generator(object):
     """The main class for of the module.
 
     Implements the pipeline, providing a method for generating
@@ -31,38 +28,38 @@ class Generator:
     """
 
     @property
-    def book(self):
+    def book(self):  # pragma: no-cover
         """Get the book."""
         if self._book is None:
             raise AttributeError("Attribute book was not set.")
         return self._book
 
     @book.setter
-    def book(self, value):
+    def book(self, value):  # pragma: no-cover
         """Set the book."""
         self._book = value
 
     @property
-    def html_file_name(self):
+    def html_file_name(self):  # pragma: no-cover
         """Get the html book file name."""
         if self._html_file_name is None:
             raise AttributeError("Attribute html_file_name was not set.")
         return self._html_file_name
 
     @html_file_name.setter
-    def html_file_name(self, value):
+    def html_file_name(self, value):  # pragma: no-cover
         """Set the html book file name."""
         self._html_file_name = value
 
     @property
-    def searcher(self):
+    def searcher(self):  # pragma: no-cover
         """Get the resulted url."""
         if self._searcher is None:
             raise AttributeError("Attribute searcher was not set.")
         return self._searcher
 
     @searcher.setter
-    def searcher(self, value):
+    def searcher(self, value):  # pragma: no-cover
         """Set the resulted url."""
         self._searcher = value
 
@@ -106,9 +103,8 @@ class Generator:
         """
         # Get the url and the source from the query
         self.searcher.book_id = the_id
-        url, the_id, source = self.searcher.get_book_info()
         # Create the book from url and source
-        book = bk.Book(url, the_id, source)
+        book = bk.Book(self.searcher.get_book_info())
 
         # Check html caching
         if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
@@ -124,8 +120,8 @@ class Generator:
         author = enclose_in_html_tag('h2', book.author, {'class': 'author'})
         # Put the table of contents in tags
         table_of_contents = ''
-        for index, chapter_title in enumerate(book.chapter_titles):
-            chapter_tag = enclose_in_html_tag('a', chapter_title,
+        for index, chapter in enumerate(book.chapter_titles):
+            chapter_tag = enclose_in_html_tag('a', chapter,
                                               {'href': '#ch-' + str(index)})
             table_of_contents += enclose_in_html_tag('li', chapter_tag)
         table_of_contents = enclose_in_html_tag('ul', table_of_contents,
@@ -147,17 +143,15 @@ class Generator:
             # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)
             chapter = enclose_in_html_tag('p', chapter,
                                           {'class': 'chapter-body'})
-            tag = enclose_in_html_tag('div', ch_title + chapter,
-                                      {'class': 'chapter'})
-            chapters += tag
+            chapters += enclose_in_html_tag('div', ch_title + chapter,
+                                            {'class': 'chapter'})
         # Enclose everything in a div tag with class book
-        html = enclose_in_html_tag('div', title + author + table_of_contents +
-                                   chapters, {'class': 'book'})
         file_name = HTML_BOOKS_FOLDER + '/' + str(the_id) + '.html'
         # Create the html file
         with codecs.open(file_name, 'w', encoding="utf-8") as f:
-            f.write(html)
-
+            f.write(enclose_in_html_tag('div', title + author +
+                                        table_of_contents +
+                                        chapters, {'class': 'book'}))
         # Return its name
         return file_name
 

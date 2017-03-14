@@ -1,0 +1,20 @@
+[report]
+exclude_lines =
+    pragma: no-cover
+    setter
+    property
+    __all__
+    continue
+    def reset_migrations
+    def reset_annotations
+    def reset_database
+    download_index_file
+    def reset_refresh
+    if __name__ == '__main__':
+    class BookNotFoundException
+    class CachingType
+    def main
+
+[run]
+omit =
+    *limigrations*
