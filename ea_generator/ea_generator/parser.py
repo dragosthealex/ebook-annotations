@@ -95,7 +95,7 @@ class GutenbergParser(Parser):
             # else
             for child in self.root.h1.descendants:
                 title = title + self.stringy(child)
-        except:
+        except Exception:
             return None
         return title
 
@@ -111,7 +111,7 @@ class GutenbergParser(Parser):
             # Else
             for child in self.root.h2.descendants:
                 author = author + self.stringy(child)
-        except:
+        except Exception:
             return None
         return author
 
@@ -160,7 +160,7 @@ class GutenbergParser(Parser):
             for chapter_tag in chapter_tags:
                 chapter_titles.append(self.stringy(chapter_tag.text))
             return chapter_titles
-        except:
+        except Exception:
             return []
 
     def get_chapters_2(self):
@@ -206,6 +206,6 @@ class GutenbergParser(Parser):
                 else:
                     # Else we append the text to current chapter
                     chapters[i] += node.text
-        except:
+        except Exception:
             return []
         return chapters

@@ -14,13 +14,13 @@ from utils import *
 __all__ = ['Book', 'BookSource']
 
 
-class BookSource:
+class BookSource(object):
     """Contains the possible sources for the original books."""
 
     GUTENBERG = 1
 
 
-class Book:
+class Book(object):
     """Represents the parsed book.
 
     Attributes:
@@ -66,6 +66,7 @@ class Book:
         c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
                   (self.the_id,))
         html_file_name = c.fetchone()[0]
+        conn.close()
         if html_file_name is None or html_file_name == '':
             return False
         self.html_file_name = html_file_name

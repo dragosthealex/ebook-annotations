@@ -26,7 +26,7 @@ def main():
                         "1 = Just HTML\n" +
                         "2 = Just annotations\n" +
                         "3 = Both HTML and annotations", choices=[0, 1, 2, 3],
-                        default=0, type=int)
+                        default=CachingType.NONE, type=int)
     args = parser.parse_args()
     generator = Generator()
     if args.action == 'all':
