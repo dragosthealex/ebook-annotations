@@ -5,8 +5,8 @@ if %errorlevel%==1 (
 ) else (
   pip2 install -r requirements.txt
 )
-py -2 server\Generator\setup.py
-if not exist "server\html_books\" (
+py -2 ea_generator\setup.py
+if not exist "ea_generator\html_books\" (
   @echo creating generated books dir
-  mkdir "server\html_books"
+  mkdir "ea_generator\html_books"
 }

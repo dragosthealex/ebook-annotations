@@ -1,6 +1,6 @@
-#!/usr/bin/python
+"""Script to install and get the generator going."""
 import nltk
-from ebook_annotations import Utils as u
+from ebook_annotations import utils as u
 
 nltk.download('tagsets')
 nltk.download('averaged_perceptron_tagger')
