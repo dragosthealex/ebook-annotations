@@ -55,12 +55,15 @@ a {
 .chapter_title {
   list-style: none;
   list-style-type: none;
-  padding: none;
+  overflow: hidden;
   text-align: center;
+  margin: 30px 0 40px;
+  padding: 0;
 }
 
-.chapter_title li {
-  
+.chapter_title li a {
+  padding: 10px 0;
+  display: block;
 }
 
 .chapter {
