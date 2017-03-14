@@ -2,13 +2,13 @@
 """The middleware between front-end and generator."""
 import sys
 import os
-sys.path.insert(0, os.path.abspath('../Generator'))
+sys.path.insert(0, os.path.abspath('../'))
 import json
 import argparse
 from argparse import RawTextHelpFormatter
-from ebook_annotations.Generator import Generator
-from ebook_annotations.Utils import BookNotFoundException
-from ebook_annotations.Utils import CachingType
+from ea_generator.generator import Generator
+from ea_generator.utils import BookNotFoundException
+from ea_generator.utils import CachingType
 
 
 def main():

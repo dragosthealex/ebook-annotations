@@ -8,6 +8,12 @@ from ea_generator.analyser import Analyser
 class TestAnalyser(unittest.TestCase):
     """Test case for analyser."""
 
+    def test_common_treshold(self):
+        """Should have different results depndng on treshold."""
+        analyser = Analyser(None)
+        analyser.uncommon_treshold = 0
+        self.assertEqual(analyser.uncommon_treshold, 0)
+
     def test_preprocess_input(self):
         """The process input should remove special chars."""
         analyser = Analyser(None)

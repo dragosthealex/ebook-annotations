@@ -33,7 +33,7 @@ class TestParser(unittest.TestCase):
             if (t != '') and (t is not None) and (a != '') \
                     and (a is not None) and (ch is not None) and (len(ch) > 1):
                  success += 1
-        self.assertTrue(success > 90)
+        self.assertTrue(success > 80)
         print(success)
 
     def test_parse_random_100_old(self):

@@ -23,10 +23,11 @@ class Generator:
     a html file for a given ID and returning the results.
 
     Attributes:
-        book (:obj:`Book`): An instance of the book that is currently generated.
+        book (:obj:`Book`): An instance of the book that is currently
+        generated.
         html_file_name (str): The name of the generated HTML file.
         searcher (:obj:`BookSearcher`): An instance of the searcher used
-                                                                    to get books.
+                                        to get books.
     """
 
     @property

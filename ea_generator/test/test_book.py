@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests the Book class."""
 import unittest
+import os
 from ea_generator.book import Book
 from ea_generator.book import BookSource
 from ea_generator.utils import URLS
@@ -20,7 +21,7 @@ class TestBook(unittest.TestCase):
 
     def test_is_cached_html(self):
         """Should check for cached books."""
-        self.assertTrue(True)
+        self.assertFalse(self.book.is_cached_html())
 
     def test_populate_content(self):
         """Should correctly populate the book."""
@@ -40,6 +41,9 @@ class TestBook(unittest.TestCase):
         self.book.populate_content()
         self.book.create_annotations(chapters=2)
         self.book.annotate(chapters=2)
+        self.book.print_text('test.txt')
+        self.assertTrue(os.path.isfile('test.txt'))
+        os.unlink('test.txt')
 
     def test_annotate_caching(self):
         """Should create the annotations from cache and apply the."""

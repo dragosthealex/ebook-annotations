@@ -40,8 +40,6 @@ class Book:
     @property
     def parser(self):
         """Get the parser."""
-        if self._parser is None:
-            raise AttributeError("Attribute parser was not set.")
         return self._parser
 
     @parser.setter
@@ -79,6 +77,9 @@ class Book:
         self.author = self.parser.get_author()
         self.chapter_titles = self.parser.get_chapter_titles()
         self.chapters = self.parser.get_chapters()
+        if self.title is None or self.author is None or \
+                len(self.chapter_titles) == 0 or len(self.chapters) == 0:
+            raise BookNotFoundException('Book was not found.')
 
     def create_annotations(self, chapters=0, caching=CachingType.NONE):
         """Analyse the text and create the annotations.
@@ -194,7 +195,7 @@ class Book:
         Args:
             file_name (str): The file name where to print the text.
         """
-        with codecs.open(file_name, 'w') as f:
+        with codecs.open(file_name, 'w', encoding="utf-8") as f:
             f.write(self.title)
             f.write('\n')
             f.write(self.author)

@@ -33,6 +33,8 @@ if(get_post('type') == 'single') {
 
   switch ($source) {
     case 'web':
+      // Caching
+      $c = get_post('c')?get_post('c'):0;
       // It means call came from web, so return the json
       $command = escapeshellcmd(PYTHON_COMMAND . ' search.py all "' . $query . '" -c ' . $c);
       echo(shell_exec($command));

@@ -87,26 +87,32 @@ class GutenbergParser(Parser):
     def get_title(self):
         """Return the title of the book, from the H1 element."""
         title = ''
-        if self.root.h1 is None:
-            for child in self.root.h2.descendants:
+        try:
+            if self.root.h1 is None:
+                for child in self.root.h2.descendants:
+                    title = title + self.stringy(child)
+                return title
+            # else
+            for child in self.root.h1.descendants:
                 title = title + self.stringy(child)
-            return title
-        # else
-        for child in self.root.h1.descendants:
-            title = title + self.stringy(child)
+        except:
+           return None
         return title
 
     def get_author(self):
         """Return the author of the book, using either H1 or H2 elements."""
         author = ''
-        # Try with h1
-        if self.root.h2 is None:
-            for child in self.root.h1.descendants:
+        try:
+            # Try with h1
+            if self.root.h2 is None:
+                for child in self.root.h1.descendants:
+                    author = author + self.stringy(child)
+                return author
+            # Else
+            for child in self.root.h2.descendants:
                 author = author + self.stringy(child)
-            return author
-        # Else
-        for child in self.root.h2.descendants:
-            author = author + self.stringy(child)
+        except:
+            return None
         return author
 
     def find_chapter_title_tag(self):
@@ -148,11 +154,14 @@ class GutenbergParser(Parser):
             A list of chapter titles.
         """
         chapter_titles = []
-        chapter_tags = self.root.find_all(self.filter_chapters)
-        # Construct the list with chapters
-        for chapter_tag in chapter_tags:
-            chapter_titles.append(self.stringy(chapter_tag.text))
-        return chapter_titles
+        try:
+            chapter_tags = self.root.find_all(self.filter_chapters)
+            # Construct the list with chapters
+            for chapter_tag in chapter_tags:
+                chapter_titles.append(self.stringy(chapter_tag.text))
+            return chapter_titles
+        except:
+            return []
 
     def get_chapters_2(self):
         """Old function for getting chapters.
@@ -182,18 +191,21 @@ class GutenbergParser(Parser):
         chapters = []
         chapters.append('')
         i = 0
-        # If no chapter seen, it means no chapters, so assume there aren't any
-        if self.root.find(self.filter_chapters) is None:
-            for node in self.root.h1.find_all_next():
-                chapters[i] += node.text
-            return chapters
-        # Iterate over all text except chapter nodes
-        for node in self.root.find(self.filter_chapters).find_all_next():
-            # If we find another chapter tag, we continue
-            if self.filter_chapters(node):
-                i += 1
-                chapters.append('')
-            else:
-                # Else we append the text to current chapter
-                chapters[i] += node.text
+        try:
+            # If no chapter seen, it means no chapters, so assume there aren't any
+            if self.root.find(self.filter_chapters) is None:
+                for node in self.root.h1.find_all_next():
+                    chapters[i] += node.text
+                return chapters
+            # Iterate over all text except chapter nodes
+            for node in self.root.find(self.filter_chapters).find_all_next():
+                # If we find another chapter tag, we continue
+                if self.filter_chapters(node):
+                    i += 1
+                    chapters.append('')
+                else:
+                    # Else we append the text to current chapter
+                    chapters[i] += node.text
+        except:
+            return []
         return chapters

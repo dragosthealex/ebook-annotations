@@ -164,6 +164,3 @@ class BookSearcher:
         c.execute('''DELETE FROM books
                      WHERE id=?''', (the_id,))
         conn.commit()
-
-if __name__ == '__main__':
-    pass
