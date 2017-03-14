@@ -30,7 +30,7 @@ include_once 'default.php';
           </div>
           <div class="collapse navbar-collapse" id="main-nav-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li>
+              <!-- <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li> -->
               <?php
               if(isset($_GET['id'])) {
                 // Means we are on book page

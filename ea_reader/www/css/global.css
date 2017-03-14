@@ -6,6 +6,35 @@ body {
 a {
   text-decoration: none;
 }
+#main-content {
+}
+.header {
+  width: 100%;
+  z-index: 1000;
+}
+.navbar.navbar-default {
+  background-color: #3F51B5;
+  border: none;
+  border-radius: 0;
+}
+.header .navbar .navbar-brand, 
+.header .navbar ul > li > a {
+  color: #fefefe;
+}
+.header .navbar ul > li > a:hover {
+  color: #cfcfcf;
+}
+.header .btn-primary {
+  background-color: #ba9325;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px -1px rgba(0,0,0,0.4);
+}
+.header .btn-primary:active,
+.header .btn-primary:hover:active,
+.header .btn-primary:focus {
+  background-color: #957720;
+  border: none;
+}
 .book-result {
   background: white;
   border-radius: 2px;
@@ -38,10 +67,6 @@ a {
 
 .popover {
   max-width: 500px;
-}
-
-.header .navbar-default {
-  background-color: #fefefe;
 }
 
 .title {
@@ -82,6 +107,8 @@ a {
 
 .chapter .chapter-body {
   text-align: justify;
+  font-size: 16px;
+  line-height: 1.55
 }
 
 .annotation {
@@ -100,12 +127,15 @@ a {
   height: 50px;
   padding: 15px 0;
   text-align: center;
-  color: #333;
+  color: #fefefe;
   border: none;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.4);
 }
+.btn-round:hover {
+  color: #eee;
+}
 .btn-primary.btn-round {
-  background-color: rgba(65, 154, 231, 0.64);
+  background-color: rgba(63, 81, 181, 0.89);
 }
 @media (min-width: 1200px){
   .container {
