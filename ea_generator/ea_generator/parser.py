@@ -9,7 +9,7 @@ __all__ = ['GutenbergParser']
 
 
 # Parser class
-class Parser():
+class Parser(object):
     """Parses the HTML into useful information."""
 
     def stringy(self, string):
@@ -96,7 +96,7 @@ class GutenbergParser(Parser):
             for child in self.root.h1.descendants:
                 title = title + self.stringy(child)
         except:
-           return None
+            return None
         return title
 
     def get_author(self):

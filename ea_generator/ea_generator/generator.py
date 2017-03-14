@@ -104,7 +104,8 @@ class Generator(object):
         # Get the url and the source from the query
         self.searcher.book_id = the_id
         # Create the book from url and source
-        book = bk.Book(self.searcher.get_book_info())
+        the_url, the_id, src = self.searcher.get_book_info()
+        book = bk.Book(the_url, the_id, src)
 
         # Check html caching
         if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\

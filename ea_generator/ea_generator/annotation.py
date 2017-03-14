@@ -10,14 +10,14 @@ from utils import *
 __all__ = ['TextAnnotation', 'AnnotationType']
 
 
-class AnnotationType:
+class AnnotationType(object):
     """Enum for Annotation types."""
 
     UNCOMMON_WORD = 0
     EXTRA = 1
 
 
-class TextAnnotation:
+class TextAnnotation(object):
     """Annotation that contains some text.
 
     TODO: Make proper docstrings.
@@ -135,6 +135,7 @@ class TextAnnotation:
                                  WHERE hash=?
                                  LIMIT 1''', (m.hexdigest(),))
         result = c.fetchone()
+        conn.close()
         if result is None:
             return False
         self.data = result[3]

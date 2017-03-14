@@ -4,8 +4,6 @@
 import nltk
 import re
 from nltk import word_tokenize
-from nltk import FreqDist
-from nltk.corpus import gutenberg
 from nltk.corpus import stopwords
 from utils import *
 import annotation as annot
@@ -16,7 +14,7 @@ __all__ = ['Analyser']
 # TODO: Make annotations user-influenced
 
 
-class Analyser:
+class Analyser(object):
     """Analyses the text and provides methods for annotating.
 
     Attributes:
@@ -165,7 +163,7 @@ class Analyser:
         is_proper_noun = False
         text = []
         proper_noun = ""
-        for index, (word, tag) in enumerate(tagged):
+        for (word, tag) in tagged:
             if not is_proper_noun and (tag == 'NNP' or tag == 'NNPS'):
                 # Start building a proper noun
                 proper_noun = word
