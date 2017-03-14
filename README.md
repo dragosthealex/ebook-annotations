@@ -1,4 +1,5 @@
-# ebook-annotations [![Code Health](https://landscape.io/github/dragosthealex/ebook-annotations/master/landscape.svg?style=flat)](https://landscape.io/github/dragosthealex/ebook-annotations/master)
+# ebook-annotations [![Code Health](https://landscape.io/github/dragosthealex/ebook-annotations/master/landscape.svg?style=flat)](https://landscape.io/github/dragosthealex/ebook-annotations/master) [![Code Health](https://img.shields.io/badge/coverage-88%25-green.svg)](https://landscape.io/github/dragosthealex/ebook-annotations/master)
+
 
 
 A generator for annotated ebooks, which uses the freely available [gutenberg project](https://www.gutenberg.org) sources.
