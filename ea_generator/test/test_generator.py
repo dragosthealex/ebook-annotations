@@ -25,7 +25,7 @@ class TestGenerator(unittest.TestCase):
         self.assertIsNot(file, None)
         self.assertEqual(file, '11.html')
         html_path = os.path.abspath(os.path.dirname(__file__)) + \
-            '../html_books/'
+            '../html-books/'
         self.assertTrue(os.path.isfile(html_path + '11.html'))
 
 if __name__ == '__main__':

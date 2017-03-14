@@ -40,7 +40,7 @@ DB_FILE_NAME = os.path.join(os.path.dirname(__file__),
 DB_MIGRATIONS_FOLDER = os.path.join(os.path.dirname(__file__),
                                     './database/migrations')
 HTML_BOOKS_FOLDER = os.path.join(os.path.dirname(__file__),
-                                 '../../html_books')
+                                 '../html-books')
 
 
 def represents_int(s):
