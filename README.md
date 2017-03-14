@@ -1,6 +1,6 @@
-# ebook-annotations
+# ebook-annotations [![Code Health](https://landscape.io/github/dragosthealex/ebook-annotations/master/landscape.svg?style=flat)](https://landscape.io/github/dragosthealex/ebook-annotations/master)
 
-## Description
+
 A generator for annotated ebooks, which uses the freely available [gutenberg project](https://www.gutenberg.org) sources.
 Consists of a php-based web front-end which connects to the python-based generator.
 
