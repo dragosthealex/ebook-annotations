@@ -6,6 +6,7 @@ BookSource is an enum that provides maintainability
 if more sources (except Gutenberg) will be added.
 """
 import re
+import cgi
 import codecs
 import parser
 import analyser
@@ -199,10 +200,22 @@ class Book(object):
                     continue
                 tag = enclose_in_html_tag('a', str(proposed_ann_word),
                                           {'class': 'annotation',
-                                           'data-content': '' + ann.data,
+                                           'data-content': '' +
+                                           cgi.escape(ann.data, True),
                                            'title': "<a target='_blank' " +
                                            "href='" + ann.url +
                                            "'>More</a>"})
+                # If we have image
+                if ann.image_url is not None and ann.image_url != '':
+                    img_tag = enclose_in_html_tag('img', '',
+                                                  {'class': 'ann-img',
+                                                   'src': ann.image_url})
+                    img_tag += enclose_in_html_tag('figcaption',
+                                                   str(proposed_ann_word))
+                    img_tag = enclose_in_html_tag('figure', img_tag,
+                                                  {'class': 'ann-figure'},
+                                                  False)
+                    tag += img_tag
                 # Replace the processed word found with a tag with the
                 # annotation
                 if number_of_words == 1:

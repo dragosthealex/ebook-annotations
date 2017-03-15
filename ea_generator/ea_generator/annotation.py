@@ -18,16 +18,14 @@ class AnnotationType(object):
 
 
 class TextAnnotation(object):
-    """Annotation that contains some text.
-
-    TODO: Make proper docstrings.
-    """
+    """Annotation that contains some text."""
 
     the_type = None
     word = None
     data = None
     url = None
     votes = None
+    image_url = None
 
     def __init__(self, word, the_type, caching=CachingType.NONE):
         """Initialise the Annotation.
@@ -47,6 +45,7 @@ class TextAnnotation(object):
         self.word = word
         self.votes = 0
         self.caching = caching
+        self.image_url = ''
 
         if the_type == AnnotationType.UNCOMMON_WORD:
             self.get_meaning()
@@ -112,12 +111,16 @@ class TextAnnotation(object):
             self.url = None
             return
         # Assign the value
-        r = r[0]["abstract"]["value"]
+        abstract = r[0]["abstract"]["value"]
+        try:
+            self.image_url = r[0]["thumbnail"]["value"]
+        except Exception:
+            pass
         self.url = "http://wikipedia.org/wiki/" + self.word
         # Make sure no more than 300 chars
-        if len(r) > 500:
-            r = r[:500] + "..."
-        self.data = 'About (from Wikipedia):&nbsp;' + r
+        if len(abstract) > 500:
+            abstract = abstract[:500] + "..."
+        self.data = 'About (from Wikipedia):&nbsp;' + abstract
 
     def get_from_db(self, case_sensitive=False):
         """Get the info from the database.
@@ -141,6 +144,7 @@ class TextAnnotation(object):
         self.data = result[3]
         self.url = result[4]
         self.votes = result[5]
+        self.image_url = result[6]
         return True
 
     def save_to_db(self, case_sensitive=False):
@@ -163,8 +167,9 @@ class TextAnnotation(object):
             # Already in, so don't save
             return False
         c.execute('''INSERT INTO annotations
-                     (hash, word, data, url, votes)
-                     VALUES (?, ?, ?, ?, ?)''',
-                  (m.hexdigest(), self.word, self.data, self.url, self.votes))
+                     (hash, word, data, url, votes, image_url)
+                     VALUES (?, ?, ?, ?, ?, ?)''',
+                  (m.hexdigest(), self.word, self.data, self.url, self.votes,
+                   self.image_url))
         conn.commit()
         return True

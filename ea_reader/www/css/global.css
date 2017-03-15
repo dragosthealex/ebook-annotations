@@ -116,6 +116,23 @@ a {
   text-decoration: underline;
   color: rgb(0, 37, 216);
 }
+
+.ann-figure {
+  float: left;
+  margin: 1em 1em 1em 0;
+}
+
+.ann-figure:nth-of-type(2) {
+  float: right;
+  margin: 1em 0 1em 1em;
+}
+.ann-figure figcaption {
+  text-align: center;
+}
+.ann-image {
+  max-width: 20em;
+}
+
 .top-link {
   position: fixed;
   bottom: 30px;
