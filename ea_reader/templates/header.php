@@ -50,7 +50,8 @@ include_once 'default.php';
                 </div>
               </div>
             </form>
-          </ul>
+          </div>
         </div>
+      </nav>
     </header>
     <div id="main-content" class="container main-content">

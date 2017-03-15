@@ -145,7 +145,7 @@ class Generator(object):
             ch_title = enclose_in_html_tag('h3', ch_title,
                                            {'class': 'chapter-title'})
             # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)
-            chapter = enclose_in_html_tag('p', chapter,
+            chapter = enclose_in_html_tag('div', chapter,
                                           {'class': 'chapter-body'})
             chapters += enclose_in_html_tag('div', ch_title + chapter,
                                             {'class': 'chapter'})
