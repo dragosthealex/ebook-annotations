@@ -119,18 +119,20 @@ a {
 
 .ann-figure {
   float: left;
-  margin: 1em 1em 1em 0;
+  clear: left;
+  margin: 1em 1em 0em 0;
 }
 
 .ann-figure:nth-of-type(2) {
   float: right;
-  margin: 1em 0 1em 1em;
+  clear: right;
+  margin: 1em 0 0em 1em;
 }
 .ann-figure figcaption {
   text-align: center;
 }
-.ann-image {
-  max-width: 20em;
+.ann-img {
+  max-width: 15em;
 }
 
 .top-link {
