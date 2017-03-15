@@ -169,7 +169,7 @@ def reset_refresh():
     conn.commit()
 
 
-def enclose_in_html_tag(tag, data, attributes=None):
+def enclose_in_html_tag(tag, data, attributes=None, explicit_end=True):
     """Enclose the data in a HTML tag with attributes."""
     if attributes is None:
         attributes = {}
@@ -177,7 +177,8 @@ def enclose_in_html_tag(tag, data, attributes=None):
            ' '.join(key + '="' + value + '"'
                     for key, value in attributes.iteritems()) + '>'
     text += data
-    text += '</' + tag + '>'
+    if explicit_end:
+        text += '</' + tag + '>'
     return text
 
 

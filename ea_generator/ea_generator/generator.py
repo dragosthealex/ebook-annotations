@@ -110,7 +110,7 @@ class Generator(object):
         # Check html caching
         if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
                 book.is_cached_html():
-            return book.get_html_file_name()
+            return book.get_html_from_db()
         # Else, parse the book into the object
         book.populate_content()
         self.book = book
@@ -124,7 +124,10 @@ class Generator(object):
         for index, chapter in enumerate(book.chapter_titles):
             chapter_tag = enclose_in_html_tag('a', chapter,
                                               {'href': '#ch-' + str(index)})
-            table_of_contents += enclose_in_html_tag('li', chapter_tag)
+            table_of_contents += enclose_in_html_tag('li', chapter_tag,
+                                                     {'class': 'col-xs-12 ' +
+                                                      'col-sm-6 col-' +
+                                                      'md-4 col-lg-3'})
         table_of_contents = enclose_in_html_tag('ul', table_of_contents,
                                                 {'class': 'chapter_title'})
 
@@ -142,7 +145,7 @@ class Generator(object):
             ch_title = enclose_in_html_tag('h3', ch_title,
                                            {'class': 'chapter-title'})
             # chapter = re.sub(r'(([^\n]*\n[^\n]*)\n)', r'\1<br>', chapter)
-            chapter = enclose_in_html_tag('p', chapter,
+            chapter = enclose_in_html_tag('div', chapter,
                                           {'class': 'chapter-body'})
             chapters += enclose_in_html_tag('div', ch_title + chapter,
                                             {'class': 'chapter'})
@@ -153,6 +156,7 @@ class Generator(object):
             f.write(enclose_in_html_tag('div', title + author +
                                         table_of_contents +
                                         chapters, {'class': 'book'}))
+        book.cache_to_db(file_name)
         # Return its name
         return file_name
 
@@ -189,7 +193,13 @@ def main():
     elif args.action == 'get':
         result = g.generate_html_book(args.query, args.caching,
                                       args.max_chapters)
-        g.book.print_text('result.txt')
+        if args.caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS]:
+            r = codecs.open(result, "r", encoding="utf-8")
+            r = r.read()
+            with codecs.open('result.txt', 'w', encoding="utf-8") as f:
+                f.write(r)
+        else:
+            g.book.print_text('result.txt')
         print('Book contents were printed in result.txt')
     else:
         print("Invalid action.")

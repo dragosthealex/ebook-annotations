@@ -14,7 +14,7 @@ function get_post($key) {
 if(get_post('type') == 'single') {
   $id = trim(get_post('id'));
   // Caching
-  $c = get_post('c')?get_post('c'):0;
+  $c = get_post('caching')?get_post('caching'):0;
   if(!in_array($c, [0,1,2,3])) {
     $c = 0;
   }
@@ -34,7 +34,7 @@ if(get_post('type') == 'single') {
   switch ($source) {
     case 'web':
       // Caching
-      $c = get_post('c')?get_post('c'):0;
+      $c = get_post('caching')?get_post('caching'):0;
       // It means call came from web, so return the json
       $command = escapeshellcmd(PYTHON_COMMAND . ' search.py all "' . $query . '" -c ' . $c);
       echo(shell_exec($command));

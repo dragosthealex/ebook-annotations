@@ -30,7 +30,16 @@ include_once 'default.php';
           </div>
           <div class="collapse navbar-collapse" id="main-nav-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li>
+              <!-- <li class="active"><a href="#">All Books <span class="sr-only">(current)</span></a></li> -->
+              <?php
+              if(isset($_GET['id'])) {
+                // Means we are on book page
+                $url="./book?id=" . $_GET['id'] . "&c=0";
+              ?>
+              <li class=""><a href="<?=$url?>">Reset cache</a></li>
+              <?php                
+              }
+              ?>
             </ul>
             <form id="nav-search" class="navbar-form navbar-left" method="post" action="<?=$env['API_ROOT']?>/search">
               <div class="input-group">
@@ -41,7 +50,8 @@ include_once 'default.php';
                 </div>
               </div>
             </form>
-          </ul>
+          </div>
         </div>
+      </nav>
     </header>
     <div id="main-content" class="container main-content">

@@ -6,6 +6,35 @@ body {
 a {
   text-decoration: none;
 }
+#main-content {
+}
+.header {
+  width: 100%;
+  z-index: 1000;
+}
+.navbar.navbar-default {
+  background-color: #3F51B5;
+  border: none;
+  border-radius: 0;
+}
+.header .navbar .navbar-brand, 
+.header .navbar ul > li > a {
+  color: #fefefe;
+}
+.header .navbar ul > li > a:hover {
+  color: #cfcfcf;
+}
+.header .btn-primary {
+  background-color: #ba9325;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px -1px rgba(0,0,0,0.4);
+}
+.header .btn-primary:active,
+.header .btn-primary:hover:active,
+.header .btn-primary:focus {
+  background-color: #957720;
+  border: none;
+}
 .book-result {
   background: white;
   border-radius: 2px;
@@ -40,10 +69,6 @@ a {
   max-width: 500px;
 }
 
-.header .navbar-default {
-  background-color: #fefefe;
-}
-
 .title {
   text-align: center;
 }
@@ -55,8 +80,15 @@ a {
 .chapter_title {
   list-style: none;
   list-style-type: none;
-  padding: none;
+  overflow: hidden;
   text-align: center;
+  margin: 30px 0 40px;
+  padding: 0;
+}
+
+.chapter_title li a {
+  padding: 10px 0;
+  display: block;
 }
 
 .chapter {
@@ -69,12 +101,59 @@ a {
   text-decoration: underline;
 }
 
+.chapter .chapter-title:hover {
+  color: #337ab7;
+}
+
+.chapter .chapter-body {
+  text-align: justify;
+  font-size: 16px;
+  line-height: 1.55
+}
+
 .annotation {
   cursor: pointer;
   text-decoration: underline;
   color: rgb(0, 37, 216);
 }
 
+.ann-figure {
+  float: left;
+  margin: 1em 1em 1em 0;
+}
+
+.ann-figure:nth-of-type(2) {
+  float: right;
+  margin: 1em 0 1em 1em;
+}
+.ann-figure figcaption {
+  text-align: center;
+}
+.ann-image {
+  max-width: 20em;
+}
+
+.top-link {
+  position: fixed;
+  bottom: 30px;
+  right: 150px;
+}
+.btn-round {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 15px 0;
+  text-align: center;
+  color: #fefefe;
+  border: none;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.4);
+}
+.btn-round:hover {
+  color: #eee;
+}
+.btn-primary.btn-round {
+  background-color: rgba(63, 81, 181, 0.89);
+}
 @media (min-width: 1200px){
   .container {
     width: 970px;

@@ -19,9 +19,17 @@ class TestBook(unittest.TestCase):
         """Run after every test."""
         self.book = None
 
-    def test_is_cached_html(self):
+    def test_caching(self):
         """Should check for cached books."""
+        # Remember original value
+        orig = self.book.is_cached_html()
+        self.book.cache_to_db()
         self.assertFalse(self.book.is_cached_html())
+        self.book.cache_to_db('11.html')
+        self.assertTrue(self.book.is_cached_html())
+        self.assertEqual(self.book.get_html_from_db(),
+                         '11.html')
+        self.book.cache_to_db(orig)
 
     def test_populate_content(self):
         """Should correctly populate the book."""

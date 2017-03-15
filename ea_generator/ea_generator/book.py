@@ -6,6 +6,7 @@ BookSource is an enum that provides maintainability
 if more sources (except Gutenberg) will be added.
 """
 import re
+import cgi
 import codecs
 import parser
 import analyser
@@ -71,6 +72,35 @@ class Book(object):
             return False
         self.html_file_name = html_file_name
         return True
+
+    def cache_to_db(self, file_name=None):
+        """Cache this book to db.
+
+        Args:
+            file_name (str): The filename of this html.
+                             If let empty, will remove cache.
+        """
+        if file_name is None:
+            file_name = ''
+        conn, c = connect_database()
+        c.execute('''UPDATE books
+                     SET html_file_name = ?
+                     WHERE id = ?''', (file_name, self.the_id))
+        conn.commit()
+        conn.close()
+
+    def get_html_from_db(self):
+        """Return the filename of this book form DB.
+
+        Returns:
+            The filename of this html book.
+        """
+        conn, c = connect_database()
+        c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
+                  (self.the_id,))
+        html_file_name = c.fetchone()[0]
+        conn.close()
+        return html_file_name
 
     def populate_content(self):
         """Use the parser to parse everything and get the content."""
@@ -170,9 +200,22 @@ class Book(object):
                     continue
                 tag = enclose_in_html_tag('a', str(proposed_ann_word),
                                           {'class': 'annotation',
-                                           'data-content': '' + ann.data,
-                                           'title': "<a href='" + ann.url +
+                                           'data-content': '' +
+                                           cgi.escape(ann.data, True),
+                                           'title': "<a target='_blank' " +
+                                           "href='" + ann.url +
                                            "'>More</a>"})
+                # If we have image
+                if ann.image_url is not None and ann.image_url != '':
+                    img_tag = enclose_in_html_tag('img', '',
+                                                  {'class': 'ann-img',
+                                                   'src': ann.image_url},
+                                                  False)
+                    img_tag += enclose_in_html_tag('figcaption',
+                                                   str(proposed_ann_word))
+                    img_tag = enclose_in_html_tag('figure', img_tag,
+                                                  {'class': 'ann-figure'})
+                    tag += img_tag
                 # Replace the processed word found with a tag with the
                 # annotation
                 if number_of_words == 1:

@@ -3,6 +3,7 @@ ea_generator/ea_generator/rdf-files*
 ea_generator/ea_generator/rdf-files
 ea_generator/ea_generator/database/database.db
 ea_generator/htmlcov
+ea_generator/result.txt
 .phpintel
 *.pyc
 *.html
