@@ -1,0 +1,16 @@
+digraph "classes_EbookAnnotations" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{Analyser|common_words : NoneType, Text\ltext : NoneType\luncommon_treshold\l|eliminate_common()\lgenerate_annotations()\lget_extras()\lload_common_words()\lnltk_text()\lpreprocess_input()\l}", shape="record"];
+"1" [label="{AnnotationType|EXTRA : int\lUNCOMMON_WORD : int\l|}", shape="record"];
+"2" [label="{Book|annotations : list\lauthor : NoneType\lchapter_titles : list\lchapters : list\lhtml_file_name\lparser\lthe_id\ltitle : NoneType\l|annotate()\lapply_annotations()\lcache_to_db()\lcreate_annotations()\lget_html_from_db()\lis_cached_html()\lpopulate_content()\lprint_text()\l}", shape="record"];
+"3" [fontcolor="red", label="{BookNotFoundException|\l|}", shape="record"];
+"4" [label="{BookSearcher|book_id\lresult_url\lresult_url\lroot : BeautifulSoup\lsearch_query\l|construct_url_from_id()\ldelete_book_from_db()\lget_book_info()\lsearch_for_query()\ltest_valid_book_url()\l}", shape="record"];
+"5" [label="{BookSource|GUTENBERG : int\l|}", shape="record"];
+"6" [label="{CachingType|ANNOTATIONS : int\lHTML : int\lHTML_ANNOTATIONS : int\lNONE : int\l|}", shape="record"];
+"7" [label="{Generator|book\lbook\lhtml_file_name\lsearcher\l|generate_html_book()\lsearch_for_query()\l}", shape="record"];
+"8" [label="{GutenbergParser|chapter_title_tag : NoneType\lchapter_title_tag : str\lroot : BeautifulSoup\lroot : NoneType\lurl\lurl : NoneType\l|filter_chapters()\lfind_chapter_title_tag()\lget_author()\lget_chapter_titles()\lget_chapters()\lget_chapters_2()\lget_title()\l}", shape="record"];
+"9" [label="{Parser|\l|get_author()\lget_chapter_titles()\lget_chapters()\lget_title()\lstringy()\l}", shape="record"];
+"10" [label="{TextAnnotation|caching\ldata : NoneType\ldata : NoneType\limage_url : NoneType\limage_url : str\lthe_type\lthe_type : NoneType\lurl : NoneType\lurl : NoneType\lvotes : NoneType\lvotes : int\lword\lword : NoneType\l|get_from_db()\lget_info()\lget_meaning()\lsave_to_db()\l}", shape="record"];
+"8" -> "9" [arrowhead="empty", arrowtail="none"];
+}

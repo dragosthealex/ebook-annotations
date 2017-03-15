@@ -1,6 +1,8 @@
 body {
   color: #333;
   background-color: #f8f8f8;
+  font-size: 16px;
+  line-height: 1.45
 }
 
 a {
@@ -24,16 +26,30 @@ a {
 .header .navbar ul > li > a:hover {
   color: #cfcfcf;
 }
+.btn-primary {
+  background-color: #5E6FC7;
+  margin-bottom: 6px;
+}
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:hover:active {
+  background-color: #3F52B5;
+}
 .header .btn-primary {
-  background-color: #ba9325;
+  background-color: #F98B13;
   border-radius: 2px;
   box-shadow: 0 1px 2px -1px rgba(0,0,0,0.4);
 }
 .header .btn-primary:active,
 .header .btn-primary:hover:active,
 .header .btn-primary:focus {
-  background-color: #957720;
+  background-color: #C06605;
   border: none;
+}
+
+.panel-default .panel-heading {
+  background-color: #FFB564;
+  color: #fefefe;
 }
 .book-result {
   background: white;
@@ -93,10 +109,12 @@ a {
 
 .chapter {
   padding: 0 15px;
+  overflow: hidden;
 }
 
 .chapter .chapter-title {
   color: #222;
+  clear: both;
   text-transform: capitalize;
   text-decoration: underline;
 }

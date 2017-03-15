@@ -14,7 +14,8 @@ from tqdm import tqdm
 __all__ = ['URLS', 'DB_FILE_NAME', 'DB_MIGRATIONS_FOLDER', 'connect_database',
            'enclose_in_html_tag', 'COMMON_WORDS_FILE_NAME',
            'HTML_BOOKS_FOLDER', 'BookNotFoundException',
-           'migrate_up', 'migrate_rollback', 'CachingType']
+           'migrate_up', 'migrate_rollback', 'CachingType',
+           'is_cached_html', 'get_html_from_db']
 
 URLS = {
     'GUTENBERG_SEARCH': 'http://www.gutenberg.org/ebooks/search/?query=',
@@ -180,6 +181,35 @@ def enclose_in_html_tag(tag, data, attributes=None, explicit_end=True):
     if explicit_end:
         text += '</' + tag + '>'
     return text
+
+
+def is_cached_html(the_id):
+    """Check if we already have the html version of this book.
+
+    Returns:
+    """
+    conn, c = connect_database()
+    c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
+              (the_id,))
+    html_file_name = c.fetchone()[0]
+    conn.close()
+    if html_file_name is None or html_file_name == '':
+        return False
+    return True
+
+
+def get_html_from_db(the_id):
+    """Return the filename of this book form DB.
+
+    Returns:
+        The filename of this html book.
+    """
+    conn, c = connect_database()
+    c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
+              (the_id,))
+    html_file_name = c.fetchone()[0]
+    conn.close()
+    return html_file_name
 
 
 class BookNotFoundException(Exception):

@@ -1,0 +1,25 @@
+digraph "packages_EbookAnnotations" {
+charset="utf-8"
+rankdir=BT
+"0" [label="ea_generator", shape="box"];
+"1" [label="ea_generator.analyser", shape="box"];
+"2" [label="ea_generator.annotation", shape="box"];
+"3" [label="ea_generator.book", shape="box"];
+"4" [label="ea_generator.book_searcher", shape="box"];
+"5" [label="ea_generator.generator", shape="box"];
+"6" [label="ea_generator.parser", shape="box"];
+"7" [label="ea_generator.utils", shape="box"];
+"1" -> "2" [arrowhead="open", arrowtail="none"];
+"1" -> "2" [arrowhead="open", arrowtail="none"];
+"1" -> "7" [arrowhead="open", arrowtail="none"];
+"2" -> "7" [arrowhead="open", arrowtail="none"];
+"3" -> "1" [arrowhead="open", arrowtail="none"];
+"3" -> "6" [arrowhead="open", arrowtail="none"];
+"3" -> "7" [arrowhead="open", arrowtail="none"];
+"4" -> "3" [arrowhead="open", arrowtail="none"];
+"4" -> "7" [arrowhead="open", arrowtail="none"];
+"5" -> "3" [arrowhead="open", arrowtail="none"];
+"5" -> "4" [arrowhead="open", arrowtail="none"];
+"5" -> "7" [arrowhead="open", arrowtail="none"];
+"6" -> "7" [arrowhead="open", arrowtail="none"];
+}

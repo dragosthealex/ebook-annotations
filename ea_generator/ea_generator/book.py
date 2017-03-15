@@ -63,15 +63,10 @@ class Book(object):
 
         Returns:
         """
-        conn, c = connect_database()
-        c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
-                  (self.the_id,))
-        html_file_name = c.fetchone()[0]
-        conn.close()
-        if html_file_name is None or html_file_name == '':
-            return False
-        self.html_file_name = html_file_name
-        return True
+        if is_cached_html(self.id):
+            self.html_file_name = get_html_from_db(self.id)
+            return True
+        return False
 
     def cache_to_db(self, file_name=None):
         """Cache this book to db.
@@ -95,12 +90,9 @@ class Book(object):
         Returns:
             The filename of this html book.
         """
-        conn, c = connect_database()
-        c.execute('''SELECT html_file_name FROM books WHERE id = ?''',
-                  (self.the_id,))
-        html_file_name = c.fetchone()[0]
-        conn.close()
-        return html_file_name
+        fn = get_html_from_db(self.the_id)
+        self.html_file_name = fn
+        return fn
 
     def populate_content(self):
         """Use the parser to parse everything and get the content."""

@@ -101,17 +101,15 @@ class Generator(object):
         Returns:
             The absolute path to the generated file.
         """
+        # Check html caching
+        if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
+                is_cached_html(the_id):
+            return get_html_from_db(the_id)
         # Get the url and the source from the query
         self.searcher.book_id = the_id
         # Create the book from url and source
         the_url, the_id, src = self.searcher.get_book_info()
         book = bk.Book(the_url, the_id, src)
-
-        # Check html caching
-        if caching in [CachingType.HTML, CachingType.HTML_ANNOTATIONS] and\
-                book.is_cached_html():
-            return book.get_html_from_db()
-        # Else, parse the book into the object
         book.populate_content()
         self.book = book
 

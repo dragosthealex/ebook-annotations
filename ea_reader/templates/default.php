@@ -14,8 +14,8 @@ while(($line = fgets($file)) !== false)
 
 // Replace data in files included
 function replace_data($page, $key) {
-  if(isset($$page) && isset($$page[$key])) {
-    return $$page[$key];
+  if(isset($data[$page], $data[$page][$key])) {
+    return $data[$page][$key];
   }
   return '';
 }

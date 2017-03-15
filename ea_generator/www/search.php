@@ -18,7 +18,9 @@ if(get_post('type') == 'single') {
   if(!in_array($c, [0,1,2,3])) {
     $c = 0;
   }
-  $command = escapeshellcmd(PYTHON_COMMAND . ' search.py single "' . $id . '" -c ' . $c);
+  // Max parsed chapters
+  $max = isset($_POST['max'])?$_POST['max']:2;
+  $command = escapeshellcmd(PYTHON_COMMAND . ' search.py single "' . $id . '" -c ' . $c . ' -m ' . $max);
   echo(shell_exec($command));
   exit();
 } else {

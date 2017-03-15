@@ -27,6 +27,9 @@ def main():
                         "2 = Just annotations\n" +
                         "3 = Both HTML and annotations", choices=[0, 1, 2, 3],
                         default=CachingType.NONE, type=int)
+    parser.add_argument("-m", "--max-chapters", help="The maximum amount of " +
+                        "chapters to annotate. 0 means all", default=2,
+                        type=int)
     args = parser.parse_args()
     generator = Generator()
     if args.action == 'all':
@@ -37,7 +40,8 @@ def main():
         try:
             # The arg query will be an ID
             file_name = generator.generate_html_book(args.query,
-                                                     args.caching, 2)
+                                                     args.caching,
+                                                     args.max_chapters)
             with open(file_name, 'r') as f:
                 print(f.read())
         except BookNotFoundException:

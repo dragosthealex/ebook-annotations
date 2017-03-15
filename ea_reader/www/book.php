@@ -1,6 +1,5 @@
 <?php
 
-$header['title'] = 'Annotated eBook Reader';
 include '../templates/header.php';
 ?>
 <a name="top">&nbsp;</a>
@@ -15,14 +14,21 @@ if(isset($_GET['c'])) {
 } else {
   $__caching = $env['CACHING'];
 }
+if(isset($_GET['max'])) {
+  $__max = $_GET['max'];
+}
+else {
+  $__max = 2;
+}
 ?>
 $(document).ready(function() {
   id = <?=$_GET['id']?>;
   caching = '<?=$__caching?>'
+  max = <?=$__max?>
   // Get the book
   $.ajax({url: "<?=$env['API_ROOT']?>/search",
               type: "POST",
-              data: {"id": id, "type": "single", "caching": caching},
+              data: {"id": id, "type": "single", "caching": caching, "max": max},
               beforeSend: function(xhr) {
                 if(caching == 0 || caching == 2) {
                   $("#main-content #book").html("<span class='loading'>Annotating your book...</span>");
@@ -35,6 +41,7 @@ $(document).ready(function() {
                         setTimeout(function(){
                           $(".annotation").popover({html: true});
                         },1000);
+                        $("#title").html($($(".title")[0]).html())
                       },
               error: function(xhr, status, error) {
                 $("#main-content #book").html("<span class='error'>An error occurred: " + error + "</span>");

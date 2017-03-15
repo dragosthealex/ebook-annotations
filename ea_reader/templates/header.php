@@ -4,7 +4,7 @@ include_once 'default.php';
 <!DOCTYPE html>
 <html>
   <head>
-    <title><?=replace_data('header', 'title')?></title>
+    <title id="title">EbookAnnotations - A reader that enriches your ebooks</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link rel="stylesheet"
