@@ -209,12 +209,12 @@ class Book(object):
                 if ann.image_url is not None and ann.image_url != '':
                     img_tag = enclose_in_html_tag('img', '',
                                                   {'class': 'ann-img',
-                                                   'src': ann.image_url})
+                                                   'src': ann.image_url},
+                                                  False)
                     img_tag += enclose_in_html_tag('figcaption',
                                                    str(proposed_ann_word))
                     img_tag = enclose_in_html_tag('figure', img_tag,
-                                                  {'class': 'ann-figure'},
-                                                  False)
+                                                  {'class': 'ann-figure'})
                     tag += img_tag
                 # Replace the processed word found with a tag with the
                 # annotation
