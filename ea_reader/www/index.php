@@ -14,19 +14,19 @@ include '../templates/header.php';
       </p>
       <h3>Demos</h3>
       <a class="btn btn-lg btn-primary"
-         href="http://localhost/projects/ebook/book?id=11&c=3&max=0"
+         href="./book?id=11&c=3&max=0"
          target="_blank">Alice, full, cached</a>
       <a class="btn btn-lg btn-primary"
-         href="http://localhost/projects/ebook/book?id=74&c=0&max=2"
+         href="./book?id=74&c=0&max=2"
          target="_blank">Tom sawyer, first 2, no cache</a>
       <a class="btn btn-lg btn-primary"
-         href="http://localhost/projects/ebook/book?id=74&c=2&max=2"
+         href="./book?id=74&c=2&max=2"
          target="_blank">Tom sawyer, first 2, cached anns</a>
       <a class="btn btn-lg btn-primary"
-         href="http://localhost/projects/ebook/book?id=174&c=3&max=2"
+         href="./book?id=174&c=3&max=2"
          target="_blank">Dorian Gray, first 2, cached</a>
       <a class="btn btn-lg btn-primary"
-         href="http://localhost/projects/ebook/book?id=74&c=0&max=2"
+         href="./book?id=1301&c=3&max=5"
          target="_blank">French Revolution, first 2, cached</a>
     </div>
   </div>

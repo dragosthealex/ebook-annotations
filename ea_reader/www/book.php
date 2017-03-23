@@ -21,6 +21,7 @@ else {
   $__max = 2;
 }
 ?>
+
 $(document).ready(function() {
   id = <?=$_GET['id']?>;
   caching = '<?=$__caching?>'
@@ -41,7 +42,29 @@ $(document).ready(function() {
                         setTimeout(function(){
                           $(".annotation").popover({html: true});
                         },1000);
-                        $("#title").html($($(".title")[0]).html())
+                        $("#title").html($($(".title")[0]).html());
+                        // Add footnotes for annotations
+                        $(".chapter").each(function() {
+                          var chapter = $(this),
+                              title = $($(this).children("chapter-title")[0]).html(),
+                              notes = $("<div></div>"),
+                              number = 0;
+                          notes.addClass("foot-notes");
+                          chapter.find(".annotation").each(function() {
+                            var word = $(this).html(),
+                                data = $(this).attr("data-content"),
+                                n = $("<a></a>");
+                            $(this).append('<span class="note-number">[' + number + ']</span>')
+                            n.addClass("note");
+                            data = data.split(":");
+                            data.splice(0, 1);
+                            data = data.join(":");
+                            n.html('<span class="word">[' + number + ']&nbsp;' + word + "</span>" + ":&nbsp;" + data);
+                            notes.append(n);
+                            number += 1;
+                          });
+                          chapter.append(notes);
+                        });
                       },
               error: function(xhr, status, error) {
                 $("#main-content #book").html("<span class='error'>An error occurred: " + error + "</span>");

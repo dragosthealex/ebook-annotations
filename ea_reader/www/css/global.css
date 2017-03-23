@@ -174,8 +174,50 @@ a {
 .btn-primary.btn-round {
   background-color: rgba(63, 81, 181, 0.89);
 }
+.note-number {
+  display: none;
+  font-size: 10px;
+  font-weight: bold;
+  position: relative;
+  top: -5px;
+  left: 1px;
+}
+.foot-notes {
+  display: none;
+  margin: 10px 0;
+  border-top: 1px solid #aaa;
+  padding: 10px;
+}
+.foot-notes .n-title {
+  font-size: 15px;
+}
+.foot-notes .note {
+  display: block;
+  text-align: justify;
+  color: #454545;
+}
+.foot-notes .note .word {
+  font-weight: bold;
+}
+
 @media (min-width: 1200px){
   .container {
     width: 970px;
+  }
+}
+
+@media print {
+  .top-link {
+    display: none;
+  }
+  .note-number {
+    display: inline-block;
+  }
+  .annotation {
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .foot-notes {
+    display: block;
   }
 }
